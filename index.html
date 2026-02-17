@@ -31,10 +31,181 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
+  <!-- Fonts: preconnect + async load to avoid render-blocking -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" /></noscript>
+
+  <!-- Inlined CSS (5KB — eliminates a render-blocking network request) -->
+  <style>
+:root {
+  color-scheme: dark;
+  --bg: #0b0b0f;
+  --bg-alt: #12121a;
+  --card: #151523;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #f3f4f6;
+  --muted: #a1a1aa;
+  --amber: #f59e0b;
+  --blue: #3b82f6;
+  --glow: rgba(245, 158, 11, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background: radial-gradient(circle at top, rgba(59, 130, 246, 0.15), transparent 45%),
+    linear-gradient(160deg, #0d0d0d 10%, #0b0b0f 55%, #111827 120%);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 48px;
+}
+
+.background-glow {
+  position: fixed;
+  inset: -20% 0 auto 0;
+  height: 60vh;
+  background: radial-gradient(circle at 30% 20%, rgba(245, 158, 11, 0.25), transparent 45%),
+    radial-gradient(circle at 80% 10%, rgba(59, 130, 246, 0.25), transparent 50%);
+  filter: blur(40px);
+  opacity: 0.8;
+  z-index: -1;
+}
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { color: var(--amber); }
+
+.hero { padding: 48px 6vw 24px; max-width: 1200px; margin: 0 auto; }
+
+.topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.2rem;
+  color: var(--muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 16px;
+}
+
+.logo { font-weight: 600; color: var(--amber); }
+
+.hero-content { margin-top: 48px; display: grid; gap: 20px; max-width: 700px; }
+
+.eyebrow { text-transform: uppercase; letter-spacing: 0.18rem; font-size: 0.75rem; color: var(--muted); }
+
+.hero h1 { font-size: clamp(2.8rem, 5vw, 4.2rem); line-height: 1.05; text-transform: uppercase; letter-spacing: 0.18rem; }
+
+.subtitle { font-size: 1.2rem; color: var(--amber); font-weight: 600; }
+
+.hero-body { font-size: 1.05rem; color: #d1d5db; }
+
+.hero-callout {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 0.85rem;
+  color: #e5e7eb;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+}
+
+.callout-label { text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.2rem; color: var(--amber); }
+
+section { padding: 64px 6vw 0; max-width: 1200px; margin: 0 auto; }
+
+.section-title { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+
+.section-title h2 { font-size: clamp(2rem, 3vw, 2.6rem); text-transform: uppercase; letter-spacing: 0.14rem; }
+
+.section-title p { color: var(--muted); max-width: 640px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover { transform: translateY(-6px); border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); }
+.card:hover::before { opacity: 1; }
+
+.card-header { display: flex; align-items: center; gap: 14px; }
+.emoji { font-size: 2rem; }
+.card h3 { font-size: 1.4rem; }
+.aka { font-size: 0.85rem; color: var(--muted); }
+.role { color: var(--amber); font-weight: 600; }
+.description { color: #d1d5db; }
+
+.meta { list-style: none; display: grid; gap: 10px; font-size: 0.9rem; color: #e5e7eb; }
+
+.meta span { text-transform: uppercase; letter-spacing: 0.1rem; font-size: 0.65rem; color: var(--blue); display: block; margin-bottom: 4px; }
+
+.muted { opacity: 0.55; filter: grayscale(40%); }
+
+.how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+
+.how-card {
+  background: var(--bg-alt);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 16px;
+  padding: 20px;
+  transition: border 0.3s ease, transform 0.3s ease;
+}
+
+.how-card:hover { transform: translateY(-4px); border-color: rgba(245, 158, 11, 0.4); }
+.how-card h4 { margin-bottom: 10px; color: var(--amber); font-size: 1.1rem; }
+
+.name-body { display: grid; gap: 16px; font-size: 1.05rem; color: #d1d5db; }
+
+footer {
+  margin-top: 80px;
+  padding: 32px 6vw 48px;
+  text-align: center;
+  color: var(--muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+footer a { color: var(--amber); }
+
+@media (max-width: 720px) {
+  .topline { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .hero { padding-top: 32px; }
+  .hero h1 { letter-spacing: 0.1rem; }
+  .section-title h2 { letter-spacing: 0.08rem; }
+  .hero-callout { flex-direction: column; align-items: flex-start; }
+}
+  </style>
 </head>
 <body>
   <div class="background-glow"></div>
