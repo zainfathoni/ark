@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ark.zainf.dev/sitemap.xml
