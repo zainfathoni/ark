@@ -145,6 +145,7 @@ section { padding: 64px 6vw 0; max-width: 1200px; margin: 0 auto; }
   gap: 16px;
   position: relative;
   overflow: hidden;
+  scroll-margin-top: 96px;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
 }
 
@@ -160,9 +161,38 @@ section { padding: 64px 6vw 0; max-width: 1200px; margin: 0 auto; }
 .card:hover { transform: translateY(-6px); border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); }
 .card:hover::before { opacity: 1; }
 
+.card:target {
+  border-color: var(--amber);
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.04) 35%, var(--card));
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35), 0 0 28px var(--glow), 0 20px 40px rgba(0, 0, 0, 0.4);
+  animation: target-glow 0.6s ease;
+}
+
+.card:target::before { opacity: 1; }
+
 .card-header { display: flex; align-items: center; gap: 14px; }
 .emoji { font-size: 2rem; }
 .card h3 { font-size: 1.4rem; }
+.card-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-link {
+  color: var(--amber);
+  font-size: 0.9rem;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.card-link:hover { color: var(--text); }
+.card:hover .card-link,
+.card:target .card-link,
+.card-link:focus-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 .aka { font-size: 0.85rem; color: var(--muted); }
 .role { color: var(--amber); font-weight: 600; }
 .description { color: #d1d5db; }
@@ -197,6 +227,15 @@ footer {
 }
 
 footer a { color: var(--amber); }
+
+@keyframes target-glow {
+  from {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0), 0 0 0 rgba(245, 158, 11, 0), 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+  to {
+    box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35), 0 0 28px var(--glow), 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+}
 
 @media (max-width: 720px) {
   .topline { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -238,11 +277,11 @@ footer a { color: var(--amber); }
       </div>
 
       <div class="grid">
-        <article class="card">
+        <article class="card" id="optimus">
           <div class="card-header">
             <span class="emoji">🍠</span>
             <div>
-              <h3>Optimus Prime</h3>
+              <h3 class="card-title">Optimus Prime <a class="card-link" href="#optimus" aria-label="Link to Optimus Prime">#</a></h3>
               <p class="aka">aka Mas Timus</p>
             </div>
           </div>
@@ -259,11 +298,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card">
+        <article class="card" id="wheeljack">
           <div class="card-header">
             <span class="emoji">🛠️</span>
             <div>
-              <h3>Wheeljack</h3>
+              <h3 class="card-title">Wheeljack <a class="card-link" href="#wheeljack" aria-label="Link to Wheeljack">#</a></h3>
               <p class="aka">aka Lek Jack</p>
             </div>
           </div>
@@ -280,11 +319,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card">
+        <article class="card" id="prowl">
           <div class="card-header">
             <span class="emoji">🚔</span>
             <div>
-              <h3>Prowl</h3>
+              <h3 class="card-title">Prowl <a class="card-link" href="#prowl" aria-label="Link to Prowl">#</a></h3>
               <p class="aka">aka Bro Pro</p>
             </div>
           </div>
@@ -301,11 +340,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card">
+        <article class="card" id="bumblebee">
           <div class="card-header">
             <span class="emoji">🐝</span>
             <div>
-              <h3>Bumblebee</h3>
+              <h3 class="card-title">Bumblebee <a class="card-link" href="#bumblebee" aria-label="Link to Bumblebee">#</a></h3>
               <p class="aka">aka Dik Bee</p>
             </div>
           </div>
@@ -322,11 +361,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card">
+        <article class="card" id="bluestreak">
           <div class="card-header">
             <span class="emoji">🎯</span>
             <div>
-              <h3>Bluestreak</h3>
+              <h3 class="card-title">Bluestreak <a class="card-link" href="#bluestreak" aria-label="Link to Bluestreak">#</a></h3>
               <p class="aka">aka Bos Streak</p>
             </div>
           </div>
@@ -343,11 +382,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card">
+        <article class="card" id="hound">
           <div class="card-header">
             <span class="emoji">🔍</span>
             <div>
-              <h3>Hound</h3>
+              <h3 class="card-title">Hound <a class="card-link" href="#hound" aria-label="Link to Hound">#</a></h3>
               <p class="aka">aka Cak Ho</p>
             </div>
           </div>
@@ -363,11 +402,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card">
+        <article class="card" id="red-alert">
           <div class="card-header">
             <span class="emoji">🚨</span>
             <div>
-              <h3>Red Alert</h3>
+              <h3 class="card-title">Red Alert <a class="card-link" href="#red-alert" aria-label="Link to Red Alert">#</a></h3>
               <p class="aka">aka Gus Al</p>
             </div>
           </div>
@@ -384,11 +423,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card">
+        <article class="card" id="ratchet">
           <div class="card-header">
             <span class="emoji">❤️‍🩹</span>
             <div>
-              <h3>Ratchet</h3>
+              <h3 class="card-title">Ratchet <a class="card-link" href="#ratchet" aria-label="Link to Ratchet">#</a></h3>
               <p class="aka">aka Ning Rat</p>
             </div>
           </div>
@@ -405,11 +444,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card">
+        <article class="card" id="arcee">
           <div class="card-header">
             <span class="emoji">💗</span>
             <div>
-              <h3>Arcee</h3>
+              <h3 class="card-title">Arcee <a class="card-link" href="#arcee" aria-label="Link to Arcee">#</a></h3>
               <p class="aka">aka Mbak Ar</p>
             </div>
           </div>
@@ -426,11 +465,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card">
+        <article class="card" id="rewind">
           <div class="card-header">
             <span class="emoji">📼</span>
             <div>
-              <h3>Rewind</h3>
+              <h3 class="card-title">Rewind <a class="card-link" href="#rewind" aria-label="Link to Rewind">#</a></h3>
               <p class="aka">aka Kang Re</p>
             </div>
           </div>
@@ -447,11 +486,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card muted">
+        <article class="card muted" id="ironhide">
           <div class="card-header">
             <span class="emoji">🔫</span>
             <div>
-              <h3>Ironhide</h3>
+              <h3 class="card-title">Ironhide <a class="card-link" href="#ironhide" aria-label="Link to Ironhide">#</a></h3>
               <p class="aka">aka Bang Hide</p>
             </div>
           </div>
@@ -465,11 +504,11 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card muted">
+        <article class="card muted" id="jazz">
           <div class="card-header">
             <span class="emoji">🎷</span>
             <div>
-              <h3>Jazz</h3>
+              <h3 class="card-title">Jazz <a class="card-link" href="#jazz" aria-label="Link to Jazz">#</a></h3>
               <p class="aka">aka zAIn</p>
             </div>
           </div>
@@ -542,5 +581,28 @@ footer a { color: var(--amber); }
   <footer>
     <p>Made with 🍠 by the Autobots · Powered by <a href="https://openclaw.ai" target="_blank" rel="noreferrer">OpenClaw</a></p>
   </footer>
+
+  <script>
+    (function () {
+      var links = document.querySelectorAll('.card-link');
+
+      function scrollHashCard() {
+        if (!window.location.hash) return;
+        var target = document.querySelector(window.location.hash);
+        if (!target || !target.classList.contains('card')) return;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      links.forEach(function (link) {
+        link.addEventListener('click', function () {
+          if (!window.navigator.clipboard || !window.isSecureContext) return;
+          window.navigator.clipboard.writeText(window.location.origin + window.location.pathname + link.getAttribute('href')).catch(function () {});
+        });
+      });
+
+      window.addEventListener('hashchange', scrollHashCard);
+      window.addEventListener('load', scrollHashCard);
+    })();
+  </script>
 </body>
 </html>
