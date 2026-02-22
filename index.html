@@ -135,6 +135,36 @@ section { padding: 64px 6vw 0; max-width: 1200px; margin: 0 auto; }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
 
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.filter-pill {
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.08);
+  color: #fef3c7;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.filter-pill:hover {
+  border-color: rgba(245, 158, 11, 0.65);
+  background: rgba(245, 158, 11, 0.14);
+}
+
+.filter-pill.is-active {
+  background: rgba(245, 158, 11, 0.24);
+  border-color: rgba(245, 158, 11, 0.8);
+  color: #fff7e0;
+}
+
 .card {
   background: var(--card);
   border: 1px solid var(--card-border);
@@ -160,6 +190,42 @@ section { padding: 64px 6vw 0; max-width: 1200px; margin: 0 auto; }
 
 .card:hover { transform: translateY(-6px); border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); }
 .card:hover::before { opacity: 1; }
+
+.card.hidden { display: none; }
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02rem;
+}
+
+.card[data-status="active"]::after {
+  content: "🟢 Active";
+  color: #bbf7d0;
+  border-color: rgba(134, 239, 172, 0.45);
+  background: rgba(34, 197, 94, 0.14);
+}
+
+.card[data-status="coming-soon"]::after {
+  content: "🔜 Coming Soon";
+  color: #d4d4d8;
+  border-color: rgba(161, 161, 170, 0.35);
+  background: rgba(113, 113, 122, 0.16);
+}
+
+.card[data-status="private"]::after {
+  content: "🔒 Private";
+  color: #bfdbfe;
+  border-color: rgba(147, 197, 253, 0.45);
+  background: rgba(59, 130, 246, 0.16);
+}
 
 .card:target {
   border-color: var(--amber);
@@ -217,6 +283,17 @@ section { padding: 64px 6vw 0; max-width: 1200px; margin: 0 auto; }
 .how-card h4 { margin-bottom: 10px; color: var(--amber); font-size: 1.1rem; }
 
 .name-body { display: grid; gap: 16px; font-size: 1.05rem; color: #d1d5db; }
+
+.story-link {
+  color: #fbbf24;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(251, 191, 36, 0.5);
+}
+
+.story-link:hover {
+  color: #fde68a;
+  border-bottom-color: rgba(253, 230, 138, 0.9);
+}
 
 footer {
   margin-top: 80px;
@@ -276,8 +353,19 @@ footer a { color: var(--amber); }
         <p>The Autobots are a tightly coordinated squad, each with a distinctive focus.</p>
       </div>
 
+      <div class="filter-bar" role="toolbar" aria-label="Filter bots by domain">
+        <button class="filter-pill is-active" type="button" data-filter="all">All</button>
+        <button class="filter-pill" type="button" data-filter="coding">Coding</button>
+        <button class="filter-pill" type="button" data-filter="personal">Personal</button>
+        <button class="filter-pill" type="button" data-filter="family">Family</button>
+        <button class="filter-pill" type="button" data-filter="business">Business</button>
+        <button class="filter-pill" type="button" data-filter="ops">Ops</button>
+        <button class="filter-pill" type="button" data-filter="finance">Finance</button>
+        <button class="filter-pill" type="button" data-filter="content">Content</button>
+      </div>
+
       <div class="grid">
-        <article class="card" id="optimus">
+        <article class="card" id="optimus" data-status="active" data-domain="ops">
           <div class="card-header">
             <span class="emoji">🍠</span>
             <div>
@@ -298,7 +386,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="wheeljack">
+        <article class="card" id="wheeljack" data-status="active" data-domain="coding">
           <div class="card-header">
             <span class="emoji">🛠️</span>
             <div>
@@ -319,7 +407,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="prowl">
+        <article class="card" id="prowl" data-status="active" data-domain="personal">
           <div class="card-header">
             <span class="emoji">🚔</span>
             <div>
@@ -340,7 +428,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="bumblebee">
+        <article class="card" id="bumblebee" data-status="active" data-domain="family">
           <div class="card-header">
             <span class="emoji">🐝</span>
             <div>
@@ -361,7 +449,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="bluestreak">
+        <article class="card" id="bluestreak" data-status="active" data-domain="business">
           <div class="card-header">
             <span class="emoji">🎯</span>
             <div>
@@ -382,7 +470,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="hound">
+        <article class="card" id="hound" data-status="active" data-domain="finance">
           <div class="card-header">
             <span class="emoji">🔍</span>
             <div>
@@ -402,7 +490,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="red-alert">
+        <article class="card" id="red-alert" data-status="active" data-domain="ops">
           <div class="card-header">
             <span class="emoji">🚨</span>
             <div>
@@ -423,7 +511,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="ratchet">
+        <article class="card" id="ratchet" data-status="private" data-domain="personal">
           <div class="card-header">
             <span class="emoji">❤️‍🩹</span>
             <div>
@@ -444,7 +532,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="arcee">
+        <article class="card" id="arcee" data-status="private" data-domain="personal">
           <div class="card-header">
             <span class="emoji">💗</span>
             <div>
@@ -465,7 +553,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="rewind">
+        <article class="card" id="rewind" data-status="active" data-domain="content">
           <div class="card-header">
             <span class="emoji">📼</span>
             <div>
@@ -486,7 +574,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card muted" id="ironhide">
+        <article class="card muted" id="ironhide" data-status="coming-soon" data-domain="business">
           <div class="card-header">
             <span class="emoji">🔫</span>
             <div>
@@ -504,7 +592,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card muted" id="jazz">
+        <article class="card muted" id="jazz" data-status="coming-soon" data-domain="content">
           <div class="card-header">
             <span class="emoji">🎷</span>
             <div>
@@ -574,6 +662,10 @@ footer a { color: var(--amber); }
           The Indonesian and Javanese nicknames — <em>Mas</em>, <em>Lek</em>, <em>Cak</em>, <em>Dik</em> — reflect where we're from,
           adding a touch of local flavor to a global tech stack.
         </p>
+        <p>
+          Want the full origin story?
+          <a class="story-link" href="https://www.zainfathoni.com/blog/project-transformers-building-personal-ai-army" target="_blank" rel="noreferrer">Read the blog post →</a>
+        </p>
       </div>
     </section>
   </main>
@@ -585,6 +677,25 @@ footer a { color: var(--amber); }
   <script>
     (function () {
       var links = document.querySelectorAll('.card-link');
+      var filterPills = document.querySelectorAll('.filter-pill');
+      var cards = document.querySelectorAll('.card');
+
+      function applyFilter(domain) {
+        cards.forEach(function (card) {
+          var show = domain === 'all' || card.getAttribute('data-domain') === domain;
+          card.classList.toggle('hidden', !show);
+        });
+      }
+
+      filterPills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+          var selectedDomain = pill.getAttribute('data-filter');
+          filterPills.forEach(function (item) {
+            item.classList.toggle('is-active', item === pill);
+          });
+          applyFilter(selectedDomain);
+        });
+      });
 
       function scrollHashCard() {
         if (!window.location.hash) return;
@@ -600,6 +711,7 @@ footer a { color: var(--amber); }
         });
       });
 
+      applyFilter('all');
       window.addEventListener('hashchange', scrollHashCard);
       window.addEventListener('load', scrollHashCard);
     })();
