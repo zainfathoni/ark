@@ -295,6 +295,65 @@ section { padding: 64px 6vw 0; max-width: 1200px; margin: 0 auto; }
   border-bottom-color: rgba(253, 230, 138, 0.9);
 }
 
+.cta-wrap {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.16), rgba(245, 158, 11, 0.1));
+  border: 1px solid rgba(59, 130, 246, 0.34);
+  border-radius: 20px;
+  padding: 28px;
+  display: grid;
+  gap: 18px;
+}
+
+.cta-body {
+  color: #d1d5db;
+  max-width: 760px;
+}
+
+.cta-links {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.cta-links a {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.08);
+  border-radius: 999px;
+  padding: 8px 14px;
+  color: #fef3c7;
+  font-size: 0.9rem;
+}
+
+.cta-links a:hover {
+  border-color: rgba(245, 158, 11, 0.7);
+  background: rgba(245, 158, 11, 0.14);
+  color: #fff7e0;
+}
+
+.cta-star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.2);
+  color: #dbeafe;
+  font-weight: 600;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.cta-star:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.65);
+  background: rgba(245, 158, 11, 0.2);
+  color: #fef3c7;
+}
+
 footer {
   margin-top: 80px;
   padding: 32px 6vw 48px;
@@ -666,6 +725,25 @@ footer a { color: var(--amber); }
           Want the full origin story?
           <a class="story-link" href="https://www.zainfathoni.com/blog/project-transformers-building-personal-ai-army" target="_blank" rel="noreferrer">Read the blog post →</a>
         </p>
+      </div>
+    </section>
+
+    <section class="cta" id="cta">
+      <div class="section-title">
+        <h2>Want your own crew?</h2>
+        <p>Build your own team of specialized AI bots with OpenClaw.</p>
+      </div>
+      <div class="cta-wrap">
+        <p class="cta-body">
+          OpenClaw is an open-source AI assistant framework where each bot can have its own personality,
+          domain focus, and tools while still collaborating as one coordinated crew.
+        </p>
+        <ul class="cta-links">
+          <li><a href="https://openclaw.ai" target="_blank" rel="noreferrer">openclaw.ai</a></li>
+          <li><a href="https://github.com/openclaw/openclaw" target="_blank" rel="noreferrer">github.com/openclaw/openclaw</a></li>
+          <li><a href="https://discord.com/invite/clawd" target="_blank" rel="noreferrer">discord.com/invite/clawd</a></li>
+        </ul>
+        <a class="cta-star" href="https://github.com/zainfathoni/ark" target="_blank" rel="noreferrer">⭐ Star on GitHub</a>
       </div>
     </section>
   </main>
