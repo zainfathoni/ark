@@ -66,7 +66,7 @@
   --card: #151523;
   --card-border: rgba(255, 255, 255, 0.08);
   --text: #f3f4f6;
-  --muted: #a1a1aa;
+  --muted: #b0b0ba;
   --amber: #f59e0b;
   --blue: #3b82f6;
   --glow: rgba(245, 158, 11, 0.2);
@@ -89,6 +89,21 @@ body {
   padding-bottom: 48px;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--amber);
+  color: #000;
+  padding: 8px 16px;
+  font-weight: 600;
+  z-index: 9999;
+  border-radius: 0 0 8px 0;
+  transition: top 0.2s;
+}
+
+.skip-link:focus { top: 0; }
+
 .background-glow {
   position: fixed;
   inset: -20% 0 auto 0;
@@ -102,6 +117,14 @@ body {
 
 a { color: var(--blue); text-decoration: none; }
 a:hover { color: var(--amber); }
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+:focus:not(:focus-visible) { outline: none; }
 
 .hero { padding: 48px 6vw 24px; max-width: 1200px; margin: 0 auto; }
 
@@ -395,6 +418,14 @@ footer a { color: var(--amber); }
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @media (max-width: 720px) {
   .topline { flex-direction: column; align-items: flex-start; gap: 8px; }
   .hero { padding-top: 32px; }
@@ -405,9 +436,10 @@ footer a { color: var(--amber); }
   </style>
 </head>
 <body>
+  <a href="#crew" class="skip-link">Skip to main content</a>
   <div class="background-glow"></div>
-  <header class="hero">
-    <nav class="topline">
+  <header class="hero" aria-label="Site header">
+    <nav class="topline" aria-label="Main navigation">
       <span class="logo">ark.zainf.dev</span>
       <span class="tag">Meet the Autobots</span>
     </nav>
@@ -427,26 +459,26 @@ footer a { color: var(--amber); }
     </div>
   </header>
 
-  <main>
-    <section class="crew" id="crew">
+  <main role="main">
+    <section class="crew" id="crew" aria-label="The Crew">
       <div class="section-title">
         <h2>The Crew</h2>
         <p>The Autobots are a tightly coordinated squad, each with a distinctive focus.</p>
       </div>
 
       <div class="filter-bar" role="toolbar" aria-label="Filter bots by domain">
-        <button class="filter-pill is-active" type="button" data-filter="all">All</button>
-        <button class="filter-pill" type="button" data-filter="coding">Coding</button>
-        <button class="filter-pill" type="button" data-filter="personal">Personal</button>
-        <button class="filter-pill" type="button" data-filter="family">Family</button>
-        <button class="filter-pill" type="button" data-filter="business">Business</button>
-        <button class="filter-pill" type="button" data-filter="ops">Ops</button>
-        <button class="filter-pill" type="button" data-filter="finance">Finance</button>
-        <button class="filter-pill" type="button" data-filter="content">Content</button>
+        <button class="filter-pill is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="filter-pill" type="button" data-filter="coding" aria-pressed="false">Coding</button>
+        <button class="filter-pill" type="button" data-filter="personal" aria-pressed="false">Personal</button>
+        <button class="filter-pill" type="button" data-filter="family" aria-pressed="false">Family</button>
+        <button class="filter-pill" type="button" data-filter="business" aria-pressed="false">Business</button>
+        <button class="filter-pill" type="button" data-filter="ops" aria-pressed="false">Ops</button>
+        <button class="filter-pill" type="button" data-filter="finance" aria-pressed="false">Finance</button>
+        <button class="filter-pill" type="button" data-filter="content" aria-pressed="false">Content</button>
       </div>
 
       <div class="grid">
-        <article class="card" id="optimus" data-status="active" data-domain="ops">
+        <article class="card" id="optimus" data-status="active" data-domain="ops" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">🍠</span>
             <div>
@@ -468,7 +500,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="wheeljack" data-status="active" data-domain="coding">
+        <article class="card" id="wheeljack" data-status="active" data-domain="coding" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">🛠️</span>
             <div>
@@ -490,7 +522,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="prowl" data-status="active" data-domain="personal">
+        <article class="card" id="prowl" data-status="active" data-domain="personal" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">🚔</span>
             <div>
@@ -512,7 +544,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="bumblebee" data-status="active" data-domain="family">
+        <article class="card" id="bumblebee" data-status="active" data-domain="family" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">🐝</span>
             <div>
@@ -534,7 +566,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="bluestreak" data-status="active" data-domain="business">
+        <article class="card" id="bluestreak" data-status="active" data-domain="business" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">🎯</span>
             <div>
@@ -556,7 +588,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="hound" data-status="active" data-domain="finance">
+        <article class="card" id="hound" data-status="active" data-domain="finance" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">🔍</span>
             <div>
@@ -577,7 +609,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="red-alert" data-status="active" data-domain="ops">
+        <article class="card" id="red-alert" data-status="active" data-domain="ops" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">🚨</span>
             <div>
@@ -599,7 +631,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="ratchet" data-status="private" data-domain="personal">
+        <article class="card" id="ratchet" data-status="private" data-domain="personal" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">❤️‍🩹</span>
             <div>
@@ -621,7 +653,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="arcee" data-status="private" data-domain="personal">
+        <article class="card" id="arcee" data-status="private" data-domain="personal" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">💗</span>
             <div>
@@ -643,7 +675,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card" id="rewind" data-status="active" data-domain="content">
+        <article class="card" id="rewind" data-status="active" data-domain="content" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">📼</span>
             <div>
@@ -665,7 +697,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card muted" id="ironhide" data-status="coming-soon" data-domain="business">
+        <article class="card muted" id="ironhide" data-status="coming-soon" data-domain="business" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">🔫</span>
             <div>
@@ -684,7 +716,7 @@ footer a { color: var(--amber); }
           </ul>
         </article>
 
-        <article class="card muted" id="jazz" data-status="coming-soon" data-domain="content">
+        <article class="card muted" id="jazz" data-status="coming-soon" data-domain="content" tabindex="0" role="article">
           <div class="card-header">
             <span class="emoji">🎷</span>
             <div>
@@ -705,7 +737,7 @@ footer a { color: var(--amber); }
       </div>
     </section>
 
-    <section class="how" id="how-it-works">
+    <section class="how" id="how-it-works" aria-label="How It Works">
       <div class="section-title">
         <h2>How It Works</h2>
         <p>Every bot is an independent agent with a shared mission.</p>
@@ -741,7 +773,7 @@ footer a { color: var(--amber); }
       </div>
     </section>
 
-    <section class="name" id="the-name">
+    <section class="name" id="the-name" aria-label="The Name">
       <div class="section-title">
         <h2>The Name</h2>
         <p>The Ark is a story, a place, and a promise.</p>
@@ -762,7 +794,7 @@ footer a { color: var(--amber); }
       </div>
     </section>
 
-    <section class="cta" id="cta">
+    <section class="cta" id="cta" aria-label="Call to action">
       <div class="section-title">
         <h2>Want your own crew?</h2>
         <p>Build your own team of specialized AI bots with OpenClaw.</p>
@@ -782,7 +814,7 @@ footer a { color: var(--amber); }
     </section>
   </main>
 
-  <footer>
+  <footer role="contentinfo">
     <p>Made with 🍠 by the Autobots · Powered by <a href="https://openclaw.ai" target="_blank" rel="noreferrer">OpenClaw</a></p>
     <p>
       Built by Zain Fathoni ·
@@ -811,6 +843,7 @@ footer a { color: var(--amber); }
           var selectedDomain = pill.getAttribute('data-filter');
           filterPills.forEach(function (item) {
             item.classList.toggle('is-active', item === pill);
+            item.setAttribute('aria-pressed', item === pill ? 'true' : 'false');
           });
           applyFilter(selectedDomain);
         });
