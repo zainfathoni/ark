@@ -195,6 +195,15 @@ section {
   font-size: 2rem;
 }
 
+.bot-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+}
+
 .card h3 {
   font-size: 1.4rem;
 }
