@@ -1,3 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <text y=".9em" font-size="90">👾</text>
+  <!-- Background -->
+  <rect width="100" height="100" fill="#0b0b0f"/>
+  <!-- Subtle radial glow -->
+  <radialGradient id="glow" cx="50%" cy="48%" r="45%">
+    <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.18"/>
+    <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="100" height="100" fill="url(#glow)"/>
+  <!-- Orbit ring -->
+  <circle cx="50" cy="50" r="42" fill="none" stroke="#f59e0b" stroke-width="0.8" opacity="0.3"/>
+  <!-- Ship (nose up, centered at 50,50) -->
+  <g transform="translate(50,50)">
+    <!-- Main hull -->
+    <path d="M 0,-28 C 8,-22 10,-10 10,0 C 10,10 8,22 0,28 C -8,22 -10,10 -10,0 C -10,-10 -8,-22 0,-28 Z"
+          fill="#1a1208" stroke="#f59e0b" stroke-width="0.8"/>
+    <!-- Nose cone -->
+    <polygon points="0,-28 4,-18 0,-15 -4,-18" fill="#f59e0b" opacity="0.95"/>
+    <!-- Starboard nacelle -->
+    <path d="M 10,-4 L 22,-7 C 24,-7 25,-4 25,0 C 25,4 24,7 22,7 L 10,4 Z"
+          fill="#0e0c07" stroke="#f59e0b" stroke-width="0.7" opacity="0.9"/>
+    <!-- Port nacelle -->
+    <path d="M -10,-4 L -22,-7 C -24,-7 -25,-4 -25,0 C -25,4 -24,7 -22,7 L -10,4 Z"
+          fill="#0e0c07" stroke="#f59e0b" stroke-width="0.7" opacity="0.9"/>
+    <!-- Engine glows -->
+    <ellipse cx="25" cy="0" rx="2.5" ry="4" fill="#f59e0b" opacity="0.8"/>
+    <ellipse cx="-25" cy="0" rx="2.5" ry="4" fill="#f59e0b" opacity="0.8"/>
+    <!-- Viewport -->
+    <rect x="-2" y="-8" width="4" height="16" rx="1.5"
+          fill="rgba(59,130,246,0.5)" stroke="rgba(59,130,246,0.7)" stroke-width="0.5"/>
+    <!-- Thruster tail -->
+    <polygon points="0,28 -4,22 4,22" fill="#f59e0b" opacity="0.6"/>
+    <!-- Autobot A insignia -->
+    <polygon points="0,-5 -3,3 3,3" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <line x1="-1.5" y1="1" x2="1.5" y2="1" stroke="#f59e0b" stroke-width="0.8"/>
+  </g>
+  <!-- Tick marks -->
+  <g stroke="#f59e0b" stroke-width="0.8" opacity="0.4">
+    <line x1="50" y1="8" x2="50" y2="14"/>
+    <line x1="50" y1="86" x2="50" y2="92"/>
+    <line x1="8" y1="50" x2="14" y2="50"/>
+    <line x1="86" y1="50" x2="92" y2="50"/>
+  </g>
 </svg>
