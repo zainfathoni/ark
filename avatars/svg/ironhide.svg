@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Ironhide avatar">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#292524"/>
+      <stop offset="100%" stop-color="#44403c"/>
+    </linearGradient>
+    <linearGradient id="armor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6b7280"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bgGrad)"/>
+  <circle cx="122" cy="110" r="84" fill="#ffffff" opacity="0.08"/>
+  <circle cx="432" cy="404" r="96" fill="#000000" opacity="0.06"/>
+  <path d="M0 360 C120 320, 220 400, 512 320 L512 512 L0 512 Z" fill="#ffffff" opacity="0.08"/>
+  <g filter="url(#softShadow)">
+    <path d="M158 150 L354 150 L392 220 L358 350 L154 350 L120 220 Z" fill="url(#armor)"/>
+    <rect x="178" y="172" width="156" height="36" rx="10" fill="#f97316"/>
+    <rect x="170" y="230" width="172" height="58" rx="12" fill="#0f172a" opacity="0.9"/>
+    <rect x="188" y="246" width="58" height="16" rx="8" fill="#93c5fd"/>
+    <rect x="266" y="246" width="58" height="16" rx="8" fill="#93c5fd"/>
+    <rect x="224" y="292" width="64" height="12" rx="6" fill="#f97316"/>
+    <path d="M188 150 L220 112 L292 112 L324 150 Z" fill="#6b7280"/>
+    <rect x="146" y="188" width="24" height="118" rx="10" fill="#111827"/>
+    <rect x="342" y="188" width="24" height="118" rx="10" fill="#111827"/>
+  </g>
+  <g transform="translate(362,362)">
+    <circle cx="56" cy="56" r="56" fill="#0b1220" opacity="0.78"/>
+    <circle cx="56" cy="56" r="48" fill="#f97316"/>
+    <rect x="36" y="44" width="40" height="24" rx="4" fill="#111827"/><rect x="52" y="34" width="8" height="10" fill="#111827"/><circle cx="46" cy="72" r="6" fill="#f97316"/><circle cx="66" cy="72" r="6" fill="#f97316"/>
+  </g>
+  <text x="256" y="430" font-family="Avenir Next, Segoe UI, sans-serif" font-size="30" text-anchor="middle" fill="#f8fafc" font-weight="700">Ironhide</text>
+  <text x="256" y="460" font-family="Avenir Next, Segoe UI, sans-serif" font-size="16" text-anchor="middle" fill="#e2e8f0" opacity="0.92">Operations</text>
+</svg>
