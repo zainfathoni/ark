@@ -157,7 +157,7 @@ section {
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: 20px;
-  padding: 24px;
+  padding: 24px 24px 52px;
   display: flex;
   flex-direction: column;
   gap: 16px;
