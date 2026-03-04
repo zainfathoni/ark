@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Viz — The Ark</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf7f5; --surface: #ffffff; --border: rgba(0,0,0,0.08);
+      --text: #1a1a2e; --text-dim: #6b7280; --accent: #c2410c;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117; --surface: #161b22; --border: rgba(255,255,255,0.06);
+        --text: #e6edf3; --text-dim: #8b949e; --accent: #fb923c;
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem;
+    }
+    h1 { font-size: 1.8rem; margin-bottom: 0.3rem; }
+    .subtitle { color: var(--text-dim); margin-bottom: 2rem; font-size: 0.95rem; }
+    .subtitle a { color: var(--accent); text-decoration: none; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-weight: 500; color: var(--text-dim);
+         font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;
+         padding: 0.5rem 0; border-bottom: 2px solid var(--border); }
+    td { padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+    td a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    td a:hover { text-decoration: underline; }
+    .empty { color: var(--text-dim); padding: 3rem 0; text-align: center; }
+    @media (max-width: 600px) {
+      td:nth-child(2), th:nth-child(2) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 Viz</h1>
+  <p class="subtitle">Visual explainers from <a href="/">The Ark</a></p>
+  <table>
+        <thead><tr><th>Title</th><th>Author</th><th>Date</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><a href="test-viz-setup.html">test-viz-setup</a></td>
+        <td>Optimus</td>
+        <td>2026-03-04</td>
+      </tr></tbody>
+      </table>
+</body>
+</html>

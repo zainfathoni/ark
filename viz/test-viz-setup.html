@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Explainer — Setup Test</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf7f5; --surface: #ffffff; --border: rgba(0,0,0,0.08);
+      --text: #1a1a2e; --text-dim: #6b7280;
+      --accent: #c2410c; --accent-dim: rgba(194,65,12,0.1);
+      --success: #059669; --success-dim: rgba(5,150,105,0.1);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117; --surface: #161b22; --border: rgba(255,255,255,0.06);
+        --text: #e6edf3; --text-dim: #8b949e;
+        --accent: #fb923c; --accent-dim: rgba(251,146,60,0.12);
+        --success: #34d399; --success-dim: rgba(52,211,153,0.12);
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 3rem; max-width: 500px; text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      animation: fadeUp 0.6s ease-out;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .icon { font-size: 3rem; margin-bottom: 1rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    p { color: var(--text-dim); line-height: 1.6; margin-bottom: 1.5rem; }
+    .badge {
+      display: inline-block; background: var(--success-dim); color: var(--success);
+      padding: 0.4rem 1rem; border-radius: 99px; font-weight: 500;
+      font-family: 'Fira Code', monospace; font-size: 0.85rem;
+    }
+    .footer { margin-top: 2rem; color: var(--text-dim); font-size: 0.8rem; }
+    .footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">📊</div>
+    <h1>Visual Explainer is Live</h1>
+    <p>The Ark's visual explanation engine is operational. Any Autobot can generate rich HTML pages and publish them here.</p>
+    <span class="badge">✓ setup complete</span>
+    <div class="footer">
+      Part of <a href="/">The Ark</a> · Powered by
+      <a href="https://github.com/nicobailon/visual-explainer">visual-explainer</a>
+    </div>
+  </div>
+</body>
+</html>
