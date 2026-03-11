@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent Orchestration Deep Dive — Symphony · Paperclip · OpenClaw</title>
-<meta property="og:title" content="Agent Orchestration Deep Dive — Symphony · Paperclip · OpenClaw">
-<meta property="og:description" content="Three-way comparison of Symphony, Paperclip, and OpenClaw for AI agent orchestration. Architecture, token costs, and what to steal.">
+<title>Agent Orchestration — Symphony · Paperclip · OpenClaw · Hybrid</title>
+<meta property="og:title" content="Agent Orchestration — Symphony · Paperclip · OpenClaw · The Hybrid Approach">
+<meta property="og:description" content="Three orchestration tools compared, and a hybrid architecture proposal that combines deterministic dispatch with LLM judgment.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Fragment+Mono:wght@400&display=swap" rel="stylesheet">
@@ -116,6 +116,7 @@
   .badge--navy { background: var(--navy-dim); color: var(--navy); border-color: var(--navy); }
   .badge--plum { background: var(--plum-dim); color: var(--plum); border-color: var(--plum); }
   .badge--teal { background: var(--teal-dim); color: var(--teal); border-color: var(--teal); }
+  .badge--gold { background: var(--gold-dim); color: var(--gold); border-color: var(--gold); }
 
   .section-label {
     font-family: var(--font-mono);
@@ -430,11 +431,12 @@
   <!-- ==================== HERO ==================== -->
   <div class="hero anim" style="--i:0">
     <h1><span>Agent Orchestration</span> Deep Dive</h1>
-    <p class="subtitle">Two new orchestration tools compared against our existing OpenClaw setup. How they work, where they differ, and what's worth stealing.</p>
+    <p class="subtitle">Two orchestration tools compared against our setup, and a hybrid architecture proposal that takes the best of each — deterministic dispatch, LLM judgment, and fizzy-pop coordination.</p>
     <div class="meta">
       <span class="badge badge--navy">Symphony — openai/symphony</span>
       <span class="badge badge--plum">Paperclip — paperclipai/paperclip</span>
       <span class="badge badge--teal">OpenClaw — baseline</span>
+      <span class="badge badge--gold">Hybrid — proposed</span>
     </div>
   </div>
 
@@ -1107,7 +1109,7 @@ flowchart TD
     </div>
   </section>
 
-  <!-- Takeaways -->
+  <!-- What to steal -->
   <section class="anim" style="--i:17">
     <div class="section-label"><span class="dot" style="background:var(--gold)"></span> Verdict</div>
     <h2>What's Worth Stealing</h2>
@@ -1120,6 +1122,7 @@ flowchart TD
           <li><strong>Per-issue workspaces</strong> — git worktrees, no cross-contamination</li>
           <li><strong>Reconciliation loop</strong> — auto-kill stale/terminal runs every tick</li>
           <li><strong>Lifecycle hooks</strong> — <code>after_create</code>, <code>before_run</code>, <code>after_run</code></li>
+          <li><strong>Blocker-aware dispatch</strong> — skip issues with unresolved dependencies</li>
         </ul>
       </div>
       <div class="ve-card ve-card--hero border-plum">
@@ -1132,16 +1135,295 @@ flowchart TD
         </ul>
       </div>
     </div>
+  </section>
 
-    <div class="ve-card border-rust" style="margin-top:8px">
-      <h3>Gap: Fizzy Has No Issue Dependencies</h3>
-      <p>Our current Fizzy workflow has <strong>no native concept of task interdependency</strong>. Cards can't block other cards. Symphony handles this natively — issues in "Todo" with non-terminal blockers are automatically skipped during dispatch. Linear and Paperclip both support dependency chains.</p>
-      <p style="margin-top:8px">We explored this in <a href="https://app.fizzy.do/6104728/cards/187" style="color:var(--rust)">Fizzy Card #187</a> (discussed with Wheeljack). Two options were considered: forking Fizzy for native deps (5-8 days, drift risk — not recommended) vs. a <strong>tag-based convention</strong> using <code>blocked-by:NN</code> tags with bot heartbeat checks for stale blockers. The tag convention was preferred — zero code changes needed.</p>
-      <p style="margin-top:8px;font-size:13px;color:var(--text-dim)">Linear solves this at the tracker level, but if its agent protocol wastes 5K+ tokens per checkbox toggle, the savings from deterministic orchestration get eaten right back. The pragmatic path: implement the <code>blocked-by:NN</code> tag convention in Fizzy rather than switching trackers.</p>
+  <hr class="section-divider">
+
+  <!-- ==================== PART 4: HYBRID PROPOSAL ==================== -->
+  <section class="anim" style="--i:18">
+    <div class="section-label"><span class="dot" style="background:var(--gold)"></span> Part 4</div>
+    <h2 style="color:var(--gold)">The Hybrid — Proposed Architecture</h2>
+    <p style="color:var(--text-dim);margin-bottom:8px;font-size:15px">Spend tokens on judgment, spend code on mechanics. Deterministic dispatch + LLM supervision + fizzy-pop coordination.</p>
+    <div style="margin-bottom:20px">
+      <span class="tag tag--gold">Fizzy as task source</span>
+      <span class="tag tag--gold">fizzy-pop for agent comms</span>
+      <span class="tag tag--gold">Zero-token dispatch</span>
+      <span class="tag tag--gold">OpenClaw for judgment</span>
+      <span class="tag tag--gold">Multi-agent</span>
+    </div>
+  </section>
+
+  <!-- Hybrid: The Principle -->
+  <section class="anim" style="--i:19">
+    <div class="section-label"><span class="dot" style="background:var(--gold)"></span> Hybrid — Core Principle</div>
+    <h2>Three Layers, One System</h2>
+    <p style="color:var(--text-dim);margin-bottom:20px;font-size:15px">The key insight: most orchestration is mechanical (poll, check, dispatch, retry). Only a small fraction needs actual reasoning. Separate them.</p>
+
+    <div class="mermaid-wrap" id="hybrid-arch">
+      <div class="zoom-controls">
+        <button onclick="zoom(this, 1.2)">+</button>
+        <button onclick="zoom(this, 0.83)">−</button>
+        <button onclick="resetZoom(this)">⌀</button>
+      </div>
+      <div class="mermaid-inner">
+        <pre class="mermaid">
+flowchart TD
+    subgraph L1["Layer 1: Deterministic Dispatcher (0 tokens)"]
+        direction LR
+        FZ["Fizzy Cards\n(bot-actionable)"]
+        DP["Dispatcher\n(cron script)"]
+        WS["Workspace\nManager"]
+        FZ -->|"poll every 5 min"| DP
+        DP -->|"create worktree"| WS
+    end
+
+    subgraph L2["Layer 2: Agent Execution (work tokens)"]
+        direction LR
+        CX["Codex"]
+        CC["Claude Code"]
+        AMP["Amp"]
+        OC["OpenCode"]
+    end
+
+    subgraph L3["Layer 3: fizzy-pop + OpenClaw (judgment tokens)"]
+        direction LR
+        FP["fizzy-pop\n(notifications)"]
+        OP["OpenClaw\n(Optimus)"]
+        ZN["Zain\n(human)"]
+        FP -->|"mentions, assigns"| OP
+        OP -->|"escalate"| ZN
+    end
+
+    DP -->|"route + launch"| L2
+    L2 -->|"done / blocked / failed"| FP
+    OP -->|"review PRs\njudgment calls"| L2
+
+    classDef layer1 fill:#fef3c7,stroke:#b8860b,color:#78350f
+    classDef layer2 fill:#dbeafe,stroke:#1e3a5f,color:#1e3a5f
+    classDef layer3 fill:#dcfce7,stroke:#166534,color:#166534
+
+    class FZ,DP,WS layer1
+    class CX,CC,AMP,OC layer2
+    class FP,OP,ZN layer3
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hybrid: Layer Details -->
+  <section class="anim" style="--i:20">
+    <div class="section-label"><span class="dot" style="background:var(--gold)"></span> Hybrid — Layer Details</div>
+    <h2>What Each Layer Does</h2>
+
+    <div class="ve-card ve-card--hero border-gold">
+      <h3>Layer 1: Deterministic Dispatcher <span class="tag tag--gold">0 tokens</span></h3>
+      <p style="margin-bottom:12px">A lightweight script on a cron. Does everything Symphony's orchestrator does, but against Fizzy instead of Linear.</p>
+      <div class="grid-2" style="margin-top:12px">
+        <div>
+          <p style="font-weight:600;margin-bottom:6px">Every tick (5 min):</p>
+          <ul>
+            <li>Poll Fizzy for <code>bot-actionable</code> cards</li>
+            <li>Resolve <code>blocked-by:NN</code> tags — skip blocked cards</li>
+            <li>Check concurrency limits (max N agents running)</li>
+            <li>Check per-agent budget caps</li>
+            <li>Create per-card git worktree</li>
+            <li>Run <code>before_run</code> hook (git pull, deps)</li>
+            <li>Route card to agent (tag-based rules)</li>
+            <li>Launch agent in workspace</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:600;margin-bottom:6px">Reconciliation (every tick):</p>
+          <ul>
+            <li>Check card state — if Done/Closed, kill running agent</li>
+            <li>Stall detection — no output for N minutes → kill + retry</li>
+            <li>Track per-card token spend from agent output</li>
+            <li>Run <code>after_run</code> hook on completion</li>
+            <li>On failure: exponential backoff retry</li>
+            <li>On success: comment on Fizzy card with results</li>
+            <li>Clean up worktrees for completed/terminal cards</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:12px;font-size:13px;color:var(--text-dim)">State stored in <code>memory/dispatcher-state.json</code>. No database. Restart recovery by re-scanning Fizzy + filesystem.</p>
     </div>
 
-    <div class="callout" style="margin-top:12px">
-      <strong>The hybrid idea:</strong> A lightweight deterministic dispatcher (Symphony-style) handles the mechanical poll → assign → reconcile loop at zero token cost. OpenClaw sits above it as the judgment layer — deciding <em>what</em> to work on, reviewing output, handling ambiguity. Paperclip's budget enforcement and goal ancestry add governance without LLM overhead. Best of all three worlds.
+    <div class="ve-card ve-card--hero border-teal" style="margin-top:16px">
+      <h3>Layer 2: Agent Execution <span class="tag tag--teal">work tokens (unchanged)</span></h3>
+      <p style="margin-bottom:12px">The actual coding agents do the work. Nothing changes here — they just get launched by the dispatcher instead of by Optimus.</p>
+      <div class="grid-2" style="margin-top:12px">
+        <div>
+          <p style="font-weight:600;margin-bottom:6px">Agent routing (tag-based):</p>
+          <ul>
+            <li><code>code</code> → Codex or Claude Code</li>
+            <li><code>enhancement</code> → Claude Code</li>
+            <li><code>chore</code> → Amp (free credits)</li>
+            <li><code>research</code> → Perceptor</li>
+            <li><code>bug</code> → Codex (fast iteration)</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:600;margin-bottom:6px">Per-repo customization:</p>
+          <ul>
+            <li>Optional <code>WORKFLOW.md</code> in repo root</li>
+            <li>Defines prompt template, hooks, agent prefs</li>
+            <li>Falls back to default prompt if absent</li>
+            <li>Version-controlled with the code</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="ve-card ve-card--hero border-sage" style="margin-top:16px">
+      <h3>Layer 3: fizzy-pop + OpenClaw Judgment <span class="tag tag--sage">judgment tokens only</span></h3>
+      <p style="margin-bottom:12px">fizzy-pop is already our inter-agent communication layer. Bots assign cards, mention each other, and coordinate via Fizzy notifications. OpenClaw steps in only when <em>thinking</em> is required.</p>
+      <div class="grid-2" style="margin-top:12px">
+        <div>
+          <p style="font-weight:600;margin-bottom:6px">fizzy-pop handles (0 tokens):</p>
+          <ul>
+            <li>Card assignment notifications between agents</li>
+            <li>@-mentions for cross-agent handoffs</li>
+            <li>Status updates via card comments</li>
+            <li>Column transitions (Ready → In Progress → Done)</li>
+            <li>The entire "who should work on this" coordination</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:600;margin-bottom:6px">OpenClaw handles (judgment tokens):</p>
+          <ul>
+            <li>PR review — "is this code good enough?"</li>
+            <li>Ambiguity resolution — "this card is underspecified"</li>
+            <li>Escalation to Zain — <code>needs-human</code> cards</li>
+            <li>Cross-agent conflict resolution</li>
+            <li>Dispatcher health monitoring</li>
+            <li>Periodic audits — "are we working on the right things?"</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hybrid: Token Savings -->
+  <section class="anim" style="--i:21">
+    <div class="section-label"><span class="dot" style="background:var(--gold)"></span> Hybrid — Token Impact</div>
+    <h2>Estimated Token Savings</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>Today (all LLM)</th>
+            <th>Hybrid</th>
+            <th>Savings</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Card polling + triage</strong></td>
+            <td>~15K tokens/heartbeat</td>
+            <td>0 (dispatcher code)</td>
+            <td><span class="state-dot state-dot--green"></span>100%</td>
+          </tr>
+          <tr>
+            <td><strong>Dependency checking</strong></td>
+            <td>N/A (not implemented)</td>
+            <td>0 (<code>blocked-by:NN</code> tags)</td>
+            <td><span class="state-dot state-dot--green"></span>New capability, free</td>
+          </tr>
+          <tr>
+            <td><strong>Agent spawning + routing</strong></td>
+            <td>~5K tokens/dispatch</td>
+            <td>0 (tag-based rules)</td>
+            <td><span class="state-dot state-dot--green"></span>100%</td>
+          </tr>
+          <tr>
+            <td><strong>Reconciliation</strong></td>
+            <td>N/A (fire-and-forget)</td>
+            <td>0 (dispatcher code)</td>
+            <td><span class="state-dot state-dot--green"></span>New capability, free</td>
+          </tr>
+          <tr>
+            <td><strong>Inter-agent coordination</strong></td>
+            <td>~5K tokens (OpenClaw relays)</td>
+            <td>0 (fizzy-pop notifications)</td>
+            <td><span class="state-dot state-dot--green"></span>100%</td>
+          </tr>
+          <tr>
+            <td><strong>PR review + judgment</strong></td>
+            <td>~10K tokens (when needed)</td>
+            <td>~10K tokens (unchanged)</td>
+            <td><span class="state-dot state-dot--gold"></span>0% (intentional)</td>
+          </tr>
+          <tr>
+            <td><strong>Heartbeat total</strong></td>
+            <td>~60K tokens/day</td>
+            <td>~15K tokens/day</td>
+            <td><span class="state-dot state-dot--green"></span><strong>~75% reduction</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>Net result:</strong> ~75% fewer orchestration tokens while <em>gaining</em> dependency tracking, workspace isolation, reconciliation, retry logic, and budget enforcement. The tokens we do spend go to judgment — the one thing an LLM is actually better at than code.
+    </div>
+  </section>
+
+  <!-- Hybrid: What Exists vs What's New -->
+  <section class="anim" style="--i:22">
+    <div class="section-label"><span class="dot" style="background:var(--gold)"></span> Hybrid — Build Plan</div>
+    <h2>What We Keep vs What We Build</h2>
+
+    <div class="grid-2">
+      <div class="ve-card border-sage">
+        <h3>Already exists (keep as-is)</h3>
+        <ul>
+          <li>All agent configs and personalities</li>
+          <li>Fizzy as task source + boards</li>
+          <li><strong>fizzy-pop</strong> for agent notifications, mentions, assignments</li>
+          <li>OpenClaw for messaging (Telegram, WhatsApp, etc.)</li>
+          <li>Memory system (MEMORY.md, knowledge/)</li>
+          <li>Codexbar for cost tracking</li>
+          <li>gh-issues + amp-swarm skills</li>
+          <li>All coding agents (Codex, Claude Code, Amp, etc.)</li>
+        </ul>
+      </div>
+      <div class="ve-card border-gold">
+        <h3>New (to build)</h3>
+        <ul>
+          <li><strong>Dispatcher script</strong> — polls Fizzy, manages concurrency, launches agents</li>
+          <li><strong>Workspace manager</strong> — git worktree per card, lifecycle hooks</li>
+          <li><strong><code>blocked-by:NN</code> tag checker</strong> — <a href="https://app.fizzy.do/6104728/cards/187" style="color:var(--gold)">Card #187</a> convention</li>
+          <li><strong>Tag-based router</strong> — card tags → agent selection</li>
+          <li><strong>Reconciliation loop</strong> — stall detection, state refresh, cleanup</li>
+          <li><strong>Budget caps</strong> — per-card / per-agent token limits</li>
+          <li><strong>WORKFLOW.md</strong> convention for repos (optional)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hybrid: Fizzy Dependency Gap -->
+  <section class="anim" style="--i:23">
+    <div class="section-label"><span class="dot" style="background:var(--rust)"></span> Hybrid — Open Question</div>
+    <h2>The Dependency Gap</h2>
+
+    <div class="ve-card border-rust">
+      <h3>Fizzy Has No Native Dependencies</h3>
+      <p>Fizzy cards can't natively block other cards. Symphony skips issues with unresolved blockers automatically. Linear and Paperclip both support dependency chains.</p>
+      <p style="margin-top:8px">We explored this in <a href="https://app.fizzy.do/6104728/cards/187" style="color:var(--rust)">Fizzy Card #187</a> (discussed with Wheeljack). Two options:</p>
+      <div class="grid-2" style="margin-top:12px">
+        <div class="ve-card ve-card--recessed">
+          <h3 style="font-size:14px;color:var(--rust)">Option 1: Fork Fizzy</h3>
+          <p>~5-8 days effort. Native dependency support. But maintaining a fork = drift risk. Fighting against the current. <strong>Not recommended.</strong></p>
+        </div>
+        <div class="ve-card ve-card--recessed">
+          <h3 style="font-size:14px;color:var(--sage)">Option 2: Tag Convention ✓</h3>
+          <p><code>blocked-by:NN</code> tags. Dispatcher checks if card #NN is still open before dispatch. Bot heartbeat checks for stale blockers. <strong>Zero code changes to Fizzy.</strong></p>
+        </div>
+      </div>
+      <p style="margin-top:12px;font-size:13px;color:var(--text-dim)">Linear solves this at the tracker level, but if its agent protocol <a href="https://x.com/odysseus0z/status/2031817165637349864" style="color:var(--text-dim)">wastes 5K+ tokens per checkbox toggle</a>, the savings from deterministic orchestration get eaten right back. The pragmatic path: implement the tag convention rather than switching trackers.</p>
     </div>
   </section>
 
