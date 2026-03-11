@@ -1135,8 +1135,9 @@ flowchart TD
 
     <div class="ve-card border-rust" style="margin-top:8px">
       <h3>Gap: Fizzy Has No Issue Dependencies</h3>
-      <p>Our current Fizzy workflow has <strong>no concept of task interdependency</strong>. Cards can't block other cards. Symphony handles this natively — issues in "Todo" with non-terminal blockers are automatically skipped during dispatch. Linear and Paperclip both support dependency chains. This means our agents can start work on tasks whose prerequisites haven't been completed yet.</p>
-      <p style="margin-top:8px;font-size:13px;color:var(--text-dim)">Linear solves this at the tracker level, but if its agent protocol wastes 5K+ tokens per checkbox toggle, the token savings from deterministic orchestration get eaten right back. The right answer might be adding dependency tracking to Fizzy rather than switching trackers.</p>
+      <p>Our current Fizzy workflow has <strong>no native concept of task interdependency</strong>. Cards can't block other cards. Symphony handles this natively — issues in "Todo" with non-terminal blockers are automatically skipped during dispatch. Linear and Paperclip both support dependency chains.</p>
+      <p style="margin-top:8px">We explored this in <a href="https://app.fizzy.do/6104728/cards/187" style="color:var(--rust)">Fizzy Card #187</a> (discussed with Wheeljack). Two options were considered: forking Fizzy for native deps (5-8 days, drift risk — not recommended) vs. a <strong>tag-based convention</strong> using <code>blocked-by:NN</code> tags with bot heartbeat checks for stale blockers. The tag convention was preferred — zero code changes needed.</p>
+      <p style="margin-top:8px;font-size:13px;color:var(--text-dim)">Linear solves this at the tracker level, but if its agent protocol wastes 5K+ tokens per checkbox toggle, the savings from deterministic orchestration get eaten right back. The pragmatic path: implement the <code>blocked-by:NN</code> tag convention in Fizzy rather than switching trackers.</p>
     </div>
 
     <div class="callout" style="margin-top:12px">
