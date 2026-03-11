@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Symphony — Deep Dive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Fragment+Mono:wght@400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --surface2: #f3f0ea;
+    --surface-elevated: #fffcf7;
+    --border: rgba(0,0,0,0.07);
+    --border-bright: rgba(0,0,0,0.14);
+    --text: #1e1b16;
+    --text-dim: #7a7265;
+    --navy: #1e3a5f;
+    --navy-dim: rgba(30,58,95,0.07);
+    --gold: #b8860b;
+    --gold-dim: rgba(184,134,11,0.07);
+    --teal: #0d7377;
+    --teal-dim: rgba(13,115,119,0.07);
+    --rust: #9a3412;
+    --rust-dim: rgba(154,52,18,0.07);
+    --sage: #4d7c0f;
+    --sage-dim: rgba(77,124,15,0.07);
+    --plum: #7e22ce;
+    --plum-dim: rgba(126,34,206,0.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12110e;
+      --surface: #1c1a16;
+      --surface2: #262320;
+      --surface-elevated: #2a2722;
+      --border: rgba(255,255,255,0.06);
+      --border-bright: rgba(255,255,255,0.12);
+      --text: #e8e2d8;
+      --text-dim: #9a9185;
+      --navy: #7db4e0;
+      --navy-dim: rgba(125,180,224,0.1);
+      --gold: #f0c850;
+      --gold-dim: rgba(240,200,80,0.1);
+      --teal: #5ce0e4;
+      --teal-dim: rgba(92,224,228,0.1);
+      --rust: #fb923c;
+      --rust-dim: rgba(251,146,60,0.1);
+      --sage: #a3e635;
+      --sage-dim: rgba(163,230,53,0.1);
+      --plum: #c084fc;
+      --plum-dim: rgba(192,132,252,0.1);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 15% 0%, var(--navy-dim) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 100%, var(--gold-dim) 0%, transparent 40%);
+    color: var(--text);
+    font-family: var(--font-body);
+    padding: 40px 24px;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(14px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .anim { animation: none !important; opacity: 1 !important; }
+  }
+  .anim {
+    opacity: 0;
+    animation: fadeUp 0.5s ease-out forwards;
+    animation-delay: calc(var(--i, 0) * 0.08s);
+  }
+
+  /* Hero */
+  .hero { margin-bottom: 48px; }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--navy); }
+  .hero .subtitle {
+    font-size: 18px;
+    color: var(--text-dim);
+    max-width: 680px;
+  }
+  .hero .meta {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .badge--accent { background: var(--navy-dim); color: var(--navy); border-color: var(--navy); }
+
+  /* Section Labels */
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* Cards */
+  .ve-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .ve-card--hero {
+    background: var(--surface-elevated);
+    border-color: var(--border-bright);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  }
+  .ve-card--recessed {
+    background: var(--surface2);
+    border-color: var(--border);
+  }
+  .ve-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .ve-card p, .ve-card li {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+  .ve-card ul { padding-left: 18px; }
+  .ve-card li { margin-bottom: 6px; }
+  .ve-card code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--surface2);
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  /* Accent borders */
+  .border-navy { border-left: 3px solid var(--navy); }
+  .border-gold { border-left: 3px solid var(--gold); }
+  .border-teal { border-left: 3px solid var(--teal); }
+  .border-rust { border-left: 3px solid var(--rust); }
+  .border-sage { border-left: 3px solid var(--sage); }
+  .border-plum { border-left: 3px solid var(--plum); }
+
+  /* Grid layouts */
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* Flow arrows */
+  .flow-arrow {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+  }
+  .flow-arrow svg {
+    width: 24px;
+    height: 32px;
+  }
+  .flow-arrow svg path {
+    stroke: var(--text-dim);
+    stroke-width: 1.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Mermaid container */
+  .mermaid-wrap {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    cursor: grab;
+    min-height: 200px;
+  }
+  .mermaid-wrap.dragging { cursor: grabbing; }
+  .zoom-controls {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+  }
+  .zoom-controls button {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .zoom-controls button:hover { background: var(--surface2); }
+  .mermaid-inner {
+    transform-origin: center center;
+    transition: transform 0.15s ease;
+  }
+
+  /* Section spacing */
+  section { margin-bottom: 48px; }
+  section > h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    margin-bottom: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead { position: sticky; top: 0; z-index: 2; }
+  th {
+    background: var(--surface2);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-bright);
+  }
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--surface2); }
+  td code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: var(--surface2);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  /* State dot indicators */
+  .state-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .state-dot--green { background: var(--sage); }
+  .state-dot--gold { background: var(--gold); }
+  .state-dot--rust { background: var(--rust); }
+  .state-dot--navy { background: var(--navy); }
+  .state-dot--teal { background: var(--teal); }
+
+  /* Callout */
+  .callout {
+    background: var(--gold-dim);
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .callout strong { color: var(--gold); }
+
+  /* Code block */
+  .code-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .code-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  /* Comparison section */
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    align-items: stretch;
+  }
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+  @media (max-width: 768px) {
+    .vs-grid { grid-template-columns: 1fr; }
+    .vs-divider { padding: 12px 0; }
+  }
+
+  /* KPI row */
+  .kpi-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .kpi {
+    flex: 1;
+    min-width: 140px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .kpi .num {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--navy);
+    font-feature-settings: 'tnum';
+  }
+  .kpi .label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* Pipeline steps */
+  .pipeline {
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    align-items: stretch;
+  }
+  .pipe-step {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    text-align: center;
+    position: relative;
+  }
+  .pipe-step:first-child { border-radius: 8px 0 0 8px; }
+  .pipe-step:last-child { border-radius: 0 8px 8px 0; }
+  .pipe-step .step-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .pipe-step .step-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .pipe-step .step-detail {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .pipe-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--text-dim);
+    font-size: 18px;
+    padding: 0 2px;
+  }
+  @media (max-width: 600px) {
+    .pipeline { flex-direction: column; }
+    .pipe-step { border-radius: 0 !important; }
+    .pipe-step:first-child { border-radius: 8px 8px 0 0 !important; }
+    .pipe-step:last-child { border-radius: 0 0 8px 8px !important; }
+    .pipe-arrow { justify-content: center; transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero anim" style="--i:0">
+    <h1><span>Symphony</span> Deep Dive</h1>
+    <p class="subtitle">OpenAI's spec-driven orchestrator that polls your issue tracker, isolates work into per-issue workspaces, and runs coding agents autonomously. Here's how every piece fits together.</p>
+    <div class="meta">
+      <span class="badge badge--accent">openai/symphony</span>
+      <span class="badge">SPEC v1 — Draft</span>
+      <span class="badge">Elixir Reference</span>
+      <span class="badge">Apache 2.0</span>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row anim" style="--i:1">
+    <div class="kpi">
+      <div class="num">6</div>
+      <div class="label">Core Components</div>
+    </div>
+    <div class="kpi">
+      <div class="num">4</div>
+      <div class="label">Lifecycle Hooks</div>
+    </div>
+    <div class="kpi">
+      <div class="num">11</div>
+      <div class="label">Run Phases</div>
+    </div>
+    <div class="kpi">
+      <div class="num" style="color:var(--gold)">∞</div>
+      <div class="label">Retry + Reconcile</div>
+    </div>
+  </div>
+
+  <!-- Section 1: The Core Loop -->
+  <section class="anim" style="--i:2">
+    <div class="section-label"><span class="dot" style="background:var(--navy)"></span> Core Loop</div>
+    <h2>How Symphony Works</h2>
+    <p style="color:var(--text-dim);margin-bottom:20px;font-size:15px">Symphony is a long-running daemon. Every <code>polling.interval_ms</code> (default 30s), it runs this exact sequence:</p>
+
+    <div class="pipeline">
+      <div class="pipe-step" style="border-bottom:3px solid var(--navy)">
+        <div class="step-num">Step 1</div>
+        <div class="step-title">Reconcile</div>
+        <div class="step-detail">Check running agents against tracker state. Kill stale runs.</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step" style="border-bottom:3px solid var(--gold)">
+        <div class="step-num">Step 2</div>
+        <div class="step-title">Validate</div>
+        <div class="step-detail">Pre-flight config check. If broken, skip dispatch but keep reconciling.</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step" style="border-bottom:3px solid var(--teal)">
+        <div class="step-num">Step 3</div>
+        <div class="step-title">Fetch</div>
+        <div class="step-detail">Query tracker for active issues. Sort by priority → created_at → identifier.</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step" style="border-bottom:3px solid var(--sage)">
+        <div class="step-num">Step 4</div>
+        <div class="step-title">Dispatch</div>
+        <div class="step-detail">Launch agents in isolated workspaces until concurrency slots exhausted.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Architecture -->
+  <section class="anim" style="--i:3">
+    <div class="section-label"><span class="dot" style="background:var(--teal)"></span> Architecture</div>
+    <h2>System Components</h2>
+
+    <div class="grid-2">
+      <div class="ve-card border-navy">
+        <h3>Workflow Loader</h3>
+        <p>Reads <code>WORKFLOW.md</code> from your repo. Parses YAML front matter (config) and Markdown body (prompt template). Watches for changes and hot-reloads without restart.</p>
+      </div>
+      <div class="ve-card border-gold">
+        <h3>Config Layer</h3>
+        <p>Typed getters for all workflow settings. Handles defaults, <code>$ENV_VAR</code> expansion, path normalization. Validates before every dispatch tick.</p>
+      </div>
+      <div class="ve-card border-teal">
+        <h3>Issue Tracker Client</h3>
+        <p>Currently Linear-only. Fetches candidates in active states, refreshes states for reconciliation, fetches terminal issues for cleanup. Normalizes everything into a stable domain model.</p>
+      </div>
+      <div class="ve-card border-rust">
+        <h3>Orchestrator</h3>
+        <p>The brain. Owns the poll tick, all in-memory state, dispatch/retry/stop decisions, and token accounting. Single authority — no external DB required.</p>
+      </div>
+      <div class="ve-card border-sage">
+        <h3>Workspace Manager</h3>
+        <p>Maps issue identifiers to filesystem paths. Creates directories, runs lifecycle hooks (<code>after_create</code>, <code>before_run</code>, etc.), cleans up terminal workspaces. Safety: all paths validated inside workspace root.</p>
+      </div>
+      <div class="ve-card border-plum">
+        <h3>Agent Runner</h3>
+        <p>Creates workspace → builds prompt → launches <code>codex app-server</code> via JSON-RPC over stdio → streams events back to orchestrator. Supports multi-turn sessions on the same thread.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: WORKFLOW.md -->
+  <section class="anim" style="--i:4">
+    <div class="section-label"><span class="dot" style="background:var(--gold)"></span> Repository Contract</div>
+    <h2>WORKFLOW.md — The Single Source of Truth</h2>
+    <p style="color:var(--text-dim);margin-bottom:20px;font-size:15px">This is what makes Symphony different. Your agent's behavior is version-controlled <em>with your code</em>, not in some external config.</p>
+
+    <div class="grid-2">
+      <div>
+        <div class="code-label">WORKFLOW.md — Front Matter (Config)</div>
+        <div class="code-block">---
+tracker:
+  kind: linear
+  project_slug: "my-project-abc"
+  active_states: ["Todo", "In Progress"]
+  terminal_states: ["Done", "Closed", "Cancelled"]
+
+polling:
+  interval_ms: 30000
+
+workspace:
+  root: ~/code/workspaces
+
+hooks:
+  after_create: |
+    git clone --depth 1 git@github.com:org/repo.git .
+    npm install
+  before_run: |
+    git checkout main && git pull
+  after_run: |
+    echo "Run complete for $ISSUE_ID"
+
+agent:
+  max_concurrent_agents: 5
+  max_turns: 20
+  max_retry_backoff_ms: 300000
+
+codex:
+  command: codex app-server
+  approval_policy: never
+  thread_sandbox: workspace-write
+  turn_timeout_ms: 3600000
+  stall_timeout_ms: 300000
+---</div>
+      </div>
+      <div>
+        <div class="code-label">WORKFLOW.md — Prompt Template (Markdown Body)</div>
+        <div class="code-block">You are working on Linear issue {{ issue.identifier }}.
+
+## Task
+**Title:** {{ issue.title }}
+**Description:** {{ issue.description }}
+
+## Instructions
+1. Read the issue carefully
+2. Create a feature branch
+3. Implement the changes
+4. Write tests
+5. Open a PR with a clear description
+6. Link the PR to the Linear issue
+7. Move the issue to "Human Review"
+
+{% if attempt %}
+## Retry Context
+This is attempt #{{ attempt }}.
+Check what was done previously and continue.
+{% endif %}
+
+## Rules
+- Follow existing code conventions
+- Run tests before committing
+- Keep PRs focused and small</div>
+      </div>
+    </div>
+
+    <div class="callout anim" style="--i:5">
+      <strong>Key insight:</strong> The prompt template uses Liquid-compatible syntax with strict variable checking. Unknown variables or filters fail the render — no silent fallbacks. The <code>issue</code> object includes all normalized fields (labels, blockers, priority, etc.) so you can build sophisticated per-repo workflows.
+    </div>
+  </section>
+
+  <!-- Section 4: Orchestration State Machine -->
+  <section class="anim" style="--i:5">
+    <div class="section-label"><span class="dot" style="background:var(--rust)"></span> State Machine</div>
+    <h2>Issue Orchestration States</h2>
+    <p style="color:var(--text-dim);margin-bottom:20px;font-size:15px">These are Symphony's <em>internal</em> claim states — separate from your tracker's states (Todo, In Progress, etc.).</p>
+
+    <div class="mermaid-wrap" id="state-diagram">
+      <div class="zoom-controls">
+        <button onclick="zoom(this, 1.2)">+</button>
+        <button onclick="zoom(this, 0.83)">−</button>
+        <button onclick="resetZoom(this)">⌀</button>
+      </div>
+      <div class="mermaid-inner">
+        <pre class="mermaid">
+flowchart TD
+    U["🔘 Unclaimed\n(not running, no retry)"]
+    C["🔵 Claimed\n(reserved for dispatch)"]
+    R["🟢 Running\n(worker active)"]
+    RQ["🟡 RetryQueued\n(timer pending)"]
+    REL["⚪ Released\n(claim removed)"]
+
+    U -->|"dispatch eligible"| C
+    C -->|"worker launched"| R
+    R -->|"normal exit"| RQ
+    R -->|"abnormal exit"| RQ
+    R -->|"reconciliation: terminal"| REL
+    R -->|"reconciliation: inactive"| REL
+    R -->|"stall timeout"| RQ
+    RQ -->|"timer fires + eligible"| R
+    RQ -->|"timer fires + ineligible"| REL
+    RQ -->|"issue missing"| REL
+
+    classDef unclaimed fill:#f0f0f0,stroke:#999,color:#333
+    classDef claimed fill:#dbeafe,stroke:#3b82f6,color:#1e3a8a
+    classDef running fill:#dcfce7,stroke:#22c55e,color:#166534
+    classDef retry fill:#fef3c7,stroke:#f59e0b,color:#92400e
+    classDef released fill:#f3f4f6,stroke:#9ca3af,color:#6b7280
+
+    class U unclaimed
+    class C claimed
+    class R running
+    class RQ retry
+    class REL released
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Run Attempt Lifecycle -->
+  <section class="anim" style="--i:6">
+    <div class="section-label"><span class="dot" style="background:var(--sage)"></span> Run Lifecycle</div>
+    <h2>What Happens During Each Run</h2>
+
+    <div class="pipeline" style="flex-wrap:wrap;">
+      <div class="pipe-step" style="border-top:3px solid var(--navy)">
+        <div class="step-num">Phase 1</div>
+        <div class="step-title">Prepare Workspace</div>
+        <div class="step-detail">Create/reuse dir, run <code>after_create</code> hook if new</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step" style="border-top:3px solid var(--gold)">
+        <div class="step-num">Phase 2</div>
+        <div class="step-title">Build Prompt</div>
+        <div class="step-detail">Render template with issue data + attempt number</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step" style="border-top:3px solid var(--teal)">
+        <div class="step-num">Phase 3</div>
+        <div class="step-title">before_run Hook</div>
+        <div class="step-detail">Git pull, dep install, etc. Failure = abort attempt</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step" style="border-top:3px solid var(--sage)">
+        <div class="step-num">Phase 4</div>
+        <div class="step-title">Launch Agent</div>
+        <div class="step-detail"><code>bash -lc "codex app-server"</code> in workspace dir</div>
+      </div>
+    </div>
+    <div class="pipeline" style="flex-wrap:wrap;">
+      <div class="pipe-step" style="border-top:3px solid var(--plum)">
+        <div class="step-num">Phase 5</div>
+        <div class="step-title">Handshake</div>
+        <div class="step-detail"><code>initialize</code> → <code>thread/start</code> → <code>turn/start</code></div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step" style="border-top:3px solid var(--rust)">
+        <div class="step-num">Phase 6</div>
+        <div class="step-title">Stream Turn</div>
+        <div class="step-detail">Read JSON-RPC events line-by-line from stdout. Track tokens.</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step" style="border-top:3px solid var(--navy)">
+        <div class="step-num">Phase 7</div>
+        <div class="step-title">Multi-Turn Loop</div>
+        <div class="step-detail">If issue still active after turn completes: start another turn (up to <code>max_turns</code>)</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step" style="border-top:3px solid var(--gold)">
+        <div class="step-num">Phase 8</div>
+        <div class="step-title">Exit + after_run</div>
+        <div class="step-detail">Worker exits → orchestrator schedules 1s continuation retry to re-check</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Config Cheat Sheet -->
+  <section class="anim" style="--i:7">
+    <div class="section-label"><span class="dot" style="background:var(--plum)"></span> Configuration</div>
+    <h2>Full Config Reference</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>tracker.kind</code></td>
+            <td>string</td>
+            <td>—</td>
+            <td><strong>Required.</strong> Currently only <code>linear</code></td>
+          </tr>
+          <tr>
+            <td><code>tracker.api_key</code></td>
+            <td>string / $VAR</td>
+            <td><code>$LINEAR_API_KEY</code></td>
+            <td>Linear personal API token</td>
+          </tr>
+          <tr>
+            <td><code>tracker.project_slug</code></td>
+            <td>string</td>
+            <td>—</td>
+            <td><strong>Required.</strong> Linear project slug from URL</td>
+          </tr>
+          <tr>
+            <td><code>tracker.active_states</code></td>
+            <td>list</td>
+            <td><code>["Todo", "In Progress"]</code></td>
+            <td>Issue states eligible for dispatch</td>
+          </tr>
+          <tr>
+            <td><code>tracker.terminal_states</code></td>
+            <td>list</td>
+            <td><code>["Closed", "Cancelled", ...]</code></td>
+            <td>States that trigger cleanup</td>
+          </tr>
+          <tr>
+            <td><code>polling.interval_ms</code></td>
+            <td>integer</td>
+            <td><code>30000</code></td>
+            <td>Poll cadence. Dynamic reload supported.</td>
+          </tr>
+          <tr>
+            <td><code>workspace.root</code></td>
+            <td>path</td>
+            <td><code>&lt;tmp&gt;/symphony_workspaces</code></td>
+            <td>Root directory for per-issue workspaces</td>
+          </tr>
+          <tr>
+            <td><code>hooks.after_create</code></td>
+            <td>shell script</td>
+            <td>null</td>
+            <td>Runs once when workspace dir is first created. <span class="state-dot state-dot--rust"></span>Fatal on failure.</td>
+          </tr>
+          <tr>
+            <td><code>hooks.before_run</code></td>
+            <td>shell script</td>
+            <td>null</td>
+            <td>Runs before each agent attempt. <span class="state-dot state-dot--rust"></span>Fatal on failure.</td>
+          </tr>
+          <tr>
+            <td><code>hooks.after_run</code></td>
+            <td>shell script</td>
+            <td>null</td>
+            <td>Runs after each attempt. <span class="state-dot state-dot--green"></span>Failure ignored.</td>
+          </tr>
+          <tr>
+            <td><code>hooks.before_remove</code></td>
+            <td>shell script</td>
+            <td>null</td>
+            <td>Runs before workspace deletion. <span class="state-dot state-dot--green"></span>Failure ignored.</td>
+          </tr>
+          <tr>
+            <td><code>hooks.timeout_ms</code></td>
+            <td>integer</td>
+            <td><code>60000</code></td>
+            <td>Timeout for all hooks</td>
+          </tr>
+          <tr>
+            <td><code>agent.max_concurrent_agents</code></td>
+            <td>integer</td>
+            <td><code>10</code></td>
+            <td>Global concurrency limit. Dynamic reload.</td>
+          </tr>
+          <tr>
+            <td><code>agent.max_turns</code></td>
+            <td>integer</td>
+            <td><code>20</code></td>
+            <td>Max back-to-back Codex turns per worker run</td>
+          </tr>
+          <tr>
+            <td><code>agent.max_retry_backoff_ms</code></td>
+            <td>integer</td>
+            <td><code>300000</code></td>
+            <td>Cap for exponential backoff (5 min)</td>
+          </tr>
+          <tr>
+            <td><code>agent.max_concurrent_agents_by_state</code></td>
+            <td>map</td>
+            <td><code>{}</code></td>
+            <td>Per-state concurrency limits (e.g., max 2 for "Todo")</td>
+          </tr>
+          <tr>
+            <td><code>codex.command</code></td>
+            <td>shell command</td>
+            <td><code>codex app-server</code></td>
+            <td>Agent binary. Launched via <code>bash -lc</code></td>
+          </tr>
+          <tr>
+            <td><code>codex.approval_policy</code></td>
+            <td>string/object</td>
+            <td>impl-defined</td>
+            <td>Codex approval mode. Elixir default: reject all approvals</td>
+          </tr>
+          <tr>
+            <td><code>codex.thread_sandbox</code></td>
+            <td>string</td>
+            <td><code>workspace-write</code></td>
+            <td><code>read-only</code> / <code>workspace-write</code> / <code>danger-full-access</code></td>
+          </tr>
+          <tr>
+            <td><code>codex.turn_timeout_ms</code></td>
+            <td>integer</td>
+            <td><code>3600000</code></td>
+            <td>Max time per Codex turn (1 hour)</td>
+          </tr>
+          <tr>
+            <td><code>codex.stall_timeout_ms</code></td>
+            <td>integer</td>
+            <td><code>300000</code></td>
+            <td>Kill agent if no events for this long. ≤0 disables.</td>
+          </tr>
+          <tr>
+            <td><code>server.port</code></td>
+            <td>integer</td>
+            <td>disabled</td>
+            <td>Optional Phoenix LiveView dashboard + JSON API</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 7: Retry & Reconciliation -->
+  <section class="anim" style="--i:8">
+    <div class="section-label"><span class="dot" style="background:var(--rust)"></span> Resilience</div>
+    <h2>Retry & Reconciliation</h2>
+
+    <div class="grid-2">
+      <div class="ve-card ve-card--hero border-gold">
+        <h3>Retry Logic</h3>
+        <ul>
+          <li><strong>Normal exit:</strong> 1-second continuation retry. Re-checks if issue is still active, then re-dispatches.</li>
+          <li><strong>Abnormal exit:</strong> Exponential backoff: <code>min(10s × 2^(attempt-1), max_retry_backoff_ms)</code></li>
+          <li>Before re-dispatch: re-fetches active candidates, checks eligibility, verifies concurrency slots</li>
+          <li>If issue no longer eligible: releases claim, no retry</li>
+        </ul>
+      </div>
+      <div class="ve-card ve-card--hero border-rust">
+        <h3>Reconciliation (every tick)</h3>
+        <ul>
+          <li><strong>Part A — Stall detection:</strong> If no Codex events for <code>stall_timeout_ms</code>, kill the worker and queue retry</li>
+          <li><strong>Part B — Tracker state refresh:</strong> Fetch current states for all running issues:
+            <ul>
+              <li>Terminal state → kill worker + clean workspace</li>
+              <li>Still active → update in-memory snapshot</li>
+              <li>Neither active nor terminal → kill worker, keep workspace</li>
+            </ul>
+          </li>
+          <li>If state refresh fails: keep workers running, try next tick</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: Agent Protocol -->
+  <section class="anim" style="--i:9">
+    <div class="section-label"><span class="dot" style="background:var(--navy)"></span> Agent Protocol</div>
+    <h2>Codex App-Server Integration</h2>
+    <p style="color:var(--text-dim);margin-bottom:20px;font-size:15px">Symphony communicates with Codex via JSON-RPC over stdio. The handshake is strict — four messages in exact order:</p>
+
+    <div class="code-block">→ {"id":1, "method":"initialize", "params":{"clientInfo":{"name":"symphony","version":"1.0"}, "capabilities":{}}}
+← {"id":1, "result":{...}}
+
+→ {"method":"initialized", "params":{}}
+
+→ {"id":2, "method":"thread/start", "params":{"approvalPolicy":"never", "sandbox":"workspace-write", "cwd":"/workspaces/ABC-123"}}
+← {"id":2, "result":{"thread":{"id":"thread_abc123"}}}
+
+→ {"id":3, "method":"turn/start", "params":{"threadId":"thread_abc123", "input":[{"type":"text","text":"&lt;rendered prompt&gt;"}], "cwd":"/workspaces/ABC-123", "title":"ABC-123: Fix login bug"}}
+← streaming events...</div>
+
+    <div class="grid-3" style="margin-top:20px">
+      <div class="ve-card ve-card--recessed">
+        <h3 style="font-size:14px">Turn Completion</h3>
+        <p><code>turn/completed</code> → success<br>
+        <code>turn/failed</code> → failure<br>
+        <code>turn/cancelled</code> → failure<br>
+        Timeout or process exit → failure</p>
+      </div>
+      <div class="ve-card ve-card--recessed">
+        <h3 style="font-size:14px">Approval Policy</h3>
+        <p>Auto-approve command + file changes. User-input-required = hard failure. Unsupported tool calls → return error + continue session.</p>
+      </div>
+      <div class="ve-card ve-card--recessed">
+        <h3 style="font-size:14px">linear_graphql Tool</h3>
+        <p>Optional client-side tool that lets Codex query/mutate Linear using Symphony's auth. Single GraphQL operation per call.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 9: Safety Invariants -->
+  <section class="anim" style="--i:10">
+    <div class="section-label"><span class="dot" style="background:var(--rust)"></span> Safety</div>
+    <h2>Safety Invariants</h2>
+    <p style="color:var(--text-dim);margin-bottom:20px;font-size:15px">The spec calls these "the most important portability constraint."</p>
+
+    <div class="grid-3">
+      <div class="ve-card border-rust">
+        <h3 style="font-size:14px">Invariant 1</h3>
+        <p>Agent <strong>only runs in the per-issue workspace path</strong>. Validated: <code>cwd == workspace_path</code> before launch.</p>
+      </div>
+      <div class="ve-card border-rust">
+        <h3 style="font-size:14px">Invariant 2</h3>
+        <p>Workspace path must <strong>stay inside workspace root</strong>. Both normalized to absolute. Prefix check enforced.</p>
+      </div>
+      <div class="ve-card border-rust">
+        <h3 style="font-size:14px">Invariant 3</h3>
+        <p>Workspace key is <strong>sanitized</strong>: only <code>[A-Za-z0-9._-]</code> allowed. Everything else replaced with <code>_</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 10: Elixir Reference -->
+  <section class="anim" style="--i:11">
+    <div class="section-label"><span class="dot" style="background:var(--sage)"></span> Elixir Implementation</div>
+    <h2>Reference Implementation</h2>
+
+    <div class="ve-card ve-card--hero border-sage">
+      <h3>Why Elixir?</h3>
+      <p>Erlang/BEAM/OTP excels at supervising long-running processes. Hot code reloading means you can update Symphony without stopping running agents. The implementation includes:</p>
+      <ul style="margin-top:10px">
+        <li>Phoenix LiveView dashboard at <code>/</code> (opt-in via <code>--port</code>)</li>
+        <li>JSON API at <code>/api/v1/state</code>, <code>/api/v1/&lt;identifier&gt;</code>, <code>/api/v1/refresh</code></li>
+        <li><code>linear_graphql</code> client-side tool for in-session Linear mutations</li>
+        <li>Skills bundled: <code>commit</code>, <code>push</code>, <code>pull</code>, <code>land</code>, <code>linear</code></li>
+        <li>Embedded PostgreSQL not required — in-memory state, file-system recovery</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <strong>Setup note:</strong> Uses <code>mise</code> for Elixir/Erlang version management. The Elixir impl expects custom Linear workflow states: "Rework", "Human Review", and "Merging" — configure in Linear Team Settings → Workflow. Ryan Carson reported 2-3 days to set up for his codebase.
+    </div>
+  </section>
+
+  <!-- Section 11: Comparison with our setup -->
+  <section class="anim" style="--i:12">
+    <div class="section-label"><span class="dot" style="background:var(--gold)"></span> Comparison</div>
+    <h2>Symphony vs Our Current Setup</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>Symphony</th>
+            <th>OpenClaw + Fizzy + gh-issues</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Issue source</strong></td>
+            <td>Linear (polled every 30s)</td>
+            <td>GitHub Issues / Fizzy cards</td>
+          </tr>
+          <tr>
+            <td><strong>Workspace isolation</strong></td>
+            <td><span class="state-dot state-dot--green"></span>Per-issue directory with hooks</td>
+            <td><span class="state-dot state-dot--gold"></span>Agent spawns, no worktrees</td>
+          </tr>
+          <tr>
+            <td><strong>In-repo workflow policy</strong></td>
+            <td><span class="state-dot state-dot--green"></span><code>WORKFLOW.md</code> versioned with code</td>
+            <td><span class="state-dot state-dot--rust"></span>Agent config in OpenClaw, separate from repos</td>
+          </tr>
+          <tr>
+            <td><strong>Reconciliation</strong></td>
+            <td><span class="state-dot state-dot--green"></span>Every tick: stall detection + state refresh</td>
+            <td><span class="state-dot state-dot--rust"></span>Fire-and-forget, no auto-stop</td>
+          </tr>
+          <tr>
+            <td><strong>Retry logic</strong></td>
+            <td><span class="state-dot state-dot--green"></span>Exponential backoff + continuation retries</td>
+            <td><span class="state-dot state-dot--gold"></span>Basic re-run, no structured backoff</td>
+          </tr>
+          <tr>
+            <td><strong>Per-task token tracking</strong></td>
+            <td><span class="state-dot state-dot--green"></span>Per-session token counters, rate-limit tracking</td>
+            <td><span class="state-dot state-dot--gold"></span>Aggregate via codexbar</td>
+          </tr>
+          <tr>
+            <td><strong>Multi-turn sessions</strong></td>
+            <td><span class="state-dot state-dot--green"></span>Same thread, up to <code>max_turns</code></td>
+            <td><span class="state-dot state-dot--green"></span>Via sub-agent sessions</td>
+          </tr>
+          <tr>
+            <td><strong>Hot reload</strong></td>
+            <td><span class="state-dot state-dot--green"></span>WORKFLOW.md watched, config reloaded live</td>
+            <td><span class="state-dot state-dot--green"></span>config.patch with restart</td>
+          </tr>
+          <tr>
+            <td><strong>Agent flexibility</strong></td>
+            <td><span class="state-dot state-dot--gold"></span>Codex only (app-server protocol)</td>
+            <td><span class="state-dot state-dot--green"></span>Any agent: Claude Code, Codex, Amp, etc.</td>
+          </tr>
+          <tr>
+            <td><strong>Observability</strong></td>
+            <td><span class="state-dot state-dot--green"></span>TUI + LiveView dashboard + JSON API</td>
+            <td><span class="state-dot state-dot--gold"></span>Telegram messages + codexbar</td>
+          </tr>
+          <tr>
+            <td><strong>Messaging integration</strong></td>
+            <td><span class="state-dot state-dot--rust"></span>None (pure daemon)</td>
+            <td><span class="state-dot state-dot--green"></span>Telegram, WhatsApp, Discord, etc.</td>
+          </tr>
+          <tr>
+            <td><strong>Requires</strong></td>
+            <td>Linear account, Codex app, Elixir/mise</td>
+            <td>GitHub, Node.js (already running)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 12: Key Takeaways -->
+  <section class="anim" style="--i:13">
+    <div class="section-label"><span class="dot" style="background:var(--navy)"></span> Takeaways</div>
+    <h2>What's Worth Stealing</h2>
+
+    <div class="grid-2">
+      <div class="ve-card ve-card--hero border-navy">
+        <h3>🎯 Adopt</h3>
+        <ul>
+          <li><strong>In-repo WORKFLOW.md:</strong> Let each repo define its own agent behavior. Prompt + config + hooks, version-controlled.</li>
+          <li><strong>Per-issue workspaces:</strong> Git worktrees per issue. No cross-contamination between concurrent agents.</li>
+          <li><strong>Reconciliation loop:</strong> Every poll tick, check running agents against tracker state. Auto-kill stale/terminal runs.</li>
+          <li><strong>Lifecycle hooks:</strong> <code>after_create</code> / <code>before_run</code> / <code>after_run</code> give repos full control over workspace setup.</li>
+        </ul>
+      </div>
+      <div class="ve-card ve-card--hero border-gold">
+        <h3>🤔 Skip (for now)</h3>
+        <ul>
+          <li><strong>Linear dependency:</strong> We use GitHub Issues + Fizzy. The spec is Linear-only for now.</li>
+          <li><strong>Codex-only agent protocol:</strong> We use multiple agents. Symphony's JSON-RPC protocol is Codex-specific.</li>
+          <li><strong>Elixir runtime:</strong> Adding Elixir to our stack is overhead. The concepts port to our Node.js setup.</li>
+          <li><strong>Full service daemon:</strong> We already have OpenClaw as our daemon. Don't need a second one.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Mermaid init
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#dbeafe',
+      primaryTextColor: '#1e3a5f',
+      primaryBorderColor: '#93c5fd',
+      lineColor: '#94a3b8',
+      secondaryColor: '#fef3c7',
+      tertiaryColor: '#dcfce7',
+      fontFamily: "'Bricolage Grotesque', system-ui",
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', padding: 16 }
+  });
+
+  // Zoom controls
+  const ZOOM_STATES = new WeakMap();
+  function getState(btn) {
+    const wrap = btn.closest('.mermaid-wrap');
+    if (!ZOOM_STATES.has(wrap)) ZOOM_STATES.set(wrap, { scale: 1, tx: 0, ty: 0 });
+    return { wrap, state: ZOOM_STATES.get(wrap) };
+  }
+  function applyTransform(wrap, state) {
+    const inner = wrap.querySelector('.mermaid-inner');
+    inner.style.transform = `translate(${state.tx}px, ${state.ty}px) scale(${state.scale})`;
+  }
+  function zoom(btn, factor) {
+    const { wrap, state } = getState(btn);
+    state.scale = Math.max(0.3, Math.min(4, state.scale * factor));
+    applyTransform(wrap, state);
+  }
+  function resetZoom(btn) {
+    const { wrap, state } = getState(btn);
+    state.scale = 1; state.tx = 0; state.ty = 0;
+    applyTransform(wrap, state);
+  }
+
+  // Drag to pan
+  document.querySelectorAll('.mermaid-wrap').forEach(wrap => {
+    let dragging = false, startX, startY;
+    wrap.addEventListener('mousedown', e => {
+      if (e.target.closest('.zoom-controls')) return;
+      dragging = true;
+      wrap.classList.add('dragging');
+      const state = ZOOM_STATES.get(wrap) || { scale:1, tx:0, ty:0 };
+      startX = e.clientX - state.tx;
+      startY = e.clientY - state.ty;
+    });
+    window.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const state = ZOOM_STATES.get(wrap) || { scale:1, tx:0, ty:0 };
+      state.tx = e.clientX - startX;
+      state.ty = e.clientY - startY;
+      ZOOM_STATES.set(wrap, state);
+      applyTransform(wrap, state);
+    });
+    window.addEventListener('mouseup', () => {
+      dragging = false;
+      wrap.classList.remove('dragging');
+    });
+    // Scroll zoom
+    wrap.addEventListener('wheel', e => {
+      e.preventDefault();
+      const state = ZOOM_STATES.get(wrap) || { scale:1, tx:0, ty:0 };
+      const factor = e.deltaY < 0 ? 1.1 : 0.9;
+      state.scale = Math.max(0.3, Math.min(4, state.scale * factor));
+      ZOOM_STATES.set(wrap, state);
+      applyTransform(wrap, state);
+    }, { passive: false });
+  });
+</script>
+</body>
+</html>
