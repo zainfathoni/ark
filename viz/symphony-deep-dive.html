@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent Orchestration Deep Dive — Symphony · Paperclip · OpenClaw</title>
+<meta property="og:title" content="Agent Orchestration Deep Dive — Symphony · Paperclip · OpenClaw">
+<meta property="og:description" content="Three-way comparison of Symphony, Paperclip, and OpenClaw for AI agent orchestration. Architecture, token costs, and what to steal.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Fragment+Mono:wght@400&display=swap" rel="stylesheet">
@@ -462,6 +464,14 @@
     <div class="callout">
       <strong>The tradeoff:</strong> Symphony and Paperclip can poll every 30 seconds for free. OpenClaw's value is <em>judgment</em> — deciding <em>what</em> to work on, not just <em>when</em>. But for mechanical dispatch loops, deterministic code wins on cost and speed.
     </div>
+
+    <!-- Token Waste: Real-World Finding -->
+    <div class="ve-card ve-card--hero border-rust" style="margin-top:8px">
+      <h3>Real-World Token Waste: Symphony's Workpad Bug</h3>
+      <p style="margin-bottom:10px">George (<a href="https://x.com/odysseus0z" style="color:var(--rust)">@odysseus0z</a>) found that Symphony's workpad edits send the <strong>full body</strong> on every update. On big tickets with >5K tokens, <strong>each checkbox toggle burns 5,000+ tokens</strong>. He submitted a <a href="https://github.com/odysseus0/symphony/pull/2" style="color:var(--rust)">PR for file-based workpad sync</a> but can't PR directly to openai/symphony due to restrictions.</p>
+      <p style="font-size:12px;color:var(--text-dim)">Source: <a href="https://x.com/odysseus0z/status/2031817165637349864" style="color:var(--text-dim)">x.com/odysseus0z — Mar 12, 2026</a></p>
+      <p style="margin-top:10px"><strong>Lesson:</strong> Even "zero-token orchestration" tools have hidden token costs in their agent protocol. The orchestrator is cheap but the agent-to-tracker communication can be wasteful. This is a design-level concern, not just a billing concern.</p>
+    </div>
   </section>
 
   <hr class="section-divider">
@@ -471,7 +481,7 @@
     <div class="section-label"><span class="dot" style="background:var(--navy)"></span> Part 1</div>
     <h2 style="color:var(--navy)">Symphony — The Focused Scheduler</h2>
     <p style="color:var(--text-dim);margin-bottom:8px;font-size:15px">OpenAI's spec-driven orchestrator. Polls Linear, isolates work into per-issue workspaces, runs Codex autonomously.</p>
-    <div style="margin-bottom:20px">
+    <div style="margin-bottom:12px">
       <span class="tag tag--navy">openai/symphony</span>
       <span class="tag tag--navy">SPEC v1 Draft</span>
       <span class="tag tag--navy">Elixir/OTP</span>
@@ -479,6 +489,12 @@
       <span class="tag tag--navy">Codex only</span>
       <span class="tag tag--navy">Linear only</span>
     </div>
+    <p style="font-size:13px;color:var(--text-dim)">
+      <a href="https://github.com/openai/symphony" style="color:var(--navy)">GitHub</a> ·
+      <a href="https://github.com/openai/symphony/blob/main/SPEC.md" style="color:var(--navy)">SPEC.md</a> ·
+      <a href="https://github.com/openai/symphony/blob/main/elixir/README.md" style="color:var(--navy)">Elixir README</a> ·
+      <a href="https://x.com/ryancarson/status/2031755002205655511" style="color:var(--navy)">Ryan Carson's tweet</a>
+    </p>
   </section>
 
   <!-- Symphony: Core Loop -->
@@ -699,13 +715,19 @@ flowchart TD
     <div class="section-label"><span class="dot" style="background:var(--plum)"></span> Part 2</div>
     <h2 style="color:var(--plum)">Paperclip — The Company Simulator</h2>
     <p style="color:var(--text-dim);margin-bottom:8px;font-size:15px">Open-source orchestration for "zero-human companies." If Symphony is a scheduler, Paperclip is an entire business operating system.</p>
-    <div style="margin-bottom:20px">
+    <div style="margin-bottom:12px">
       <span class="tag tag--plum">paperclipai/paperclip</span>
       <span class="tag tag--plum">Node.js + React</span>
       <span class="tag tag--plum">MIT</span>
       <span class="tag tag--plum">Multi-agent</span>
       <span class="tag tag--plum">Embedded Postgres</span>
     </div>
+    <p style="font-size:13px;color:var(--text-dim)">
+      <a href="https://github.com/paperclipai/paperclip" style="color:var(--plum)">GitHub</a> ·
+      <a href="https://paperclip.ing" style="color:var(--plum)">paperclip.ing</a> ·
+      <a href="https://paperclip.ing/docs" style="color:var(--plum)">Docs</a> ·
+      <a href="https://x.com/odysseus0z/status/2031836320671441311" style="color:var(--plum)">George's tweet</a>
+    </p>
   </section>
 
   <!-- Paperclip: Mental Model -->
@@ -1111,7 +1133,13 @@ flowchart TD
       </div>
     </div>
 
-    <div class="callout" style="margin-top:8px">
+    <div class="ve-card border-rust" style="margin-top:8px">
+      <h3>Gap: Fizzy Has No Issue Dependencies</h3>
+      <p>Our current Fizzy workflow has <strong>no concept of task interdependency</strong>. Cards can't block other cards. Symphony handles this natively — issues in "Todo" with non-terminal blockers are automatically skipped during dispatch. Linear and Paperclip both support dependency chains. This means our agents can start work on tasks whose prerequisites haven't been completed yet.</p>
+      <p style="margin-top:8px;font-size:13px;color:var(--text-dim)">Linear solves this at the tracker level, but if its agent protocol wastes 5K+ tokens per checkbox toggle, the token savings from deterministic orchestration get eaten right back. The right answer might be adding dependency tracking to Fizzy rather than switching trackers.</p>
+    </div>
+
+    <div class="callout" style="margin-top:12px">
       <strong>The hybrid idea:</strong> A lightweight deterministic dispatcher (Symphony-style) handles the mechanical poll → assign → reconcile loop at zero token cost. OpenClaw sits above it as the judgment layer — deciding <em>what</em> to work on, reviewing output, handling ambiguity. Paperclip's budget enforcement and goal ancestry add governance without LLM overhead. Best of all three worlds.
     </div>
   </section>
