@@ -498,63 +498,82 @@
           </svg>
         </div>
 
-        <!-- Elongasi Diagram -->
+        <!-- Elongasi Diagram — CORRECTED: Sun & Moon on same side (west) -->
         <div class="svg-chart-wrap" style="padding: 1.5rem 1rem;">
           <div style="text-align: center; margin-bottom: 0.75rem;">
             <span style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); font-weight: 600;">Elongasi (Elongation)</span>
           </div>
-          <svg viewBox="0 0 340 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram penjelasan elongasi">
+          <svg viewBox="0 0 340 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram penjelasan elongasi — Matahari dan Bulan di sisi yang sama">
             <defs>
               <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#1e3a5f" stop-opacity="0.08"/>
                 <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
               </linearGradient>
+              <!-- Sunset glow on the right (west) side -->
+              <radialGradient id="westGlow" cx="85%" cy="90%" r="40%">
+                <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.12"/>
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+              </radialGradient>
             </defs>
 
-            <!-- Sky area -->
+            <!-- Sky area with western glow -->
             <rect x="20" y="20" width="300" height="180" rx="8" fill="url(#sky2)"/>
+            <rect x="20" y="20" width="300" height="180" rx="8" fill="url(#westGlow)"/>
 
-            <!-- Horizon line -->
+            <!-- Direction labels -->
+            <text x="30" y="38" fill="currentColor" fill-opacity="0.2" font-family="Plus Jakarta Sans, sans-serif" font-size="8">TIMUR ←</text>
+            <text x="280" y="38" fill="currentColor" fill-opacity="0.2" font-family="Plus Jakarta Sans, sans-serif" font-size="8">→ BARAT</text>
+
+            <!-- Horizon line (ufuk) -->
             <line x1="20" y1="200" x2="320" y2="200" stroke="#c2410c" stroke-width="2.5"/>
             <text x="325" y="204" fill="#c2410c" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">UFUK</text>
 
             <!-- Ground -->
             <rect x="20" y="200" width="300" height="80" rx="0" fill="currentColor" fill-opacity="0.03"/>
 
-            <!-- Observer / Earth -->
-            <circle cx="170" cy="240" r="22" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
-            <text x="170" y="244" text-anchor="middle" fill="currentColor" fill-opacity="0.35" font-family="Plus Jakarta Sans, sans-serif" font-size="8" font-weight="600">BUMI</text>
+            <!-- Observer at bottom center -->
+            <circle cx="200" cy="248" r="5" fill="currentColor" fill-opacity="0.4"/>
+            <line x1="200" y1="248" x2="200" y2="233" stroke="currentColor" stroke-opacity="0.4" stroke-width="2"/>
+            <circle cx="200" cy="230" r="4" fill="currentColor" fill-opacity="0.4"/>
+            <text x="200" y="265" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="8" font-weight="600">pengamat</text>
 
-            <!-- Sun glow & icon (near horizon, left) -->
-            <circle cx="60" cy="155" r="22" fill="url(#sunGlow)"/>
-            <circle cx="60" cy="155" r="12" fill="#f59e0b" opacity="0.75"/>
-            <text x="60" y="130" text-anchor="middle" fill="#d97706" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Matahari</text>
+            <!-- Sun (just at/below horizon on the RIGHT/west side) -->
+            <circle cx="280" cy="200" r="22" fill="url(#sunGlow)"/>
+            <circle cx="280" cy="200" r="11" fill="#f59e0b" opacity="0.7"/>
+            <!-- Half below horizon -->
+            <rect x="260" y="200" width="40" height="22" fill="var(--bg)" opacity="0.6"/>
+            <text x="280" y="183" text-anchor="middle" fill="#d97706" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Matahari</text>
+            <text x="280" y="172" text-anchor="middle" fill="#d97706" font-family="Plus Jakarta Sans, sans-serif" font-size="7">(terbenam)</text>
 
-            <!-- Moon (hilal) (right, above) -->
-            <circle cx="260" cy="95" r="18" fill="url(#moonGlow)"/>
-            <circle cx="260" cy="95" r="10" fill="#f0c56d" opacity="0.8"/>
-            <circle cx="265" cy="93" r="8" fill="url(#sky2)"/>
-            <text x="260" y="73" text-anchor="middle" fill="#c17f24" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Hilal ☽</text>
+            <!-- Moon (hilal) — ALSO on the right/west side, slightly above and to the left of the sun -->
+            <circle cx="235" cy="138" r="18" fill="url(#moonGlow)"/>
+            <circle cx="235" cy="138" r="10" fill="#f0c56d" opacity="0.8"/>
+            <circle cx="240" cy="136" r="8" fill="url(#sky2)"/>
+            <text x="235" y="115" text-anchor="middle" fill="#c17f24" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Hilal ☽</text>
 
-            <!-- Line from Earth to Sun -->
-            <line x1="170" y1="240" x2="62" y2="160" stroke="#d97706" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+            <!-- Line from observer to Sun -->
+            <line x1="200" y1="230" x2="278" y2="202" stroke="#d97706" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
 
-            <!-- Line from Earth to Moon -->
-            <line x1="170" y1="240" x2="255" y2="100" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+            <!-- Line from observer to Moon -->
+            <line x1="200" y1="230" x2="233" y2="143" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
 
-            <!-- Elongation angle arc -->
-            <path d="M 130,200 A 65,65 0 0,1 200,180" fill="none" stroke="#d97706" stroke-width="2.5" opacity="0.8"/>
-            <text x="172" y="184" text-anchor="middle" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="13" font-weight="600">ε</text>
+            <!-- Elongation angle arc (small angle between the two lines) -->
+            <path d="M 245,210 A 30,30 0 0,0 225,195" fill="none" stroke="#d97706" stroke-width="2.5" opacity="0.8"/>
+            <text x="248" y="197" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600">ε</text>
 
-            <!-- Label -->
-            <rect x="85" y="80" width="170" height="38" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
-            <text x="170" y="95" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Elongasi = sudut ε</text>
-            <text x="170" y="108" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="8">antara Matahari dan Bulan</text>
+            <!-- Small angle annotation -->
+            <text x="260" y="158" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600" opacity="0.7">~6°</text>
+
+            <!-- Label box -->
+            <rect x="30" y="80" width="175" height="50" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+            <text x="117" y="96" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Elongasi = sudut ε</text>
+            <text x="117" y="109" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="8">Jarak sudut Matahari ↔ Bulan</text>
+            <text x="117" y="122" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="8">Keduanya di sisi barat (sama)</text>
 
             <!-- Annotations -->
-            <text x="170" y="258" text-anchor="middle" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-style="italic">Diukur dari pusat Bumi (geosentris):</text>
-            <text x="170" y="272" text-anchor="middle" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-style="italic">jarak sudut Matahari ↔ Bulan di langit</text>
-            <text x="170" y="290" text-anchor="middle" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">Kriteria: ≥ 6,4°</text>
+            <text x="170" y="220" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="8" font-style="italic">Saat rukyat, keduanya di sisi barat</text>
+            <text x="170" y="282" text-anchor="middle" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-style="italic">Elongasi kecil → Bulan dekat Matahari</text>
+            <text x="170" y="295" text-anchor="middle" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">Kriteria: ≥ 6,4°</text>
           </svg>
         </div>
       </div>
