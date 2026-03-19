@@ -867,6 +867,154 @@
       </div>
     </div>
 
+    <!-- Danjon Limit Visualization -->
+    <div class="chart-section" style="animation: fadeUp 0.8s ease-out 0.75s both;">
+      <div class="section-label section-label--gold">Batas fisika</div>
+      <h2>Apa Itu Danjon Limit?</h2>
+      <p class="desc">Ditemukan oleh astronom Perancis André Danjon (~1930-an). Pada elongasi di bawah ~7°, sabit bulan secara fisik menghilang — bukan karena terlalu redup, tapi karena cahayanya memang tidak terbentuk.</p>
+
+      <div class="svg-chart-wrap" style="padding: 2rem 1.5rem;">
+        <svg viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Visualisasi Danjon Limit — hubungan elongasi dan pembentukan sabit bulan">
+          <defs>
+            <radialGradient id="moonFull" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#f0c56d" stop-opacity="0.9"/>
+              <stop offset="85%" stop-color="#d4a73a" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#c17f24" stop-opacity="0.6"/>
+            </radialGradient>
+            <radialGradient id="moonDark" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="currentColor" stop-opacity="0.08"/>
+              <stop offset="100%" stop-color="currentColor" stop-opacity="0.04"/>
+            </radialGradient>
+            <clipPath id="clip1"><circle cx="0" cy="0" r="28"/></clipPath>
+            <clipPath id="clip2"><circle cx="0" cy="0" r="28"/></clipPath>
+            <clipPath id="clip3"><circle cx="0" cy="0" r="28"/></clipPath>
+            <clipPath id="clip4"><circle cx="0" cy="0" r="28"/></clipPath>
+            <clipPath id="clip5"><circle cx="0" cy="0" r="28"/></clipPath>
+            <clipPath id="clip6"><circle cx="0" cy="0" r="28"/></clipPath>
+          </defs>
+
+          <!-- Title -->
+          <text x="360" y="28" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="700">Danjon Limit — Elongasi vs Bentuk Sabit Bulan</text>
+          <text x="360" y="46" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="11">Semakin kecil elongasi, semakin pendek sabit — hingga menghilang di bawah ~7°</text>
+
+          <!-- === ROW OF MOON PHASES AT DIFFERENT ELONGATIONS === -->
+
+          <!-- Moon 1: Elongasi 30° — sabit lebar, jelas terlihat -->
+          <g transform="translate(100, 130)">
+            <circle r="30" fill="url(#moonDark)" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"/>
+            <!-- Lit crescent — wide -->
+            <circle r="28" fill="url(#moonFull)" clip-path="url(#clip1)"/>
+            <ellipse cx="8" cy="0" rx="22" ry="28" fill="var(--bg)"/>
+            <text x="0" y="55" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600">30°</text>
+            <text x="0" y="70" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9">sabit lebar</text>
+            <rect x="-30" y="78" width="60" height="20" rx="10" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="1" stroke-opacity="0.3"/>
+            <text x="0" y="92" text-anchor="middle" fill="#2d6a4f" font-family="Plus Jakarta Sans, sans-serif" font-size="8" font-weight="600">mudah dilihat</text>
+          </g>
+
+          <!-- Moon 2: Elongasi 15° — sabit tipis tapi terlihat -->
+          <g transform="translate(225, 130)">
+            <circle r="30" fill="url(#moonDark)" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"/>
+            <circle r="28" fill="url(#moonFull)" clip-path="url(#clip2)"/>
+            <ellipse cx="2" cy="0" rx="26" ry="28" fill="var(--bg)"/>
+            <text x="0" y="55" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600">15°</text>
+            <text x="0" y="70" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9">sabit tipis</text>
+            <rect x="-30" y="78" width="60" height="20" rx="10" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="1" stroke-opacity="0.3"/>
+            <text x="0" y="92" text-anchor="middle" fill="#2d6a4f" font-family="Plus Jakarta Sans, sans-serif" font-size="8" font-weight="600">bisa dilihat</text>
+          </g>
+
+          <!-- Moon 3: Elongasi 10° — sabit sangat tipis -->
+          <g transform="translate(350, 130)">
+            <circle r="30" fill="url(#moonDark)" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"/>
+            <circle r="28" fill="url(#moonFull)" clip-path="url(#clip3)"/>
+            <ellipse cx="-2" cy="0" rx="27.5" ry="28" fill="var(--bg)"/>
+            <text x="0" y="55" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600">10°</text>
+            <text x="0" y="70" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9">sangat tipis</text>
+            <rect x="-30" y="78" width="60" height="20" rx="10" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1" stroke-opacity="0.3"/>
+            <text x="0" y="92" text-anchor="middle" fill="var(--amber)" font-family="Plus Jakarta Sans, sans-serif" font-size="8" font-weight="600">sulit dilihat</text>
+          </g>
+
+          <!-- Moon 4: Elongasi 7° — Danjon Limit, nyaris menghilang -->
+          <g transform="translate(475, 130)">
+            <circle r="30" fill="url(#moonDark)" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"/>
+            <circle r="28" fill="url(#moonFull)" clip-path="url(#clip4)" opacity="0.5"/>
+            <ellipse cx="-4" cy="0" rx="28" ry="28" fill="var(--bg)"/>
+            <!-- Tiny sliver -->
+            <path d="M 25,-20 Q 28,0 25,20 Q 24,0 25,-20 Z" fill="#f0c56d" opacity="0.4"/>
+            <text x="0" y="55" text-anchor="middle" fill="#c17f24" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600">~7°</text>
+            <text x="0" y="70" text-anchor="middle" fill="#c17f24" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">DANJON LIMIT</text>
+            <rect x="-35" y="78" width="70" height="20" rx="10" fill="var(--red-bg)" stroke="var(--red)" stroke-width="1" stroke-opacity="0.3"/>
+            <text x="0" y="92" text-anchor="middle" fill="var(--red)" font-family="Plus Jakarta Sans, sans-serif" font-size="8" font-weight="600">batas fisika</text>
+          </g>
+
+          <!-- Moon 5: Elongasi 6° — di bawah Danjon, sabit TIDAK terbentuk -->
+          <g transform="translate(600, 130)">
+            <circle r="30" fill="url(#moonDark)" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"/>
+            <!-- No lit crescent at all — just dark moon -->
+            <text x="0" y="4" text-anchor="middle" fill="currentColor" fill-opacity="0.15" font-family="Plus Jakarta Sans, sans-serif" font-size="8">tidak ada</text>
+            <text x="0" y="14" text-anchor="middle" fill="currentColor" fill-opacity="0.15" font-family="Plus Jakarta Sans, sans-serif" font-size="8">sabit</text>
+            <text x="0" y="55" text-anchor="middle" fill="var(--red)" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600">&lt; 7°</text>
+            <text x="0" y="70" text-anchor="middle" fill="var(--red)" fill-opacity="0.7" font-family="Plus Jakarta Sans, sans-serif" font-size="9">tidak terbentuk</text>
+            <rect x="-35" y="78" width="70" height="20" rx="10" fill="var(--red-bg)" stroke="var(--red)" stroke-width="1" stroke-opacity="0.3"/>
+            <text x="0" y="92" text-anchor="middle" fill="var(--red)" font-family="Plus Jakarta Sans, sans-serif" font-size="8" font-weight="600">mustahil dilihat</text>
+          </g>
+
+          <!-- Arrow showing progression -->
+          <line x1="140" y1="130" x2="560" y2="130" stroke="currentColor" stroke-opacity="0.08" stroke-width="1"/>
+          <text x="360" y="240" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-family="Plus Jakarta Sans, sans-serif" font-size="10">← elongasi semakin kecil, sabit semakin pendek →</text>
+
+          <!-- === DANJON LIMIT EXPLANATION BOX === -->
+          <rect x="40" y="265" width="640" height="195" rx="12" fill="var(--surface)" stroke="var(--border-bright)" stroke-width="1"/>
+
+          <!-- Left: the physics explanation -->
+          <text x="65" y="292" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700">Kenapa sabit menghilang?</text>
+
+          <text x="65" y="315" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="10">Permukaan Bulan tidak rata — penuh gunung dan kawah.</text>
+          <text x="65" y="332" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="10">Pada elongasi &lt; 7°, bayangan gunung-gunung saling</text>
+          <text x="65" y="349" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="10">menutupi — cahaya Matahari tidak bisa "menembus"</text>
+          <text x="65" y="366" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="10">tepian Bulan untuk membentuk sabit.</text>
+
+          <text x="65" y="392" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-style="italic">Ini batas fisika, bukan batas mata.</text>
+          <text x="65" y="409" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-style="italic">Tidak ada teleskop yang bisa melihat sesuatu yang tidak ada.</text>
+
+          <!-- Right: where tonight falls -->
+          <line x1="400" y1="280" x2="400" y2="445" stroke="var(--border)" stroke-width="1"/>
+
+          <text x="425" y="292" fill="var(--amber)" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">MALAM INI (19 MARET 2026)</text>
+
+          <text x="425" y="318" fill="currentColor" fill-opacity="0.7" font-family="Plus Jakarta Sans, sans-serif" font-size="10">Elongasi Indonesia:</text>
+          <text x="425" y="338" fill="var(--amber)" font-family="JetBrains Mono, monospace" font-size="14" font-weight="600">4,5° — 6,1°</text>
+          <text x="425" y="356" fill="var(--red)" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600">→ Di bawah Danjon Limit (~7°)</text>
+          <text x="425" y="373" fill="var(--red)" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600">→ Di bawah MABIMS (6,4°)</text>
+
+          <line x1="425" y1="385" x2="650" y2="385" stroke="var(--border)" stroke-width="1"/>
+
+          <text x="425" y="405" fill="currentColor" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="9">Rekor terendah sabit pernah difoto:</text>
+          <text x="425" y="422" fill="currentColor" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="9">Stamm (2007): elongasi 6,4° — dengan</text>
+          <text x="425" y="437" fill="currentColor" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="9">peralatan modern & kondisi sempurna.</text>
+          <text x="425" y="452" fill="var(--amber)" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">→ Itulah asal angka 6,4° di MABIMS</text>
+        </svg>
+      </div>
+
+      <!-- Comparison strip -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem;">
+        <div style="background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--green); border-radius: 10px; padding: 1rem; text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.5rem;">Kriteria Shaukat</div>
+          <div style="font-size: 1.5rem; font-weight: 700;">8°</div>
+          <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.25rem;">Margin aman, pasti terlihat</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--amber); border-radius: 10px; padding: 1rem; text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); margin-bottom: 0.5rem;">Danjon Limit</div>
+          <div style="font-size: 1.5rem; font-weight: 700;">~7°</div>
+          <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.25rem;">Batas fisika sabit terbentuk</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--red); border-radius: 10px; padding: 1rem; text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); margin-bottom: 0.5rem;">MABIMS (rekor Stamm)</div>
+          <div style="font-size: 1.5rem; font-weight: 700;">6,4°</div>
+          <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.25rem;">Rekor terendah, kondisi sempurna</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Sources -->
     <div class="sources" style="animation: fadeUp 0.8s ease-out 0.8s both;">
       <h3>Sumber Data</h3>
