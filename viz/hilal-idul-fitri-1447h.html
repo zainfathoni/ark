@@ -357,11 +357,12 @@
     }
 
     /* Responsive */
-    @media (max-width: 640px) {
+    @media (max-width: 720px) {
       .container { padding: 1rem 1rem 3rem; }
       .hero { padding: 2rem 0.5rem 1.5rem; }
       .verdict, .criteria-card { padding: 1.25rem; }
       .data-table-wrap { overflow-x: auto; }
+      .concept-grid { grid-template-columns: 1fr !important; }
     }
   </style>
 </head>
@@ -412,6 +413,160 @@
           <span class="criteria-item__label">Syarat</span>
           <span class="criteria-item__value">Ketiganya</span>
           <span class="criteria-item__note">Harus terpenuhi semua sekaligus</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Physical Explanation Diagrams -->
+    <div class="chart-section" style="animation: fadeUp 0.8s ease-out 0.35s both;">
+      <div class="section-label section-label--teal">Penjelasan konsep</div>
+      <h2>Apa Bedanya Tinggi Hilal dan Sudut Elongasi?</h2>
+      <p class="desc">Dua parameter ini sering disebut tapi jarang dijelaskan secara visual. Keduanya adalah sudut, tapi diukur dari titik acuan yang berbeda.</p>
+
+      <div class="concept-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+        <!-- Tinggi Hilal Diagram -->
+        <div class="svg-chart-wrap" style="padding: 1.5rem 1rem;">
+          <div style="text-align: center; margin-bottom: 0.75rem;">
+            <span style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); font-weight: 600;">Tinggi Hilal (Altitude)</span>
+          </div>
+          <svg viewBox="0 0 340 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram penjelasan tinggi hilal">
+            <!-- Sky gradient background -->
+            <defs>
+              <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1e3a5f" stop-opacity="0.08"/>
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
+              </linearGradient>
+              <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#f0c56d" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#f0c56d" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Sky area -->
+            <rect x="20" y="20" width="300" height="180" rx="8" fill="url(#sky1)"/>
+
+            <!-- Horizon line (ufuk) -->
+            <line x1="20" y1="200" x2="320" y2="200" stroke="#c2410c" stroke-width="2.5"/>
+            <text x="325" y="204" fill="#c2410c" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">UFUK</text>
+
+            <!-- Ground -->
+            <rect x="20" y="200" width="300" height="80" rx="0" fill="currentColor" fill-opacity="0.03"/>
+            <text x="170" y="230" text-anchor="middle" fill="currentColor" fill-opacity="0.15" font-family="Plus Jakarta Sans, sans-serif" font-size="10">permukaan bumi</text>
+
+            <!-- Observer -->
+            <circle cx="80" cy="200" r="5" fill="currentColor" fill-opacity="0.4"/>
+            <line x1="80" y1="200" x2="80" y2="185" stroke="currentColor" stroke-opacity="0.4" stroke-width="2"/>
+            <circle cx="80" cy="182" r="4" fill="currentColor" fill-opacity="0.4"/>
+            <text x="80" y="215" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">pengamat</text>
+
+            <!-- Sun (setting, partially below horizon) -->
+            <circle cx="40" cy="200" r="20" fill="url(#sunGlow)"/>
+            <circle cx="40" cy="200" r="10" fill="#f59e0b" opacity="0.7"/>
+            <text x="40" y="178" text-anchor="middle" fill="#d97706" font-family="Plus Jakarta Sans, sans-serif" font-size="8" font-weight="600">Matahari</text>
+            <text x="40" y="187" text-anchor="middle" fill="#d97706" font-family="Plus Jakarta Sans, sans-serif" font-size="7">(terbenam)</text>
+
+            <!-- Moon (hilal) above horizon -->
+            <circle cx="200" cy="120" r="18" fill="url(#moonGlow)"/>
+            <!-- Crescent shape -->
+            <circle cx="200" cy="120" r="10" fill="#f0c56d" opacity="0.8"/>
+            <circle cx="205" cy="118" r="8" fill="url(#sky1)"/>
+            <text x="200" y="97" text-anchor="middle" fill="#c17f24" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Hilal ☽</text>
+
+            <!-- Horizon line from observer -->
+            <line x1="80" y1="200" x2="280" y2="200" stroke="currentColor" stroke-opacity="0.15" stroke-width="1" stroke-dasharray="4,3"/>
+
+            <!-- Line from observer to moon -->
+            <line x1="80" y1="197" x2="195" y2="125" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.7"/>
+
+            <!-- Angle arc (tinggi hilal) -->
+            <path d="M 130,200 A 50,50 0 0,0 117,175" fill="none" stroke="#c17f24" stroke-width="2" opacity="0.8"/>
+            <text x="142" y="185" fill="#c17f24" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600">h</text>
+
+            <!-- Label -->
+            <rect x="130" y="140" width="170" height="38" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+            <text x="215" y="155" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Tinggi hilal = sudut h</text>
+            <text x="215" y="168" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="8">dari ufuk ke posisi Bulan</text>
+
+            <!-- Annotations -->
+            <text x="170" y="258" text-anchor="middle" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-style="italic">Diukur dari garis ufuk (horizon)</text>
+            <text x="170" y="272" text-anchor="middle" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-style="italic">ke arah Bulan, secara vertikal</text>
+            <text x="170" y="290" text-anchor="middle" fill="#c17f24" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">Kriteria: ≥ 3°</text>
+          </svg>
+        </div>
+
+        <!-- Elongasi Diagram -->
+        <div class="svg-chart-wrap" style="padding: 1.5rem 1rem;">
+          <div style="text-align: center; margin-bottom: 0.75rem;">
+            <span style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); font-weight: 600;">Elongasi (Elongation)</span>
+          </div>
+          <svg viewBox="0 0 340 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram penjelasan elongasi">
+            <defs>
+              <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1e3a5f" stop-opacity="0.08"/>
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Sky area -->
+            <rect x="20" y="20" width="300" height="180" rx="8" fill="url(#sky2)"/>
+
+            <!-- Horizon line -->
+            <line x1="20" y1="200" x2="320" y2="200" stroke="#c2410c" stroke-width="2.5"/>
+            <text x="325" y="204" fill="#c2410c" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">UFUK</text>
+
+            <!-- Ground -->
+            <rect x="20" y="200" width="300" height="80" rx="0" fill="currentColor" fill-opacity="0.03"/>
+
+            <!-- Observer / Earth -->
+            <circle cx="170" cy="240" r="22" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+            <text x="170" y="244" text-anchor="middle" fill="currentColor" fill-opacity="0.35" font-family="Plus Jakarta Sans, sans-serif" font-size="8" font-weight="600">BUMI</text>
+
+            <!-- Sun glow & icon (near horizon, left) -->
+            <circle cx="60" cy="155" r="22" fill="url(#sunGlow)"/>
+            <circle cx="60" cy="155" r="12" fill="#f59e0b" opacity="0.75"/>
+            <text x="60" y="130" text-anchor="middle" fill="#d97706" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Matahari</text>
+
+            <!-- Moon (hilal) (right, above) -->
+            <circle cx="260" cy="95" r="18" fill="url(#moonGlow)"/>
+            <circle cx="260" cy="95" r="10" fill="#f0c56d" opacity="0.8"/>
+            <circle cx="265" cy="93" r="8" fill="url(#sky2)"/>
+            <text x="260" y="73" text-anchor="middle" fill="#c17f24" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Hilal ☽</text>
+
+            <!-- Line from Earth to Sun -->
+            <line x1="170" y1="240" x2="62" y2="160" stroke="#d97706" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+
+            <!-- Line from Earth to Moon -->
+            <line x1="170" y1="240" x2="255" y2="100" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+
+            <!-- Elongation angle arc -->
+            <path d="M 130,200 A 65,65 0 0,1 200,180" fill="none" stroke="#d97706" stroke-width="2.5" opacity="0.8"/>
+            <text x="172" y="184" text-anchor="middle" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="13" font-weight="600">ε</text>
+
+            <!-- Label -->
+            <rect x="85" y="80" width="170" height="38" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+            <text x="170" y="95" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">Elongasi = sudut ε</text>
+            <text x="170" y="108" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="8">antara Matahari dan Bulan</text>
+
+            <!-- Annotations -->
+            <text x="170" y="258" text-anchor="middle" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-style="italic">Diukur dari pusat Bumi (geosentris):</text>
+            <text x="170" y="272" text-anchor="middle" fill="currentColor" fill-opacity="0.6" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-style="italic">jarak sudut Matahari ↔ Bulan di langit</text>
+            <text x="170" y="290" text-anchor="middle" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">Kriteria: ≥ 6,4°</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Combined explanation -->
+      <div class="insight" style="margin-top: 1.5rem;">
+        <div class="insight__icon">💡</div>
+        <div class="insight__text">
+          <strong>Singkatnya:</strong><br>
+          <strong>Tinggi hilal</strong> = seberapa tinggi posisi Bulan di atas garis cakrawala (ufuk). Semakin tinggi, semakin mudah dilihat.<br>
+          <strong>Elongasi</strong> = seberapa jauh jarak Bulan dari Matahari di langit. Semakin jauh, semakin terang sabit Bulan karena tidak silau cahaya Matahari.<br><br>
+          Keduanya harus memenuhi batas minimum agar hilal bisa dilihat: <strong>tinggi ≥ 3°</strong> dan <strong>elongasi ≥ 6,4°</strong>. Malam ini, hanya Sabang yang tinggi hilalnya menyentuh 3°, tapi elongasinya masih kurang 0,3° dari syarat.
         </div>
       </div>
     </div>
