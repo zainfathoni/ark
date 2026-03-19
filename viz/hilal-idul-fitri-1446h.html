@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Hilal Awal Syawal 1446 H — Penentuan Idul Fitri 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+      --bg: #faf7f2;
+      --surface: #ffffff;
+      --surface-alt: #f3ede4;
+      --border: rgba(0,0,0,0.08);
+      --border-bright: rgba(0,0,0,0.14);
+      --text: #2c2416;
+      --text-dim: #8c7e6a;
+      --text-mid: #5a4e3a;
+
+      --green: #2d6a4f;
+      --green-dim: rgba(45,106,79,0.1);
+      --green-bg: #e8f5e9;
+      --red: #b71c1c;
+      --red-dim: rgba(183,28,28,0.08);
+      --red-bg: #fce4e4;
+      --gold: #c17f24;
+      --gold-dim: rgba(193,127,36,0.1);
+      --gold-bg: #fef3e0;
+      --teal: #0e7c6b;
+      --teal-dim: rgba(14,124,107,0.1);
+      --navy: #1e3a5f;
+      --navy-dim: rgba(30,58,95,0.08);
+
+      --crescent: #d4a73a;
+      --horizon: #c2410c;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1612;
+        --surface: #252019;
+        --surface-alt: #2e2820;
+        --border: rgba(255,255,255,0.06);
+        --border-bright: rgba(255,255,255,0.12);
+        --text: #ede6d9;
+        --text-dim: #8c7e6a;
+        --text-mid: #b5a78f;
+
+        --green-bg: rgba(45,106,79,0.15);
+        --red-bg: rgba(183,28,28,0.12);
+        --gold-bg: rgba(193,127,36,0.12);
+        --green: #6fcf97;
+        --red: #ef9a9a;
+        --gold: #f0c56d;
+        --teal: #4fd1c5;
+        --navy: #90caf9;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      background-image: radial-gradient(ellipse at 50% 0%, var(--gold-dim) 0%, transparent 50%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* Header */
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem 2.5rem;
+      animation: fadeUp 0.8s ease-out;
+    }
+    .hero__crescent {
+      font-size: 4rem;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      color: var(--crescent);
+      filter: drop-shadow(0 0 20px rgba(212,167,58,0.3));
+    }
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .hero__sub {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .hero__date {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.4rem 1.2rem;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold);
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Verdict Banner */
+    .verdict {
+      background: var(--surface);
+      border: 1px solid var(--border-bright);
+      border-left: 4px solid var(--green);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin: 2rem 0;
+      animation: fadeUp 0.8s ease-out 0.15s both;
+    }
+    .verdict__title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+    .verdict__text {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      color: var(--text);
+    }
+    .verdict__detail {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    /* Chart Section */
+    .chart-section {
+      margin: 2.5rem 0;
+      animation: fadeUp 0.8s ease-out 0.3s both;
+    }
+    .chart-section h2 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Altitude Chart — visual bar chart */
+    .altitude-chart {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      overflow: hidden;
+    }
+
+    .chart-grid {
+      position: relative;
+      margin-top: 1rem;
+    }
+
+    /* Horizon line */
+    .horizon-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .bar-group {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .bar-pair {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      min-width: 110px;
+    }
+
+    .bar-pair__label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    /* Visual altitude representation */
+    .altitude-visual {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .altitude-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 100px;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .altitude-row:last-child { border-bottom: none; }
+
+    .altitude-row__city {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .altitude-row__city small {
+      display: block;
+      font-weight: 400;
+      color: var(--text-dim);
+      font-size: 0.75rem;
+    }
+
+    .altitude-row__bar-wrap {
+      position: relative;
+      height: 32px;
+      background: var(--surface-alt);
+      border-radius: 6px;
+      overflow: visible;
+    }
+
+    /* The zero/horizon line */
+    .altitude-row__horizon {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--horizon);
+      z-index: 2;
+    }
+    .altitude-row__horizon::after {
+      content: '0°';
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--horizon);
+    }
+
+    .altitude-row__bar {
+      position: absolute;
+      top: 4px;
+      height: 24px;
+      border-radius: 4px;
+      transition: width 1s ease-out;
+    }
+
+    .altitude-row__value {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: right;
+    }
+    .altitude-row__value.negative { color: var(--red); }
+    .altitude-row__value.positive { color: var(--green); }
+
+    /* Comparison cards — 29 vs 30 Maret */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 640px) {
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+
+    .compare-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .compare-card--fail {
+      border-color: var(--red);
+      border-width: 1px;
+    }
+    .compare-card--fail::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--red);
+    }
+    .compare-card--pass {
+      border-color: var(--green);
+      border-width: 1px;
+    }
+    .compare-card--pass::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--green);
+    }
+
+    .compare-card__date {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+    .compare-card--fail .compare-card__date { color: var(--red); }
+    .compare-card--pass .compare-card__date { color: var(--green); }
+
+    .compare-card__status {
+      display: inline-block;
+      padding: 0.2rem 0.75rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .status--fail {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+    .status--pass {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .metric:last-child { border-bottom: none; }
+    .metric__label {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+    .metric__value {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* Criteria section */
+    .criteria-card {
+      background: var(--gold-bg);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin: 2rem 0;
+      animation: fadeUp 0.8s ease-out 0.45s both;
+    }
+    .criteria-card h3 {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .criteria-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .criteria-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .criteria-item__label {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+    }
+    .criteria-item__value {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    /* SVG Chart */
+    .svg-chart-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      overflow-x: auto;
+    }
+    .svg-chart-wrap svg {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+
+    /* Kota data table */
+    .data-table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+      animation: fadeUp 0.8s ease-out 0.6s both;
+    }
+    .data-table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .data-table-wrap thead th {
+      background: var(--surface-alt);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      border-bottom: 2px solid var(--border-bright);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .data-table-wrap tbody td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table-wrap tbody tr:last-child td { border-bottom: none; }
+    .data-table-wrap tbody tr:hover { background: var(--surface-alt); }
+
+    .val-neg { color: var(--red); font-weight: 600; font-family: var(--font-mono); font-size: 0.85rem; }
+    .val-pos { color: var(--green); font-weight: 600; font-family: var(--font-mono); font-size: 0.85rem; }
+    .val-warn { color: var(--gold); font-weight: 600; font-family: var(--font-mono); font-size: 0.85rem; }
+
+    /* Source footer */
+    .sources {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      animation: fadeUp 0.8s ease-out 0.75s both;
+    }
+    .sources h3 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+    }
+    .sources ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sources li {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      padding: 0.25rem 0;
+    }
+    .sources a {
+      color: var(--teal);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0s !important; }
+    }
+
+    /* Responsive altitude grid */
+    @media (max-width: 640px) {
+      .altitude-row {
+        grid-template-columns: 90px 1fr 80px;
+        gap: 0.5rem;
+      }
+      .altitude-row__city { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero__crescent">☽</div>
+      <h1>Data Hilal Awal Syawal 1446 H</h1>
+      <p class="hero__sub">Tinggi hilal & sudut elongasi untuk penentuan 1 Syawal 1446 H / Idul Fitri 2025</p>
+      <span class="hero__date">Ijtimak: Sabtu, 29 Maret 2025 — 17:58 WIB</span>
+    </div>
+
+    <!-- Verdict -->
+    <div class="verdict">
+      <div class="verdict__title">Kesimpulan</div>
+      <div class="verdict__text">Hilal di bawah ufuk di seluruh Indonesia pada 29 Ramadhan — mustahil terlihat (istiḥālah ar-rukyah)</div>
+      <div class="verdict__detail">Idul Fitri 1446 H jatuh pada <strong>Senin, 31 Maret 2025</strong>. Puasa Ramadhan digenapkan menjadi 30 hari. Keputusan isbat pemerintah ditetapkan Sabtu malam 29 Maret 2025.</div>
+    </div>
+
+    <!-- Kriteria MABIMS -->
+    <div class="criteria-card">
+      <h3>Kriteria Imkan Rukyah (MABIMS / IRNU)</h3>
+      <div class="criteria-items">
+        <div class="criteria-item">
+          <span class="criteria-item__label">Tinggi hilal min.</span>
+          <span class="criteria-item__value">≥ 3°</span>
+        </div>
+        <div class="criteria-item">
+          <span class="criteria-item__label">Elongasi min.</span>
+          <span class="criteria-item__value">≥ 6,4°</span>
+        </div>
+        <div class="criteria-item">
+          <span class="criteria-item__label">Umur bulan min.</span>
+          <span class="criteria-item__value">≥ 8 jam</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compare: 29 vs 30 Maret -->
+    <div class="chart-section">
+      <div class="section-label">Perbandingan data hilal</div>
+      <h2>29 Maret vs 30 Maret 2025</h2>
+
+      <div class="compare-grid">
+        <!-- 29 Maret -->
+        <div class="compare-card compare-card--fail">
+          <div class="compare-card__date">29 Ramadhan — Sabtu, 29 Maret 2025</div>
+          <span class="compare-card__status status--fail">Hilal di bawah ufuk</span>
+          <div class="metric">
+            <span class="metric__label">Tinggi hilal (tertinggi)</span>
+            <span class="metric__value val-neg">−1° 07'</span>
+          </div>
+          <div class="metric">
+            <span class="metric__label">Tinggi hilal (terendah)</span>
+            <span class="metric__value val-neg">−3° 29'</span>
+          </div>
+          <div class="metric">
+            <span class="metric__label">Elongasi geosentris</span>
+            <span class="metric__value val-neg">1,06° — 1,61°</span>
+          </div>
+          <div class="metric">
+            <span class="metric__label">Elongasi haqiqy (PBNU)</span>
+            <span class="metric__value val-neg">2° 58' — 3° 01'</span>
+          </div>
+          <div class="metric">
+            <span class="metric__label">Lama hilal di atas ufuk</span>
+            <span class="metric__value val-neg">0 detik</span>
+          </div>
+          <div class="metric">
+            <span class="metric__label">Umur bulan</span>
+            <span class="metric__value val-neg">−2,22 — 0,84 jam</span>
+          </div>
+        </div>
+
+        <!-- 30 Maret -->
+        <div class="compare-card compare-card--pass">
+          <div class="compare-card__date">30 Ramadhan — Ahad, 30 Maret 2025</div>
+          <span class="compare-card__status status--pass">Hilal di atas ufuk ✓</span>
+          <div class="metric">
+            <span class="metric__label">Tinggi hilal (tertinggi)</span>
+            <span class="metric__value val-pos">+11,48°</span>
+          </div>
+          <div class="metric">
+            <span class="metric__label">Tinggi hilal (terendah)</span>
+            <span class="metric__value val-pos">+7,96°</span>
+          </div>
+          <div class="metric">
+            <span class="metric__label">Elongasi geosentris</span>
+            <span class="metric__value val-pos">13,02° — 14,83°</span>
+          </div>
+          <div class="metric">
+            <span class="metric__label">Lama hilal di atas ufuk</span>
+            <span class="metric__value val-pos">37 — 52 menit</span>
+          </div>
+          <div class="metric">
+            <span class="metric__label">Umur bulan</span>
+            <span class="metric__value val-pos">21,77 — 24,84 jam</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual altitude chart (SVG) -->
+    <div class="chart-section" style="animation-delay: 0.5s;">
+      <div class="section-label">Visualisasi tinggi hilal</div>
+      <h2>Ketinggian Hilal per Kota — 29 Maret 2025</h2>
+      <p style="font-size:0.9rem; color:var(--text-dim); margin-bottom:0.5rem;">Semua kota menunjukkan hilal di bawah ufuk (garis 0°). Batang merah = di bawah ufuk.</p>
+
+      <div class="svg-chart-wrap">
+        <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Grafik tinggi hilal per kota pada 29 Maret 2025">
+          <defs>
+            <linearGradient id="barNeg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ef5350" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#b71c1c" stop-opacity="0.7"/>
+            </linearGradient>
+            <linearGradient id="barPos" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stop-color="#66bb6a" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#2e7d32" stop-opacity="0.7"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Background grid lines -->
+          <line x1="100" y1="40" x2="680" y2="40" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+          <line x1="100" y1="80" x2="680" y2="80" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+          <line x1="100" y1="120" x2="680" y2="120" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+          <!-- Horizon line (0°) -->
+          <line x1="90" y1="160" x2="685" y2="160" stroke="#c2410c" stroke-width="2" stroke-dasharray="6,3"/>
+          <text x="85" y="164" text-anchor="end" fill="#c2410c" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">0°</text>
+          <!-- Below horizon grid -->
+          <line x1="100" y1="200" x2="680" y2="200" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+          <line x1="100" y1="240" x2="680" y2="240" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+          <line x1="100" y1="280" x2="680" y2="280" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+
+          <!-- Y-axis labels -->
+          <text x="85" y="44" text-anchor="end" fill="currentColor" fill-opacity="0.35" font-family="JetBrains Mono, monospace" font-size="10">+12°</text>
+          <text x="85" y="84" text-anchor="end" fill="currentColor" fill-opacity="0.35" font-family="JetBrains Mono, monospace" font-size="10">+8°</text>
+          <text x="85" y="124" text-anchor="end" fill="currentColor" fill-opacity="0.35" font-family="JetBrains Mono, monospace" font-size="10">+4°</text>
+          <text x="85" y="204" text-anchor="end" fill="currentColor" fill-opacity="0.35" font-family="JetBrains Mono, monospace" font-size="10">−4°</text>
+
+          <!-- Kriteria line (3°) -->
+          <line x1="100" y1="130" x2="680" y2="130" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+          <text x="685" y="128" fill="#c17f24" font-family="JetBrains Mono, monospace" font-size="9" opacity="0.8">min 3°</text>
+
+          <!-- Label: Di atas ufuk / Di bawah ufuk -->
+          <text x="95" y="148" fill="#2d6a4f" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600" opacity="0.5">↑ DI ATAS UFUK</text>
+          <text x="95" y="175" fill="#b71c1c" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600" opacity="0.5">↓ DI BAWAH UFUK</text>
+
+          <!-- Bars: 29 Maret (all negative, red) -->
+          <!-- Scale: 10px per degree, horizon at y=160 -->
+
+          <!-- Sabang: -1.12° → bar from 160 to 171 -->
+          <rect x="120" y="160" width="50" height="11" rx="4" fill="url(#barNeg)" opacity="0.85">
+            <animate attributeName="height" from="0" to="11" dur="0.8s" fill="freeze"/>
+          </rect>
+          <text x="145" y="185" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill-opacity="0.9">−1°07'</text>
+          <text x="145" y="300" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600">Sabang</text>
+          <text x="145" y="312" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9">Aceh</text>
+
+          <!-- Jakarta (PBNU): -1.99° → bar height ~20 -->
+          <rect x="210" y="160" width="50" height="20" rx="4" fill="url(#barNeg)" opacity="0.85">
+            <animate attributeName="height" from="0" to="20" dur="0.8s" fill="freeze" begin="0.1s"/>
+          </rect>
+          <text x="235" y="195" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill-opacity="0.9">−1°59'</text>
+          <text x="235" y="300" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600">Jakarta</text>
+          <text x="235" y="312" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9">PBNU</text>
+
+          <!-- Kebumen: ~-2.5° → bar height 25 -->
+          <rect x="300" y="160" width="50" height="25" rx="4" fill="url(#barNeg)" opacity="0.85">
+            <animate attributeName="height" from="0" to="25" dur="0.8s" fill="freeze" begin="0.2s"/>
+          </rect>
+          <text x="325" y="200" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill-opacity="0.9">~−2°30'</text>
+          <text x="325" y="300" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600">Kebumen</text>
+          <text x="325" y="312" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9">Jateng</text>
+
+          <!-- Lhoknga (Aceh): -0.99° → bar height ~10 -->
+          <rect x="390" y="160" width="50" height="10" rx="4" fill="url(#barNeg)" opacity="0.85">
+            <animate attributeName="height" from="0" to="10" dur="0.8s" fill="freeze" begin="0.3s"/>
+          </rect>
+          <text x="415" y="183" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill-opacity="0.9">−0°59'</text>
+          <text x="415" y="300" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600">Lhoknga</text>
+          <text x="415" y="312" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9">Aceh</text>
+
+          <!-- Oksibil (Papua): ~-3.1° → bar height 31 -->
+          <rect x="480" y="160" width="50" height="31" rx="4" fill="url(#barNeg)" opacity="0.85">
+            <animate attributeName="height" from="0" to="31" dur="0.8s" fill="freeze" begin="0.4s"/>
+          </rect>
+          <text x="505" y="206" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill-opacity="0.9">~−3°06'</text>
+          <text x="505" y="300" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600">Oksibil</text>
+          <text x="505" y="312" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9">Papua</text>
+
+          <!-- Merauke (Papua): -3.48° → bar height ~35 -->
+          <rect x="570" y="160" width="50" height="35" rx="4" fill="url(#barNeg)" opacity="0.85">
+            <animate attributeName="height" from="0" to="35" dur="0.8s" fill="freeze" begin="0.5s"/>
+          </rect>
+          <text x="595" y="210" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill-opacity="0.9">−3°29'</text>
+          <text x="595" y="300" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600">Merauke</text>
+          <text x="595" y="312" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9">Papua</text>
+
+          <!-- Title -->
+          <text x="100" y="24" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="600">Tinggi Hilal saat Matahari Terbenam — 29 Maret 2025</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Elongasi visual chart -->
+    <div class="chart-section" style="animation-delay: 0.6s;">
+      <div class="section-label">Visualisasi elongasi</div>
+      <h2>Sudut Elongasi — 29 vs 30 Maret 2025</h2>
+
+      <div class="svg-chart-wrap">
+        <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Perbandingan elongasi 29 dan 30 Maret 2025">
+
+          <!-- Grid -->
+          <line x1="100" y1="40" x2="680" y2="40" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+          <line x1="100" y1="80" x2="680" y2="80" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+          <line x1="100" y1="120" x2="680" y2="120" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+          <line x1="100" y1="160" x2="680" y2="160" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+          <line x1="100" y1="200" x2="680" y2="200" stroke="currentColor" stroke-opacity="0.06" stroke-dasharray="4,4"/>
+
+          <!-- Y-axis: 0° at bottom (y=220), scale: 14px per degree -->
+          <text x="85" y="224" text-anchor="end" fill="currentColor" fill-opacity="0.35" font-family="JetBrains Mono, monospace" font-size="10">0°</text>
+          <text x="85" y="154" text-anchor="end" fill="currentColor" fill-opacity="0.35" font-family="JetBrains Mono, monospace" font-size="10">5°</text>
+          <text x="85" y="84" text-anchor="end" fill="currentColor" fill-opacity="0.35" font-family="JetBrains Mono, monospace" font-size="10">10°</text>
+          <text x="85" y="14" text-anchor="end" fill="currentColor" fill-opacity="0.35" font-family="JetBrains Mono, monospace" font-size="10">15°</text>
+
+          <!-- Kriteria line (6.4°) -->
+          <line x1="100" y1="130" x2="680" y2="130" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+          <text x="685" y="128" fill="#c17f24" font-family="JetBrains Mono, monospace" font-size="9" opacity="0.8">min 6,4°</text>
+
+          <!-- Baseline -->
+          <line x1="100" y1="220" x2="680" y2="220" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+
+          <!-- 29 Maret bars (red, very short ~1-3°) -->
+          <!-- Kebumen: 1.06° → height ~15 -->
+          <rect x="140" y="205" width="40" height="15" rx="3" fill="url(#barNeg)" opacity="0.85">
+            <animate attributeName="height" from="0" to="15" dur="0.8s" fill="freeze"/>
+            <animate attributeName="y" from="220" to="205" dur="0.8s" fill="freeze"/>
+          </rect>
+          <text x="160" y="250" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600">Kebumen</text>
+          <text x="160" y="200" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600" fill-opacity="0.8">1,06°</text>
+
+          <!-- Jakarta (PBNU haqiqy): 3° → height ~42 -->
+          <rect x="220" y="178" width="40" height="42" rx="3" fill="url(#barNeg)" opacity="0.85">
+            <animate attributeName="height" from="0" to="42" dur="0.8s" fill="freeze" begin="0.1s"/>
+            <animate attributeName="y" from="220" to="178" dur="0.8s" fill="freeze" begin="0.1s"/>
+          </rect>
+          <text x="240" y="250" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600">Jakarta</text>
+          <text x="240" y="173" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600" fill-opacity="0.8">3,01°</text>
+
+          <!-- Divider -->
+          <line x1="330" y1="30" x2="330" y2="240" stroke="currentColor" stroke-opacity="0.1" stroke-dasharray="2,4"/>
+          <text x="215" y="270" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="JetBrains Mono, monospace" font-size="9">29 MARET</text>
+
+          <!-- 30 Maret bars (green, tall ~13-15°) -->
+          <!-- Merauke: 13.02° → height ~182 -->
+          <rect x="400" y="38" width="50" height="182" rx="4" fill="url(#barPos)" opacity="0.85">
+            <animate attributeName="height" from="0" to="182" dur="1s" fill="freeze" begin="0.3s"/>
+            <animate attributeName="y" from="220" to="38" dur="1s" fill="freeze" begin="0.3s"/>
+          </rect>
+          <text x="425" y="33" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill-opacity="0.9">13,02°</text>
+          <text x="425" y="250" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600">Merauke</text>
+
+          <!-- Sabang: 14.83° → height ~208 -->
+          <rect x="490" y="12" width="50" height="208" rx="4" fill="url(#barPos)" opacity="0.85">
+            <animate attributeName="height" from="0" to="208" dur="1s" fill="freeze" begin="0.4s"/>
+            <animate attributeName="y" from="220" to="12" dur="1s" fill="freeze" begin="0.4s"/>
+          </rect>
+          <text x="515" y="8" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill-opacity="0.9">14,83°</text>
+          <text x="515" y="250" text-anchor="middle" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600">Sabang</text>
+
+          <text x="475" y="270" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="JetBrains Mono, monospace" font-size="9">30 MARET</text>
+
+          <!-- Title -->
+          <text x="100" y="24" fill="currentColor" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="600">Elongasi Bulan-Matahari (Geosentris)</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Data table per kota -->
+    <div class="chart-section">
+      <div class="section-label">Data lengkap per kota</div>
+      <h2>Ringkasan Data BMKG & LF PBNU</h2>
+
+      <div class="data-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Kota</th>
+              <th>Tinggi Hilal (29/3)</th>
+              <th>Tinggi Hilal (30/3)</th>
+              <th>Elongasi (29/3)</th>
+              <th>Elongasi (30/3)</th>
+              <th>Lama Hilal (30/3)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Sabang, Aceh</strong></td>
+              <td class="val-neg">−1° 07'</td>
+              <td class="val-pos">+11,48°</td>
+              <td class="val-neg">~1,6°</td>
+              <td class="val-pos">14,83°</td>
+              <td class="val-pos">52 menit</td>
+            </tr>
+            <tr>
+              <td><strong>Lhoknga, Aceh</strong></td>
+              <td class="val-neg">−0° 59'</td>
+              <td class="val-pos">~11°</td>
+              <td class="val-neg">~1,5°</td>
+              <td class="val-pos">~14,5°</td>
+              <td class="val-pos">~50 menit</td>
+            </tr>
+            <tr>
+              <td><strong>Jakarta (PBNU)</strong></td>
+              <td class="val-neg">−1° 59'</td>
+              <td class="val-pos">~10°</td>
+              <td class="val-neg">~3° (haqiqy)</td>
+              <td class="val-pos">~14°</td>
+              <td class="val-pos">~45 menit</td>
+            </tr>
+            <tr>
+              <td><strong>Kebumen, Jateng</strong></td>
+              <td class="val-neg">~−2° 30'</td>
+              <td class="val-pos">~9°</td>
+              <td class="val-neg">1,06°</td>
+              <td class="val-pos">~13,5°</td>
+              <td class="val-pos">~42 menit</td>
+            </tr>
+            <tr>
+              <td><strong>Oksibil, Papua</strong></td>
+              <td class="val-neg">~−3° 06'</td>
+              <td class="val-pos">~8,5°</td>
+              <td class="val-neg">~1,6°</td>
+              <td class="val-pos">~13°</td>
+              <td class="val-pos">~38 menit</td>
+            </tr>
+            <tr>
+              <td><strong>Merauke, Papua</strong></td>
+              <td class="val-neg">−3° 29'</td>
+              <td class="val-pos">+7,96°</td>
+              <td class="val-neg">~1,1°</td>
+              <td class="val-pos">13,02°</td>
+              <td class="val-pos">37 menit</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sources -->
+    <div class="sources">
+      <h3>Sumber Data</h3>
+      <ul>
+        <li>Lembaga Falakiyah PBNU — Informasi Hilal Awal Syawal 1446 H (27 Maret 2025)</li>
+        <li>BMKG — Prakiraan Hilal Saat Matahari Terbenam 29 & 30 Maret 2025</li>
+        <li><a href="https://www.nu.or.id/nasional/data-hilal-jelang-idul-fitri-1446-h-menurut-lembaga-falakiyah-pbnu-dan-bmkg-HUY0w" target="_blank" rel="noopener">NU Online — Data Hilal Jelang Idul Fitri 1446 H</a></li>
+        <li><a href="https://hilal.bmkg.go.id" target="_blank" rel="noopener">BMKG — Sistem Informasi Observasi Hilal</a></li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>
