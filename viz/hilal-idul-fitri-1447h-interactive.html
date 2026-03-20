@@ -26,10 +26,13 @@
       --red-bg: #fce4e4;
       --gold: #c17f24;
       --gold-dim: rgba(193,127,36,0.1);
+      --gold-bg: rgba(193,127,36,0.08);
       --amber: #d97706;
       --amber-dim: rgba(217,119,6,0.1);
       --amber-bg: rgba(217,119,6,0.08);
       --teal: #0e7c6b;
+      --teal-dim: rgba(14,124,107,0.1);
+      --teal-bg: rgba(14,124,107,0.08);
       --navy: #1e3a5f;
       --crescent: #d4a73a;
       --horizon: #c2410c;
@@ -49,10 +52,14 @@
         --red: #ef9a9a;
         --red-bg: rgba(183,28,28,0.12);
         --gold: #f0c56d;
+        --gold-dim: rgba(240,197,109,0.12);
+        --gold-bg: rgba(240,197,109,0.1);
         --amber: #fbbf24;
         --amber-dim: rgba(251,191,36,0.12);
         --amber-bg: rgba(251,191,36,0.1);
         --teal: #4fd1c5;
+        --teal-dim: rgba(79,209,197,0.12);
+        --teal-bg: rgba(79,209,197,0.1);
         --horizon: #fb923c;
         --crescent: #f0c56d;
       }
@@ -139,6 +146,41 @@
     }
     input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; }
 
+    /* Three-track comparison */
+    .tracks-panel {
+      margin-bottom: 1.5rem; padding: 1.25rem; background: var(--surface-alt); border-radius: 12px;
+    }
+    .tracks-panel__title {
+      font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 0.75rem;
+    }
+    .track-row {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;
+    }
+    .track-row:last-child { margin-bottom: 0; }
+    .track-label {
+      font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600; min-width: 120px; flex-shrink: 0;
+    }
+    .track-bar-wrap {
+      flex: 1; position: relative; height: 22px; background: var(--border); border-radius: 4px; overflow: visible;
+    }
+    .track-bar {
+      position: absolute; top: 0; height: 100%; border-radius: 4px; transition: all 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .track-bar span {
+      font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; color: #fff; white-space: nowrap;
+    }
+    .track-info {
+      font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-dim); min-width: 60px; text-align: right; flex-shrink: 0;
+    }
+    .track-marker {
+      position: absolute; top: -4px; bottom: -4px; width: 2px; z-index: 2;
+    }
+    .track-marker::after {
+      content: attr(data-label); position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+      font-family: var(--font-mono); font-size: 0.55rem; font-weight: 600; white-space: nowrap;
+    }
+
     /* Milestones on timeline */
     .timeline-milestones {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;
@@ -151,7 +193,10 @@
     .milestone.past { opacity: 0.5; }
     .milestone__label { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); }
     .milestone__value { font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem; }
-    .milestone__date { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); margin-top: 0.15rem; }
+    .milestone__date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); margin-top: 0.15rem; line-height: 1.5; }
+    .milestone__date .method-tag {
+      display: inline-block; padding: 0.05rem 0.35rem; border-radius: 3px; font-size: 0.6rem; font-weight: 600; margin-right: 0.2rem;
+    }
 
     /* Interactive chart */
     .chart-interactive {
@@ -207,7 +252,7 @@
     }
 
     /* Chart tab switcher */
-    .chart-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .chart-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .chart-tab {
       padding: 0.5rem 1.2rem; border-radius: 100px; border: 1px solid var(--border);
       background: transparent; color: var(--text-dim); cursor: pointer;
@@ -216,6 +261,16 @@
     }
     .chart-tab:hover { border-color: var(--gold); color: var(--text); }
     .chart-tab.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+
+    /* Sub-tab for date toggle */
+    .sub-tabs { display: flex; gap: 0.35rem; margin-bottom: 1rem; }
+    .sub-tab {
+      padding: 0.35rem 0.9rem; border-radius: 6px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-dim); cursor: pointer;
+      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600; transition: all 0.2s;
+    }
+    .sub-tab:hover { border-color: var(--teal); color: var(--text); }
+    .sub-tab.active { background: var(--teal); color: #fff; border-color: var(--teal); }
 
     /* Verdict */
     .verdict {
@@ -227,6 +282,20 @@
     .verdict__text { font-family: var(--font-serif); font-size: 1.3rem; }
     .verdict__detail { margin-top: 0.75rem; font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; }
     .verdict__detail strong { color: var(--text); }
+
+    /* Method verdict blocks */
+    .method-verdict {
+      margin-top: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; border-left: 3px solid; font-size: 0.85rem; line-height: 1.6;
+    }
+    .method-verdict--teal { border-color: var(--teal); background: var(--teal-bg); }
+    .method-verdict--gold { border-color: var(--gold); background: var(--gold-bg); }
+    .method-verdict--amber { border-color: var(--amber); background: var(--amber-bg); }
+    .method-verdict .method-name {
+      font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;
+    }
+    .method-verdict--teal .method-name { color: var(--teal); }
+    .method-verdict--gold .method-name { color: var(--gold); }
+    .method-verdict--amber .method-name { color: var(--amber); }
 
     /* MABIMS Grid */
     .mabims-grid {
@@ -295,6 +364,8 @@
       .data-table-wrap { overflow-x: auto; }
       .concept-grid { grid-template-columns: 1fr !important; }
       .mabims-grid { grid-template-columns: 1fr 1fr; }
+      .track-label { min-width: 80px; font-size: 0.6rem; }
+      .track-info { min-width: 45px; font-size: 0.58rem; }
     }
   </style>
 </head>
@@ -304,9 +375,9 @@
     <!-- Hero -->
     <div class="hero">
       <div class="hero__crescent">☽</div>
-      <h1>Data Hilal Awal Syawal 1447 H</h1>
-      <p class="hero__sub">Visualisasi interaktif — tinggi hilal, elongasi & penentuan Idul Fitri 2026</p>
-      <span class="hero__date">Ijtimak: Kamis, 19 Maret 2026 — 08:26 WIB</span>
+      <h1>Data Hilal Ramadhan & Syawal 1447 H</h1>
+      <p class="hero__sub">Visualisasi interaktif — tinggi hilal, elongasi & penentuan awal Ramadhan dan Idul Fitri 2026 menurut tiga metode</p>
+      <span class="hero__date">Tiga perspektif, satu data astronomi</span>
     </div>
 
     <!-- ========== TIMELINE SLIDER ========== -->
@@ -314,7 +385,7 @@
       <div class="timeline-header">
         <div>
           <div class="section-label section-label--teal" style="margin-bottom: 0.25rem;">Perjalanan Ramadhan 1447 H</div>
-          <h3>Dari Awal Puasa hingga Idul Fitri</h3>
+          <h3>Dari Awal Puasa hingga Idul Fitri — Tiga Perspektif</h3>
         </div>
         <div style="text-align: right;">
           <div class="timeline-day-display" id="dayDisplay">Hari ke-1</div>
@@ -322,17 +393,55 @@
         </div>
       </div>
 
+      <!-- Three-track comparison panel -->
+      <div class="tracks-panel">
+        <div class="tracks-panel__title">Perbandingan Durasi Ramadhan — Tiga Metode</div>
+
+        <div class="track-row">
+          <div class="track-label" style="color: var(--teal);">Muhammadiyah</div>
+          <div class="track-bar-wrap" id="trackMuhammadiyah">
+            <!-- JS fills: 18 Feb – 19 Mar (30 days) -->
+          </div>
+          <div class="track-info">30 hari</div>
+        </div>
+
+        <div class="track-row">
+          <div class="track-label" style="color: var(--gold);">WH Lokal</div>
+          <div class="track-bar-wrap" id="trackWHLokal">
+            <!-- JS fills: 19 Feb – 19 Mar (29 days) -->
+          </div>
+          <div class="track-info">29 hari</div>
+        </div>
+
+        <div class="track-row">
+          <div class="track-label" style="color: var(--amber);">Pemerintah</div>
+          <div class="track-bar-wrap" id="trackPemerintah">
+            <!-- JS fills: 19 Feb – 20 Mar (30 days) -->
+          </div>
+          <div class="track-info">30 hari</div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-dim); margin-top: 0.5rem; padding: 0 calc(120px + 0.75rem) 0 calc(120px + 0.75rem);">
+          <span>18 Feb</span>
+          <span>28 Feb</span>
+          <span>10 Mar</span>
+          <span>21 Mar</span>
+        </div>
+      </div>
+
       <div class="timeline-slider-wrap">
         <div class="timeline-track">
           <div class="timeline-fill" id="timelineFill" style="width: 0%;"></div>
         </div>
-        <input type="range" id="timelineSlider" min="1" max="31" value="1" aria-label="Hari Ramadhan">
+        <input type="range" id="timelineSlider" min="0" max="32" value="1" aria-label="Hari Ramadhan">
         <div class="timeline-markers">
-          <span>1 Ram</span>
+          <span style="color:var(--teal); font-weight:600;">18 Feb ★</span>
+          <span>1 Ram (19 Feb)</span>
           <span>10</span>
           <span>20</span>
           <span>30 Ram</span>
-          <span>1 Syw</span>
+          <span style="color:var(--gold); font-weight:600;">20 Mar ★</span>
+          <span>21 Mar</span>
         </div>
       </div>
 
@@ -340,12 +449,20 @@
         <div class="milestone active" id="ms-start">
           <div class="milestone__label">Awal Ramadhan</div>
           <div class="milestone__value">1 Ramadhan</div>
-          <div class="milestone__date">Kamis, 19 Feb 2026</div>
+          <div class="milestone__date">
+            <span class="method-tag" style="background:var(--teal-bg);color:var(--teal);">Muhammadiyah</span> Rabu, 18 Feb<br>
+            <span class="method-tag" style="background:var(--gold-bg);color:var(--gold);">WH Lokal</span>
+            <span class="method-tag" style="background:var(--amber-bg);color:var(--amber);">Pemerintah</span> Kamis, 19 Feb
+          </div>
         </div>
         <div class="milestone" id="ms-nuzul">
           <div class="milestone__label">Nuzulul Quran</div>
           <div class="milestone__value">17 Ramadhan</div>
-          <div class="milestone__date">Jumat, 7 Mar 2026</div>
+          <div class="milestone__date">
+            <span class="method-tag" style="background:var(--teal-bg);color:var(--teal);">M</span> Kam, 5 Mar<br>
+            <span class="method-tag" style="background:var(--gold-bg);color:var(--gold);">WH</span>
+            <span class="method-tag" style="background:var(--amber-bg);color:var(--amber);">P</span> Jum, 7 Mar
+          </div>
         </div>
         <div class="milestone" id="ms-isbat">
           <div class="milestone__label">Sidang Isbat</div>
@@ -355,12 +472,16 @@
         <div class="milestone" id="ms-eid">
           <div class="milestone__label">Idul Fitri</div>
           <div class="milestone__value">1 Syawal</div>
-          <div class="milestone__date">Sabtu, 21 Mar 2026</div>
+          <div class="milestone__date">
+            <span class="method-tag" style="background:var(--teal-bg);color:var(--teal);">Muhammadiyah</span>
+            <span class="method-tag" style="background:var(--gold-bg);color:var(--gold);">WH Lokal</span> Jumat, 20 Mar<br>
+            <span class="method-tag" style="background:var(--amber-bg);color:var(--amber);">Pemerintah</span> Sabtu, 21 Mar
+          </div>
         </div>
       </div>
 
       <div id="timelineInfo" style="margin-top: 1rem; padding: 1rem; background: var(--surface-alt); border-radius: 8px; font-size: 0.85rem; color: var(--text-mid); line-height: 1.6; transition: opacity 0.3s;">
-        Ramadhan 1447 H dimulai pada <strong>Kamis, 19 Februari 2026</strong>, berdasarkan sidang isbat yang digelar pada Selasa, 17 Februari 2026.
+        Ramadhan 1447 H dimulai pada <strong>Kamis, 19 Februari 2026</strong> (Pemerintah & WH Lokal), atau <strong>Rabu, 18 Februari 2026</strong> (Muhammadiyah — berdasarkan konsep <em>sharing night</em>).
       </div>
     </div>
 
@@ -376,14 +497,25 @@
         Tinggi hilal tertinggi di Sabang, Aceh: <strong>+3°08'</strong> (memenuhi tinggi ≥ 3°),
         namun elongasi maksimal hanya <strong>6,10°</strong> — di bawah syarat <strong>6,4°</strong>.
         Ramadhan 1447 H di-istikmal-kan menjadi 30 hari.
-        <br><br>
-        <strong style="color: var(--amber);">Catatan:</strong> Muhammadiyah menetapkan 1 Syawal = Jumat, 20 Maret 2026 (metode hisab wujudul hilal).
+
+        <div class="method-verdict method-verdict--teal">
+          <div class="method-name">Muhammadiyah → 1 Syawal = Jumat, 20 Mar 2026</div>
+          Hilal wujud di atas ufuk di seluruh Indonesia (Sabang +3,13°). Cukup memenuhi kriteria wujudul hilal (h > 0°).
+        </div>
+        <div class="method-verdict method-verdict--gold">
+          <div class="method-name">Wujudul Hilal Lokal → 1 Syawal = Jumat, 20 Mar 2026</div>
+          Sama dengan Muhammadiyah — hilal wujud di atas 0° di seluruh Indonesia.
+        </div>
+        <div class="method-verdict method-verdict--amber">
+          <div class="method-name">Pemerintah (MABIMS) → 1 Syawal = Sabtu, 21 Mar 2026</div>
+          Elongasi 6,10° < 6,4° yang disyaratkan. Istikmal 30 hari Ramadhan.
+        </div>
       </div>
     </div>
 
     <!-- MABIMS Compliance -->
     <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 2rem; margin: 1.5rem 0; animation: fadeUp 0.8s ease-out 0.2s both;">
-      <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); margin-bottom: 1rem;">Kesesuaian dengan Kriteria MABIMS</div>
+      <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); margin-bottom: 1rem;">Kesesuaian dengan Kriteria MABIMS — 19 Maret 2026 (Akhir Ramadhan)</div>
       <div class="mabims-grid">
         <div class="mabims-header">PARAMETER</div>
         <div class="mabims-header" style="text-align: center;">SYARAT</div>
@@ -460,7 +592,6 @@
               <span class="criteria-line-label" id="altLineLabel">≥ 3.0°</span>
             </div>
             <div class="bar-group" id="altBars" style="height: 260px; align-items: flex-end; position: relative;">
-              <!-- Bars generated by JS -->
             </div>
           </div>
           <div id="altSummary" style="text-align: center; font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem; font-family: var(--font-mono);"></div>
@@ -472,7 +603,6 @@
               <span class="criteria-line-label" id="eloLineLabel">≥ 6.4°</span>
             </div>
             <div class="bar-group" id="eloBars" style="height: 260px; align-items: flex-end; position: relative;">
-              <!-- Bars generated by JS -->
             </div>
           </div>
           <div id="eloSummary" style="text-align: center; font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem; font-family: var(--font-mono);"></div>
@@ -514,17 +644,24 @@
       <p class="desc">Klik kota untuk melihat posisi hilal di langit barat saat maghrib. Diagram menunjukkan <strong>tinggi hilal</strong> (vertikal) dan <strong>elongasi</strong> (jarak dari Matahari) secara bersamaan, beserta batas kriteria <span style="color:#6fcf97; font-weight:600;">wujudul hilal (0°)</span> dan <span style="color:var(--amber); font-weight:600;">imkanur rukyah MABIMS (3° / 6,4°)</span>.</p>
 
       <!-- Tab switcher -->
-      <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+      <div class="chart-tabs">
         <button class="chart-tab active" id="tabRamadhan" onclick="switchSkyTab('ramadhan')">Awal Ramadhan — 17 Feb</button>
         <button class="chart-tab" id="tabSyawal" onclick="switchSkyTab('syawal')">Akhir Ramadhan — 19 Mar</button>
       </div>
 
       <!-- === DIAGRAM 1: AWAL RAMADHAN === -->
       <div id="skyRamadhan" style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem;">
+
+        <!-- Sub-tab: 17 Feb vs 18 Feb -->
+        <div class="sub-tabs" style="margin-bottom: 1rem;">
+          <button class="sub-tab active" id="subTab17" onclick="switchRamDate('17feb')">17 Feb (hari sidang isbat)</button>
+          <button class="sub-tab" id="subTab18" onclick="switchRamDate('18feb')">18 Feb (hari rukyat hilal)</button>
+        </div>
+
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
           <div>
-            <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); font-weight: 600; margin-bottom: 0.25rem;">Sidang Isbat Awal Ramadhan — Selasa, 17 Februari 2026</div>
-            <div style="font-size: 0.85rem; color: var(--text-dim);">Ijtimak: 17 Feb 2026 pukul <strong style="color:var(--red);">19:01 WIB</strong> — <em>setelah</em> maghrib seluruh Indonesia (terakhir Sabang 18:51)</div>
+            <div id="ram_headerTitle" style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); font-weight: 600; margin-bottom: 0.25rem;">Sidang Isbat Awal Ramadhan — Senin, 17 Februari 2026</div>
+            <div id="ram_headerSub" style="font-size: 0.85rem; color: var(--text-dim);">Ijtimak: 17 Feb 2026 pukul <strong style="color:var(--red);">19:12 WIB</strong> (12:12 UTC) — <em>setelah</em> maghrib seluruh Indonesia (terakhir Sabang 18:51)</div>
           </div>
           <div style="text-align: right;">
             <div id="ram_cityName" style="font-family: var(--font-mono); font-size: 1rem; font-weight: 600; color: var(--gold);">Sabang</div>
@@ -543,13 +680,11 @@
             <radialGradient id="rwestG" cx="90%" cy="85%" r="35%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.12"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/></radialGradient>
           </defs>
 
-          <!-- Sky -->
           <rect x="40" y="30" width="620" height="210" rx="10" fill="url(#rsky)"/>
           <rect x="40" y="30" width="620" height="210" rx="10" fill="url(#rwestG)"/>
           <text x="55" y="48" fill="currentColor" fill-opacity="0.2" font-size="9">TIMUR ←</text>
           <text x="610" y="48" fill="currentColor" fill-opacity="0.2" font-size="9">→ BARAT</text>
 
-          <!-- Zone coloring -->
           <rect x="40" y="240" width="620" height="40" fill="#b71c1c" fill-opacity="0.04"/>
           <rect x="40" y="195" width="620" height="45" fill="#d97706" fill-opacity="0.04"/>
           <rect x="40" y="30" width="620" height="165" fill="#2d6a4f" fill-opacity="0.03"/>
@@ -557,44 +692,35 @@
           <text x="48" y="210" fill="#d97706" fill-opacity="0.4" font-size="8" font-weight="600">ZONA WUJUD (0° – 3°)</text>
           <text x="48" y="257" fill="#b71c1c" fill-opacity="0.4" font-size="8" font-weight="600">DI BAWAH UFUK</text>
 
-          <!-- Horizon (0°) at y=240. Scale: 15px per degree -->
           <line x1="40" y1="240" x2="660" y2="240" stroke="#c2410c" stroke-width="2.5"/>
           <text x="668" y="244" fill="#c2410c" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">UFUK</text>
 
-          <!-- MABIMS 3° line: y = 240 - 3*15 = 195 -->
           <line x1="40" y1="195" x2="660" y2="195" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
-          <!-- Wujudul hilal 0° = horizon -->
           <line x1="40" y1="240" x2="660" y2="240" stroke="#6fcf97" stroke-width="1" stroke-dasharray="3,6" opacity="0.4"/>
 
-          <!-- Criteria labels -->
           <rect x="500" y="183" width="160" height="18" rx="4" fill="var(--surface)" stroke="var(--amber)" stroke-width="1" opacity="0.85"/>
           <text x="580" y="196" text-anchor="middle" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">MABIMS ≥ 3° tinggi</text>
           <rect x="500" y="244" width="160" height="18" rx="4" fill="var(--surface)" stroke="#6fcf97" stroke-width="1" opacity="0.85"/>
           <text x="580" y="256" text-anchor="middle" fill="#2d6a4f" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">Wujudul Hilal ≥ 0°</text>
 
-          <!-- Degree markers -->
           <text x="32" y="244" text-anchor="end" fill="currentColor" fill-opacity="0.3" font-family="JetBrains Mono, monospace" font-size="8">0°</text>
           <text x="32" y="199" text-anchor="end" fill="#d97706" fill-opacity="0.5" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">3°</text>
           <text x="32" y="259" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">-1°</text>
           <text x="32" y="274" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">-2°</text>
 
-          <!-- Ground -->
           <rect x="40" y="280" width="620" height="30" fill="currentColor" fill-opacity="0.02"/>
           <text x="350" y="298" text-anchor="middle" fill="currentColor" fill-opacity="0.1" font-size="10">permukaan bumi</text>
 
-          <!-- Observer -->
           <circle cx="350" cy="310" r="5" fill="currentColor" fill-opacity="0.3"/>
           <line x1="350" y1="310" x2="350" y2="296" stroke="currentColor" stroke-opacity="0.3" stroke-width="2"/>
           <circle cx="350" cy="293" r="4" fill="currentColor" fill-opacity="0.3"/>
           <text x="350" y="326" text-anchor="middle" fill="currentColor" fill-opacity="0.35" font-size="8">pengamat</text>
 
-          <!-- Sun (at horizon, west/right) -->
           <circle cx="580" cy="240" r="24" fill="url(#rsunG)"/>
           <circle cx="580" cy="240" r="13" fill="#f59e0b" opacity="0.7"/>
           <rect x="562" y="240" width="36" height="13" fill="var(--bg)" opacity="0.5"/>
           <text x="580" y="225" text-anchor="middle" fill="#d97706" font-size="9" font-weight="600">Matahari</text>
 
-          <!-- Moon (dynamic) -->
           <g id="ram_moon" style="transition: transform 0.3s ease-out;">
             <circle r="20" fill="url(#rmoonG)"/>
             <circle r="11" fill="#f0c56d" opacity="0.85"/>
@@ -602,19 +728,15 @@
             <text y="-25" text-anchor="middle" fill="#c17f24" font-size="10" font-weight="600">Hilal ☽</text>
           </g>
 
-          <!-- Sight lines (dynamic) -->
           <line id="ram_sightAlt" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
           <line id="ram_sightSun" stroke="#d97706" stroke-width="1" stroke-dasharray="5,4" opacity="0.3"/>
 
-          <!-- Altitude arc -->
           <path id="ram_altArc" d="" fill="none" stroke="#c17f24" stroke-width="2" opacity="0.7"/>
           <text id="ram_altArcLbl" fill="#c17f24" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600"></text>
 
-          <!-- Elongation arc -->
           <path id="ram_eloArc" d="" fill="none" stroke="#d97706" stroke-width="2" opacity="0.7"/>
           <text id="ram_eloArcLbl" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600"></text>
 
-          <!-- Status panel -->
           <rect id="ram_statusBg" x="40" y="340" width="620" height="50" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
           <text id="ram_status1" x="350" y="360" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600"></text>
           <text id="ram_status2" x="350" y="378" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9" fill="var(--text-dim)"></text>
@@ -622,7 +744,7 @@
 
         <!-- City selector -->
         <div style="margin-top: 1rem;">
-          <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.5rem;">PILIH KOTA — Data 17 Feb 2026 saat maghrib (ijtimak belum terjadi → hilal belum lahir):</div>
+          <div id="ram_cityLabel" style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.5rem;">PILIH KOTA — Data 17 Feb 2026 saat maghrib (ijtimak belum terjadi → hilal belum lahir):</div>
           <div id="ram_cityBtns" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
         </div>
 
@@ -658,7 +780,6 @@
           <text x="55" y="48" fill="currentColor" fill-opacity="0.2" font-size="9">TIMUR ←</text>
           <text x="610" y="48" fill="currentColor" fill-opacity="0.2" font-size="9">→ BARAT</text>
 
-          <!-- Zone coloring -->
           <rect x="40" y="240" width="620" height="40" fill="#b71c1c" fill-opacity="0.04"/>
           <rect x="40" y="195" width="620" height="45" fill="#d97706" fill-opacity="0.04"/>
           <rect x="40" y="30" width="620" height="165" fill="#2d6a4f" fill-opacity="0.03"/>
@@ -723,28 +844,63 @@
         <div id="syw_verdict" style="margin-top: 1rem; padding: 1rem 1.25rem; border-radius: 10px; background: var(--surface-alt); font-size: 0.85rem; color: var(--text-mid); line-height: 1.6; transition: all 0.3s;"></div>
       </div>
 
-      <!-- Standards comparison -->
+      <!-- ========== Standards comparison — 3 columns ========== -->
       <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; margin-top: 1.5rem;">
-        <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); margin-bottom: 1rem;">Perbandingan Standar Penentuan Awal Bulan</div>
-        <div class="concept-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-          <div style="padding: 1.25rem; border-radius: 10px; border: 2px solid #6fcf97; background: var(--green-bg);">
-            <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); font-weight: 600; margin-bottom: 0.5rem;">Hisab Wujudul Hilal</div>
-            <div style="font-size: 0.9rem; color: var(--text-mid); line-height: 1.6;">
-              <strong style="color: var(--text);">Muhammadiyah</strong> — Cukup hilal "wujud" (ada di atas ufuk = <strong>tinggi &gt; 0°</strong>), tanpa harus bisa dilihat.<br>
-              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--green); font-weight: 600;">→ 1 Syawal = Jumat, 20 Mar 2026</span>
+        <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); margin-bottom: 1rem;">Perbandingan Tiga Metode Penentuan Awal Bulan</div>
+        <div class="concept-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+
+          <!-- Muhammadiyah -->
+          <div style="padding: 1.25rem; border-radius: 10px; border: 2px solid var(--teal); background: var(--teal-bg);">
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal); font-weight: 600; margin-bottom: 0.5rem;">Muhammadiyah</div>
+            <div style="font-size: 0.82rem; color: var(--text-mid); line-height: 1.6;">
+              <strong style="color: var(--text);">Wujudul Hilal Global</strong><br>
+              Hilal wujud di <em>mana pun</em> di dunia + konsep <em>sharing night</em> (wilayah bagi malam).<br>
+              <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border);">
+                <div style="font-family: var(--font-mono); font-size: 0.72rem;">
+                  <strong>1 Ramadhan:</strong><br><span style="color: var(--teal); font-weight: 600;">Rabu, 18 Feb 2026</span><br>
+                  <strong>1 Syawal:</strong><br><span style="color: var(--teal); font-weight: 600;">Jumat, 20 Mar 2026</span><br>
+                  <strong>Ramadhan:</strong> <span style="font-weight: 700;">30 hari</span>
+                </div>
+              </div>
             </div>
           </div>
+
+          <!-- Wujudul Hilal Lokal -->
+          <div style="padding: 1.25rem; border-radius: 10px; border: 2px solid var(--gold); background: var(--gold-bg);">
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); font-weight: 600; margin-bottom: 0.5rem;">Wujudul Hilal Lokal</div>
+            <div style="font-size: 0.82rem; color: var(--text-mid); line-height: 1.6;">
+              <strong style="color: var(--text);">Hilal Wujud di Indonesia</strong><br>
+              Hilal harus di atas ufuk (<strong>h &gt; 0°</strong>) di wilayah Indonesia saat maghrib.<br>
+              <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border);">
+                <div style="font-family: var(--font-mono); font-size: 0.72rem;">
+                  <strong>1 Ramadhan:</strong><br><span style="color: var(--gold); font-weight: 600;">Kamis, 19 Feb 2026</span><br>
+                  <strong>1 Syawal:</strong><br><span style="color: var(--gold); font-weight: 600;">Jumat, 20 Mar 2026</span><br>
+                  <strong>Ramadhan:</strong> <span style="font-weight: 700;">29 hari</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pemerintah / MABIMS -->
           <div style="padding: 1.25rem; border-radius: 10px; border: 2px solid var(--amber); background: var(--amber-bg);">
-            <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber); font-weight: 600; margin-bottom: 0.5rem;">Imkanur Rukyah MABIMS</div>
-            <div style="font-size: 0.9rem; color: var(--text-mid); line-height: 1.6;">
-              <strong style="color: var(--text);">Pemerintah (Sidang Isbat)</strong> — Tinggi <strong>≥ 3°</strong> + elongasi <strong>≥ 6,4°</strong> + umur bulan <strong>≥ 8 jam</strong>.<br>
-              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--amber); font-weight: 600;">→ 1 Syawal = Sabtu, 21 Mar 2026</span>
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber); font-weight: 600; margin-bottom: 0.5rem;">Pemerintah (MABIMS)</div>
+            <div style="font-size: 0.82rem; color: var(--text-mid); line-height: 1.6;">
+              <strong style="color: var(--text);">Imkanur Rukyah</strong><br>
+              Tinggi <strong>≥ 3°</strong> + elongasi <strong>≥ 6,4°</strong> + umur bulan <strong>≥ 8 jam</strong>. Ketiganya harus terpenuhi.<br>
+              <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border);">
+                <div style="font-family: var(--font-mono); font-size: 0.72rem;">
+                  <strong>1 Ramadhan:</strong><br><span style="color: var(--amber); font-weight: 600;">Kamis, 19 Feb 2026</span><br>
+                  <strong>1 Syawal:</strong><br><span style="color: var(--amber); font-weight: 600;">Sabtu, 21 Mar 2026</span><br>
+                  <strong>Ramadhan:</strong> <span style="font-weight: 700;">30 hari</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
         <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-dim); line-height: 1.7;">
-          <strong>Awal Ramadhan (17 Feb):</strong> Kedua metode sepakat — ijtimak terjadi pukul 19:01 WIB, <em>setelah</em> maghrib seluruh Indonesia (terakhir Sabang 18:51). Hilal belum lahir. Sya'ban digenapkan 30 hari, Ramadhan dimulai 19 Feb.<br>
-          <strong>Akhir Ramadhan:</strong> Berbeda — hilal sudah wujud (&gt; 0°) tapi belum imkan (&lt; 3° di sebagian besar wilayah, elongasi &lt; 6,4° di seluruh wilayah). Muhammadiyah Lebaran Jumat 20 Mar, Pemerintah Sabtu 21 Mar.
+          <strong>Awal Ramadhan:</strong> Muhammadiyah memulai <strong>1 hari lebih awal</strong> (18 Feb) karena hilal sudah wujud di Alaska saat masih malam di Indonesia (<em>sharing night</em>). WH Lokal & Pemerintah sepakat memulai 19 Feb.<br>
+          <strong>Akhir Ramadhan:</strong> Hilal wujud (h &gt; 0°) di seluruh Indonesia → Muhammadiyah & WH Lokal berhari raya Jumat 20 Mar. Tapi elongasi 6,10° &lt; 6,4° → Pemerintah istikmal, Lebaran Sabtu 21 Mar.
         </div>
       </div>
 
@@ -833,7 +989,10 @@
     <div class="insight" style="animation: fadeUp 0.8s ease-out 0.6s both;">
       <div class="insight__icon">⚠️</div>
       <div class="insight__text">
-        <strong>Perbedaan penetapan:</strong> Muhammadiyah menetapkan 1 Syawal = <strong>Jumat, 20 Maret 2026</strong> (hisab wujudul hilal). Pemerintah (sidang isbat) = <strong>Sabtu, 21 Maret 2026</strong> (kriteria imkanur rukyah MABIMS).
+        <strong>Perbedaan penetapan:</strong><br>
+        — <strong style="color:var(--teal);">Muhammadiyah:</strong> 1 Syawal = <strong>Jumat, 20 Mar 2026</strong> (wujudul hilal global).<br>
+        — <strong style="color:var(--gold);">Wujudul Hilal Lokal:</strong> 1 Syawal = <strong>Jumat, 20 Mar 2026</strong> (hilal wujud di Indonesia).<br>
+        — <strong style="color:var(--amber);">Pemerintah (MABIMS):</strong> 1 Syawal = <strong>Sabtu, 21 Mar 2026</strong> (elongasi kurang 0,3° dari syarat).
       </div>
     </div>
 
@@ -882,6 +1041,7 @@
         <li style="padding: 0.4rem 0; border-bottom: 1px solid var(--border); margin-top: 0.5rem;"><strong>Data Hilal</strong></li>
         <li>Lembaga Falakiyah PBNU — Informasi Hilal Awal Syawal 1447 H</li>
         <li>BMKG — Prakiraan Hilal Saat Matahari Terbenam 19 Maret 2026</li>
+        <li>BMKG Jawa Tengah — Laporan Hilal 18 Februari 2026</li>
         <li><a href="https://www.nu.or.id/nasional/kapan-lebaran-2026-berikut-data-hilal-1-syawal-1447-h-oleh-lf-pbnu-cU3vp" target="_blank" rel="noopener">NU Online — Data Hilal 1 Syawal 1447 H</a></li>
         <li><a href="https://berita.rri.co.id/sampang/regional/2273868/data-hisab-bmkg-jelang-rukyatul-hilal-19-maret-2026" target="_blank" rel="noopener">RRI — Data Hisab BMKG Jelang Rukyatul Hilal</a></li>
       </ul>
@@ -902,14 +1062,15 @@
     ];
 
     // === TIMELINE ===
-    const ramadhanDates = [];
-    const startDate = new Date(2026, 1, 19); // Feb 19, 2026
-    for (let i = 0; i < 30; i++) {
-      const d = new Date(startDate);
-      d.setDate(d.getDate() + i);
-      ramadhanDates.push(d);
+    // Pemerintah basis: 19 Feb (day 1) to 21 Mar (day 31 = 1 Syawal)
+    // Muhammadiyah starts 18 Feb (day 0)
+    // Slider: 0 = 18 Feb (Muhammadiyah day 1), 1-30 = Ramadhan Pemerintah, 31 = 20 Mar (Muhammadiyah/WH eid), 32 = 21 Mar (Pemerintah eid)
+    const baseDate = new Date(2026, 1, 18); // Feb 18 = slider position 0
+    function sliderToDate(pos) {
+      const d = new Date(baseDate);
+      d.setDate(d.getDate() + pos);
+      return d;
     }
-    const eidDate = new Date(2026, 2, 21); // Mar 21, 2026
 
     const dayNames = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
     const monthNames = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -925,55 +1086,72 @@
     const timelineInfo = document.getElementById('timelineInfo');
 
     const milestones = {
-      start: { el: document.getElementById('ms-start'), day: 1 },
-      nuzul: { el: document.getElementById('ms-nuzul'), day: 17 },
-      isbat: { el: document.getElementById('ms-isbat'), day: 29 },
-      eid:   { el: document.getElementById('ms-eid'),   day: 31 },
+      start: { el: document.getElementById('ms-start'), day: 1 },  // 19 Feb (Pemerintah)
+      nuzul: { el: document.getElementById('ms-nuzul'), day: 17 }, // 17 Ram Pemerintah = 7 Mar
+      isbat: { el: document.getElementById('ms-isbat'), day: 30 }, // 29 Ram Pemerintah = 19 Mar (slider 30)
+      eid:   { el: document.getElementById('ms-eid'),   day: 32 }, // 1 Syawal Pemerintah = 21 Mar (slider 32)
     };
 
     const timelineMessages = {
-      1: 'Ramadhan 1447 H dimulai pada <strong>Kamis, 19 Februari 2026</strong>, berdasarkan sidang isbat yang digelar Selasa, 17 Februari 2026.',
+      0: '<span style="color:var(--teal);font-weight:600;">★ Muhammadiyah:</span> Hari ini <strong>1 Ramadhan 1447 H</strong> menurut Muhammadiyah (Rabu, 18 Feb). Berdasarkan hisab wujudul hilal global: hilal sudah wujud di atas ufuk di Alaska (h ≥ 5°, ε ≥ 8°), dan melalui konsep <em>sharing night</em>, berlaku juga untuk Indonesia.',
+      1: 'Ramadhan 1447 H dimulai pada <strong>Kamis, 19 Februari 2026</strong> menurut Pemerintah & WH Lokal. Sidang isbat digelar pada Senin, 17 Februari 2026. Muhammadiyah sudah memulai puasa sejak kemarin (18 Feb).',
       10: 'Memasuki sepertiga awal Ramadhan — bulan rahmat. Umat Islam menjalankan ibadah puasa, tarawih, dan tilawah Al-Quran.',
-      17: '<strong>17 Ramadhan — Nuzulul Quran.</strong> Memperingati turunnya wahyu pertama Al-Quran kepada Nabi Muhammad ﷺ.',
+      17: '<strong>17 Ramadhan (Pemerintah) — Nuzulul Quran.</strong> Memperingati turunnya wahyu pertama Al-Quran kepada Nabi Muhammad ﷺ. <em>(Muhammadiyah: 19 Ramadhan, karena mulai 1 hari lebih awal.)</em>',
       20: 'Memasuki 10 hari terakhir Ramadhan — malam Lailatul Qadr dicari terutama pada malam-malam ganjil.',
-      29: '<strong>29 Ramadhan — Sidang Isbat.</strong> Kamis, 19 Maret 2026. Kemenag memantau hilal di 117 titik. Hilal tidak memenuhi kriteria MABIMS.',
-      30: '<strong>30 Ramadhan (Istikmal).</strong> Karena hilal tidak memenuhi kriteria, Ramadhan digenapkan 30 hari. Jumat 20 Maret masih puasa.',
-      31: '<strong>1 Syawal 1447 H — Idul Fitri!</strong> Sabtu, 21 Maret 2026. Taqabbalallahu minna wa minkum. 🌙',
+      30: '<strong>29 Ramadhan (Pemerintah) — Sidang Isbat.</strong> Kamis, 19 Maret 2026. Kemenag memantau hilal di 117 titik. Elongasi 6,10° &lt; 6,4° → MABIMS tidak terpenuhi. Muhammadiyah & WH Lokal: hilal wujud (h &gt; 0°).',
+      31: '<span style="color:var(--teal);font-weight:600;">★ Muhammadiyah & WH Lokal:</span> <strong>1 Syawal — Idul Fitri!</strong> Jumat, 20 Maret 2026. <em>Pemerintah: hari ini masih puasa (30 Ramadhan, istikmal).</em>',
+      32: '<span style="color:var(--amber);font-weight:600;">★ Pemerintah (MABIMS):</span> <strong>1 Syawal 1447 H — Idul Fitri!</strong> Sabtu, 21 Maret 2026. Taqabbalallahu minna wa minkum. 🌙',
     };
 
-    function getTimelineMessage(day) {
+    function getTimelineMessage(pos) {
       const keys = Object.keys(timelineMessages).map(Number).sort((a,b) => b-a);
-      for (const k of keys) { if (day >= k) return timelineMessages[k]; }
-      return timelineMessages[1];
+      for (const k of keys) { if (pos >= k) return timelineMessages[k]; }
+      return timelineMessages[0];
     }
 
     timelineSlider.addEventListener('input', function() {
-      const day = parseInt(this.value);
-      const pct = ((day - 1) / 30) * 100;
+      const pos = parseInt(this.value);
+      const pct = (pos / 32) * 100;
       timelineFill.style.width = pct + '%';
 
-      if (day <= 30) {
-        dayDisplay.textContent = `Hari ke-${day}`;
+      const currentDate = sliderToDate(pos);
+
+      if (pos === 0) {
+        // Muhammadiyah day 1
+        dayDisplay.textContent = '1 Ram (Muhammadiyah)';
+        dayDisplay.style.color = 'var(--teal)';
+        dateDisplay.textContent = formatDate(currentDate);
+      } else if (pos >= 1 && pos <= 30) {
+        // Pemerintah Ramadhan days
+        const pemDay = pos; // day 1 = 19 Feb
+        const muhDay = pos + 1; // Muhammadiyah is 1 day ahead
+        dayDisplay.textContent = `Hari ke-${pemDay}`;
         dayDisplay.style.color = '';
-        dateDisplay.textContent = formatDate(ramadhanDates[day - 1]);
-      } else {
-        dayDisplay.textContent = '🌙 Idul Fitri!';
+        dateDisplay.textContent = formatDate(currentDate);
+      } else if (pos === 31) {
+        // 20 Mar — Muhammadiyah & WH Lokal eid
+        dayDisplay.textContent = '🌙 Idul Fitri (M & WH)';
+        dayDisplay.style.color = 'var(--teal)';
+        dateDisplay.textContent = formatDate(currentDate);
+      } else if (pos === 32) {
+        // 21 Mar — Pemerintah eid
+        dayDisplay.textContent = '🌙 Idul Fitri (Pemerintah)';
         dayDisplay.style.color = 'var(--green)';
-        dateDisplay.textContent = formatDate(eidDate);
+        dateDisplay.textContent = formatDate(currentDate);
       }
 
       // Update milestones
       for (const [key, ms] of Object.entries(milestones)) {
         ms.el.classList.remove('active', 'past');
-        if (day === ms.day || (key === 'start' && day <= 1) || (key === 'eid' && day >= 31)) {
+        if (pos === ms.day || (key === 'start' && pos <= 1) || (key === 'eid' && pos >= 32)) {
           ms.el.classList.add('active');
-        } else if (day > ms.day) {
+        } else if (pos > ms.day) {
           ms.el.classList.add('past');
         }
       }
       // Special: highlight closest milestone
       const closest = Object.entries(milestones).reduce((best, [k, ms]) => {
-        const dist = Math.abs(day - ms.day);
+        const dist = Math.abs(pos - ms.day);
         return dist < best.dist ? { key: k, dist } : best;
       }, { key: '', dist: 999 });
       if (closest.dist <= 2) {
@@ -981,8 +1159,31 @@
         milestones[closest.key].el.classList.remove('past');
       }
 
-      timelineInfo.innerHTML = getTimelineMessage(day);
+      timelineInfo.innerHTML = getTimelineMessage(pos);
     });
+
+    // === THREE-TRACK COMPARISON ===
+    // Total span: 18 Feb to 21 Mar = 31 days
+    // Muhammadiyah: 18 Feb – 19 Mar (days 0–29, 30 days of Ramadhan, Syawal starts day 30 = 20 Mar)
+    // WH Lokal:    19 Feb – 19 Mar (days 1–29, 29 days, Syawal starts day 30 = 20 Mar)
+    // Pemerintah:  19 Feb – 20 Mar (days 1–30, 30 days, Syawal starts day 31 = 21 Mar)
+    const TOTAL_SPAN = 32; // 0 to 31 inclusive (18 Feb to 21 Mar)
+
+    function renderTracks() {
+      const methods = [
+        { id: 'trackMuhammadiyah', start: 0, end: 30, color: 'var(--teal)', label: '18 Feb → 19 Mar' },
+        { id: 'trackWHLokal',      start: 1, end: 30, color: 'var(--gold)', label: '19 Feb → 19 Mar' },
+        { id: 'trackPemerintah',   start: 1, end: 31, color: 'var(--amber)', label: '19 Feb → 20 Mar' },
+      ];
+
+      methods.forEach(m => {
+        const wrap = document.getElementById(m.id);
+        const leftPct = (m.start / TOTAL_SPAN) * 100;
+        const widthPct = ((m.end - m.start) / TOTAL_SPAN) * 100;
+        wrap.innerHTML = `<div class="track-bar" style="left:${leftPct}%;width:${widthPct}%;background:${m.color};opacity:0.75;"><span>${m.label}</span></div>`;
+      });
+    }
+    renderTracks();
 
     // === INTERACTIVE CHART ===
     let currentChart = 'altitude';
@@ -993,7 +1194,7 @@
 
     function switchChart(type) {
       currentChart = type;
-      document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('[data-chart]').forEach(t => t.classList.remove('active'));
       document.querySelector(`[data-chart="${type}"]`).classList.add('active');
       document.getElementById('chartAltitude').style.display = type === 'altitude' ? 'block' : 'none';
       document.getElementById('chartElongation').style.display = type === 'elongation' ? 'block' : 'none';
@@ -1008,16 +1209,13 @@
       const threshold = parseFloat(isAlt ? altSlider.value : eloSlider.value);
       const maxVal = isAlt ? 5 : 10;
 
-      // Update value display
       if (isAlt) altValue.textContent = threshold.toFixed(1) + '°';
       else eloValue.textContent = threshold.toFixed(1) + '°';
 
-      // Position criteria line
       const lineTop = (1 - threshold / maxVal) * 100;
       lineEl.style.top = Math.max(0, Math.min(95, lineTop)) + '%';
       lineLabelEl.textContent = `≥ ${threshold.toFixed(1)}°`;
 
-      // Build bars
       let html = '';
       let passCount = 0;
       cities.forEach((c, i) => {
@@ -1053,19 +1251,14 @@
     altSlider.addEventListener('input', () => renderBars('altitude'));
     eloSlider.addEventListener('input', () => renderBars('elongation'));
 
-    // Initial render
     renderBars('altitude');
     renderBars('elongation');
 
     // === UNIFIED SKY DIAGRAMS ===
 
-    // Data: Awal Ramadhan — Senin 17 Feb 2026 saat maghrib
-    // Ijtimak terjadi 17 Feb 2026 pukul 19:01 WIB
-    // Maghrib terakhir (Sabang) pukul 18:51 WIB → ijtimak SETELAH maghrib
-    // Artinya: saat observasi, hilal baru BELUM LAHIR di seluruh Indonesia
-    // Data di bawah adalah posisi bulan lama (pra-konjungsi), BUKAN hilal baru
-    const ramCities = [
-      { name: 'Sabang',    alt: -0.93,  elo: 0.94,  note: 'Ijtimak 19:01 WIB > maghrib 18:51 — hilal belum lahir', src: 'Kemenag' },
+    // Data: 17 Feb 2026 saat maghrib — ijtimak SETELAH maghrib → hilal belum lahir
+    const ramCities17 = [
+      { name: 'Sabang',    alt: -0.93,  elo: 0.94,  note: 'Ijtimak 19:12 WIB > maghrib 18:51 — hilal belum lahir', src: 'Kemenag' },
       { name: 'Jakarta',   alt: -0.90,  elo: 0.93,  note: 'Tinggi −0°54\'14" — bulan lama, bukan hilal baru', src: 'Kanwil Kemenag' },
       { name: 'Semarang',  alt: -1.10,  elo: 0.88,  note: 'Bulan terbenam sebelum Matahari', src: 'BMKG' },
       { name: 'Yogyakarta',alt: -1.50,  elo: 0.85,  note: 'Hilal mustahil — ijtimak belum terjadi', src: 'Kemenag Bantul' },
@@ -1073,7 +1266,16 @@
       { name: 'Merauke',   alt: -2.41,  elo: 0.56,  note: 'Terendah — hilal belum lahir', src: 'Kemenag' },
     ];
 
-    // Data: Akhir Ramadhan (19 Mar 2026, saat maghrib)
+    // Data: 18 Feb 2026 saat maghrib — hilal baru sudah lahir, wujud di seluruh Indonesia
+    const ramCities18 = [
+      { name: 'Sabang',    alt: 10.03,  elo: 13.50,  note: 'Hilal jauh di atas ufuk — wujud & imkan rukyah', src: 'BMKG' },
+      { name: 'Semarang',  alt: 8.60,   elo: 11.77,  note: 'Memenuhi semua kriteria MABIMS', src: 'BMKG Jateng' },
+      { name: 'Surakarta', alt: 8.53,   elo: 11.70,  note: 'Memenuhi semua kriteria MABIMS', src: 'BMKG Jateng' },
+      { name: 'Cilacap',   alt: 8.57,   elo: 11.70,  note: 'Memenuhi semua kriteria MABIMS', src: 'BMKG Jateng' },
+      { name: 'Merauke',   alt: 7.62,   elo: 10.50,  note: 'Titik terendah Indonesia — tetap memenuhi MABIMS', src: 'BMKG' },
+    ];
+
+    // Data: 19 Mar 2026 (akhir Ramadhan)
     const sywCities = [
       { name: 'Sabang',    alt: 3.13,  elo: 6.10,  note: 'Tertinggi — tinggi ✓ elongasi ✗', src: 'BMKG' },
       { name: 'B. Aceh',   alt: 2.88,  elo: 6.15,  note: 'Elongasi tertinggi', src: 'LF PBNU' },
@@ -1083,9 +1285,12 @@
       { name: 'Merauke',   alt: 0.82,  elo: 4.36,  note: 'Terendah di Indonesia', src: 'LF PBNU' },
     ];
 
+    // Track current Ramadhan date tab
+    let currentRamDate = '17feb';
+
     // SVG constants
-    const SKY_HORIZON = 240;  // y for 0°
-    const SKY_SCALE = 15;     // px per degree
+    const SKY_HORIZON = 240;
+    const SKY_SCALE = 15;
     const SKY_SUN_X = 580, SKY_SUN_Y = 240;
     const SKY_OBS_X = 350, SKY_OBS_Y = 293;
 
@@ -1103,49 +1308,34 @@
       const cityNameEl = document.getElementById(prefix + '_cityName');
       const altValEl = document.getElementById(prefix + '_altVal');
       const eloValEl = document.getElementById(prefix + '_eloVal');
-      const verdictEl = document.getElementById(prefix + '_verdict');
 
       const alt = city.alt;
       const elo = city.elo;
 
-      // Update header
       cityNameEl.textContent = city.name;
       const altSign = alt >= 0 ? '+' : '';
       altValEl.textContent = altSign + alt.toFixed(2) + '°';
       eloValEl.textContent = elo.toFixed(2) + '°';
 
-      // Moon position: combine altitude and elongation
-      // Use altitude for Y, and place horizontally relative to sun based on elongation
       const moonY = SKY_HORIZON - alt * SKY_SCALE;
-      // Elongation moves moon away from sun (leftward), scale ~8px per degree
       const eloScale = 8;
       const moonX = SKY_SUN_X - elo * eloScale;
 
       moonEl.setAttribute('transform', `translate(${moonX}, ${moonY})`);
       moonEl.style.opacity = alt < -1.5 ? 0.25 : alt < 0 ? 0.4 : elo < 3 ? 0.5 : elo < 7 ? 0.7 : 1;
 
-      // Sight line to moon
       sightAlt.setAttribute('x1', SKY_OBS_X);
       sightAlt.setAttribute('y1', SKY_OBS_Y);
       sightAlt.setAttribute('x2', moonX);
       sightAlt.setAttribute('y2', moonY);
 
-      // Sight line to sun
       sightSun.setAttribute('x1', SKY_OBS_X);
       sightSun.setAttribute('y1', SKY_OBS_Y);
       sightSun.setAttribute('x2', SKY_SUN_X);
       sightSun.setAttribute('y2', SKY_SUN_Y);
 
-      // Altitude arc (at moon's horizontal position, from horizon upward)
       if (Math.abs(alt) > 0.3) {
-        const arcR = 30;
         const horizY = SKY_HORIZON;
-        const angleRad = alt * Math.PI / 180;
-        // Small visual arc near the moon
-        const arcCX = moonX;
-        const startY = horizY;
-        const endY = moonY;
-        // Simple vertical arc indicator
         altArc.setAttribute('d', `M ${moonX - 15},${horizY} Q ${moonX - 25},${(horizY + moonY)/2} ${moonX - 10},${moonY + 10}`);
         altLbl.setAttribute('x', moonX - 35);
         altLbl.setAttribute('y', (horizY + moonY) / 2 + 4);
@@ -1155,7 +1345,6 @@
         altLbl.textContent = '';
       }
 
-      // Elongation arc (between sun and moon directions from observer)
       if (elo > 0.3) {
         const sunAng = Math.atan2(SKY_SUN_Y - SKY_OBS_Y, SKY_SUN_X - SKY_OBS_X);
         const moonAng = Math.atan2(moonY - SKY_OBS_Y, moonX - SKY_OBS_X);
@@ -1179,34 +1368,36 @@
       const altOk = alt >= 3;
       const eloOk = elo >= 6.4;
       const wujud = alt > 0;
-
-      // Special case for Ramadhan diagram: ijtimak after maghrib
       const isRamDiagram = prefix === 'ram';
 
-      if (alt < 0 && isRamDiagram) {
+      if (alt < 0 && isRamDiagram && currentRamDate === '17feb') {
         sColor = 'var(--red)';
         sText = 'HILAL BELUM LAHIR — ijtimak setelah maghrib';
-        sDetail = 'Ijtimak 19:01 WIB > maghrib — kedua metode sepakat: belum masuk Ramadhan';
+        sDetail = 'Ijtimak 19:12 WIB > maghrib — semua metode sepakat: hilal belum lahir di Indonesia';
       } else if (alt < 0) {
         sColor = 'var(--red)';
         sText = 'HILAL DI BAWAH UFUK — belum wujud';
-        sDetail = 'Kedua metode sepakat: belum masuk bulan baru';
-      } else if (!altOk && !eloOk) {
-        sColor = '#6fcf97';
-        sText = 'WUJUD (> 0°) — tapi belum imkan rukyah';
-        sDetail = 'Muhammadiyah: bulan baru ✓ | MABIMS: belum (tinggi < 3°, elongasi < 6,4°) ✗';
+        sDetail = 'Semua metode sepakat: belum masuk bulan baru';
+      } else if (altOk && eloOk) {
+        sColor = 'var(--green)';
+        sText = 'MEMENUHI SEMUA KRITERIA MABIMS';
+        sDetail = 'Tinggi ≥ 3° ✓ | Elongasi ≥ 6,4° ✓ | Semua metode sepakat: bulan baru ✓';
       } else if (altOk && !eloOk) {
         sColor = 'var(--amber)';
         sText = 'TINGGI ✓ tapi ELONGASI ✗';
-        sDetail = 'Tinggi memenuhi MABIMS (≥ 3°), tapi elongasi kurang (< 6,4°)';
+        sDetail = 'Muhammadiyah & WH Lokal: bulan baru ✓ | MABIMS: elongasi kurang (< 6,4°) ✗';
       } else if (!altOk && eloOk) {
         sColor = 'var(--amber)';
         sText = 'ELONGASI ✓ tapi TINGGI ✗';
-        sDetail = 'Elongasi memenuhi MABIMS (≥ 6,4°), tapi tinggi kurang (< 3°)';
+        sDetail = 'Muhammadiyah & WH Lokal: bulan baru ✓ | MABIMS: tinggi kurang (< 3°) ✗';
+      } else if (wujud) {
+        sColor = '#6fcf97';
+        sText = 'WUJUD (> 0°) — tapi belum imkan rukyah';
+        sDetail = 'Muhammadiyah & WH Lokal: bulan baru ✓ | MABIMS: tinggi < 3°, elongasi < 6,4° ✗';
       } else {
-        sColor = 'var(--green)';
-        sText = 'MEMENUHI SEMUA KRITERIA MABIMS';
-        sDetail = 'Tinggi ≥ 3° ✓ | Elongasi ≥ 6,4° ✓ | Kedua metode sepakat: bulan baru ✓';
+        sColor = 'var(--red)';
+        sText = 'HILAL DI BAWAH UFUK';
+        sDetail = 'Belum wujud — semua metode sepakat belum masuk bulan baru';
       }
 
       status1.setAttribute('fill', sColor);
@@ -1214,22 +1405,18 @@
       status2.textContent = sDetail;
       statusBg.setAttribute('stroke', sColor);
 
-      // Color the value displays
+      // Color value displays
       altValEl.style.color = alt < 0 ? 'var(--red)' : altOk ? 'var(--green)' : '#6fcf97';
       eloValEl.style.color = eloOk ? 'var(--green)' : 'var(--amber)';
-
-      // Verdict text
-      if (verdictEl) {
-        verdictEl.innerHTML = `<strong>${city.name}</strong> (${city.src}): ${city.note}`;
-      }
     }
 
     // Build city buttons
     function buildCityButtons(prefix, cityList) {
       const container = document.getElementById(prefix + '_cityBtns');
+      container.innerHTML = '';
       cityList.forEach((c, i) => {
         const btn = document.createElement('button');
-        const isGreen = (prefix === 'syw' && c.alt >= 3) || (prefix === 'ram' && c.alt > 0);
+        const isGreen = c.alt >= 3;
         const isRed = c.alt < 0;
         const borderColor = isGreen ? 'var(--green)' : isRed ? 'var(--red)' : 'var(--amber)';
         const bgColor = isGreen ? 'var(--green-bg)' : isRed ? 'var(--red-bg)' : 'var(--amber-bg)';
@@ -1239,7 +1426,7 @@
         btn.textContent = `${c.name} ${altSign}${c.alt.toFixed(2)}°`;
         btn.addEventListener('click', () => {
           updateSkyDiagram(prefix, c);
-          // Highlight active button
+          updateVerdictPanel(prefix, c);
           container.querySelectorAll('button').forEach(b => b.style.outline = 'none');
           btn.style.outline = `2px solid ${txtColor}`;
           btn.style.outlineOffset = '2px';
@@ -1252,7 +1439,92 @@
       });
     }
 
-    // Tab switching
+    // Verdict panels with three-method explanation
+    function updateVerdictPanel(prefix, city) {
+      const verdictEl = document.getElementById(prefix + '_verdict');
+      if (!verdictEl) return;
+
+      if (prefix === 'ram') {
+        if (currentRamDate === '17feb') {
+          verdictEl.innerHTML = `
+            <strong>${city.name}</strong> (${city.src}): ${city.note}
+            <div class="method-verdict method-verdict--teal" style="margin-top:0.75rem;">
+              <div class="method-name">Muhammadiyah → 1 Ramadhan = Rabu, 18 Feb 2026</div>
+              Hilal sudah wujud di Alaska (h ≥ 5°, ε ≥ 8°) saat masih malam di Indonesia. Melalui konsep <em>sharing night</em> (wilayah bagi malam), Muhammadiyah menghitung ini sebagai awal Ramadhan. Ijtimak terjadi pukul 12:12 UTC (19:12 WIB) pada 17 Feb — <strong>setelah</strong> maghrib seluruh Indonesia (terakhir Sabang 18:51 WIB).
+            </div>
+            <div class="method-verdict method-verdict--gold" style="margin-top:0.5rem;">
+              <div class="method-name">WH Lokal → 1 Ramadhan = Kamis, 19 Feb 2026</div>
+              Pada 17 Feb saat maghrib di Indonesia, hilal belum lahir (ijtimak belum terjadi). Keesokan harinya (18 Feb), hilal sudah wujud di atas ufuk di seluruh Indonesia (Sabang +10,03°, Semarang +8,60°, Merauke +7,62°). Jadi 1 Ramadhan = 19 Feb.
+            </div>
+            <div class="method-verdict method-verdict--amber" style="margin-top:0.5rem;">
+              <div class="method-name">Pemerintah (MABIMS) → 1 Ramadhan = Kamis, 19 Feb 2026</div>
+              Sama dengan WH Lokal — pada 18 Feb hilal mudah memenuhi semua kriteria MABIMS (tinggi ≥ 3°, elongasi ≥ 6,4°). 1 Ramadhan = 19 Feb.
+            </div>
+          `;
+        } else {
+          // 18 Feb data
+          verdictEl.innerHTML = `
+            <strong>${city.name}</strong> (${city.src}): ${city.note}
+            <div style="margin-top:0.75rem; padding:0.75rem; border-radius:8px; background:var(--green-bg); border-left:3px solid var(--green);">
+              <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--green); font-weight:600;">DATA 18 FEBRUARI — HARI RUKYAT HILAL</div>
+              <div style="font-size:0.85rem; margin-top:0.25rem; color:var(--text-mid);">
+                Sehari setelah ijtimak. Hilal baru sudah wujud dan <strong>jauh di atas ufuk</strong> di seluruh Indonesia.<br>
+                Semua kota memenuhi kriteria MABIMS (h ≥ 3°, ε ≥ 6,4°). WH Lokal & Pemerintah sepakat: 1 Ramadhan = 19 Feb 2026.
+              </div>
+            </div>
+          `;
+        }
+      } else {
+        // Syawal verdict
+        const wujud = city.alt > 0;
+        const imkan = city.alt >= 3 && city.elo >= 6.4;
+        verdictEl.innerHTML = `
+          <strong>${city.name}</strong> (${city.src}): ${city.note}
+          <div class="method-verdict method-verdict--teal" style="margin-top:0.75rem;">
+            <div class="method-name">Muhammadiyah → 1 Syawal = Jumat, 20 Mar 2026</div>
+            Hilal wujud di atas ufuk di seluruh Indonesia (${city.name}: ${city.alt >= 0 ? '+' : ''}${city.alt.toFixed(2)}°). Cukup memenuhi kriteria wujudul hilal (h > 0°). ${wujud ? '✓' : '✗'}
+          </div>
+          <div class="method-verdict method-verdict--gold" style="margin-top:0.5rem;">
+            <div class="method-name">WH Lokal → 1 Syawal = Jumat, 20 Mar 2026</div>
+            Sama — hilal wujud di atas 0° di wilayah Indonesia. ${wujud ? '✓' : '✗'}
+          </div>
+          <div class="method-verdict method-verdict--amber" style="margin-top:0.5rem;">
+            <div class="method-name">Pemerintah (MABIMS) → 1 Syawal = Sabtu, 21 Mar 2026</div>
+            Elongasi tertinggi hanya 6,10° (B. Aceh) — kurang dari syarat 6,4°. Meskipun tinggi hilal di Sabang memenuhi (3,13° ≥ 3°), ketiga kriteria tidak terpenuhi bersamaan. Istikmal 30 hari. ✗
+          </div>
+        `;
+      }
+    }
+
+    // Sub-tab switching: 17 Feb vs 18 Feb
+    function switchRamDate(date) {
+      currentRamDate = date;
+      document.getElementById('subTab17').classList.toggle('active', date === '17feb');
+      document.getElementById('subTab18').classList.toggle('active', date === '18feb');
+
+      const cityList = date === '17feb' ? ramCities17 : ramCities18;
+
+      // Update header
+      const headerTitle = document.getElementById('ram_headerTitle');
+      const headerSub = document.getElementById('ram_headerSub');
+      const cityLabel = document.getElementById('ram_cityLabel');
+
+      if (date === '17feb') {
+        headerTitle.textContent = 'Sidang Isbat Awal Ramadhan — Senin, 17 Februari 2026';
+        headerSub.innerHTML = 'Ijtimak: 17 Feb 2026 pukul <strong style="color:var(--red);">19:12 WIB</strong> (12:12 UTC) — <em>setelah</em> maghrib seluruh Indonesia (terakhir Sabang 18:51)';
+        cityLabel.textContent = 'PILIH KOTA — Data 17 Feb 2026 saat maghrib (ijtimak belum terjadi → hilal belum lahir):';
+      } else {
+        headerTitle.textContent = 'Hari Rukyat Hilal — Rabu, 18 Februari 2026';
+        headerSub.innerHTML = 'Sehari setelah ijtimak — hilal baru sudah wujud. Data BMKG Jawa Tengah.';
+        cityLabel.textContent = 'PILIH KOTA — Data 18 Feb 2026 saat maghrib (hilal sudah wujud di seluruh Indonesia):';
+      }
+
+      buildCityButtons('ram', cityList);
+      updateSkyDiagram('ram', cityList[0]);
+      updateVerdictPanel('ram', cityList[0]);
+    }
+
+    // Tab switching (Ramadhan / Syawal)
     function switchSkyTab(tab) {
       document.getElementById('skyRamadhan').style.display = tab === 'ramadhan' ? 'block' : 'none';
       document.getElementById('skySyawal').style.display = tab === 'syawal' ? 'block' : 'none';
@@ -1261,10 +1533,12 @@
     }
 
     // Initialize
-    buildCityButtons('ram', ramCities);
+    buildCityButtons('ram', ramCities17);
     buildCityButtons('syw', sywCities);
-    updateSkyDiagram('ram', ramCities[0]);
+    updateSkyDiagram('ram', ramCities17[0]);
     updateSkyDiagram('syw', sywCities[0]);
+    updateVerdictPanel('ram', ramCities17[0]);
+    updateVerdictPanel('syw', sywCities[0]);
   </script>
 </body>
 </html>
