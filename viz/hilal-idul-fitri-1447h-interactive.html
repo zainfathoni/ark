@@ -507,249 +507,244 @@
       </div>
     </div>
 
-    <!-- Interactive Concept Diagrams -->
+    <!-- ========== COMBINED INTERACTIVE SKY DIAGRAMS ========== -->
     <div class="chart-section" style="animation: fadeUp 0.8s ease-out 0.35s both;">
-      <div class="section-label section-label--teal">Penjelasan konsep — Interaktif</div>
-      <h2>Geser Posisi Hilal & Bandingkan Kriteria</h2>
-      <p class="desc">Geser slider untuk memindahkan posisi hilal di langit. Perhatikan bagaimana perbedaan kriteria <strong>wujudul hilal (0°)</strong> vs <strong>imkanur rukyah MABIMS (3° / 6,4°)</strong> menentukan apakah bulan baru dianggap "ada".</p>
+      <div class="section-label section-label--teal">Visualisasi Interaktif — Posisi Hilal di Langit</div>
+      <h2>Dua Momen Kritis: Awal & Akhir Ramadhan 1447 H</h2>
+      <p class="desc">Klik kota untuk melihat posisi hilal di langit barat saat maghrib. Diagram menunjukkan <strong>tinggi hilal</strong> (vertikal) dan <strong>elongasi</strong> (jarak dari Matahari) secara bersamaan, beserta batas kriteria <span style="color:#6fcf97; font-weight:600;">wujudul hilal (0°)</span> dan <span style="color:var(--amber); font-weight:600;">imkanur rukyah MABIMS (3° / 6,4°)</span>.</p>
 
-      <!-- Interactive Altitude Diagram -->
-      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
-          <span style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); font-weight: 600;">Tinggi Hilal (Altitude) — Geser Hilal</span>
-          <span id="altDegreeDisplay" style="font-family: var(--font-mono); font-size: 1.3rem; font-weight: 600; color: var(--gold);">3.1°</span>
-        </div>
-
-        <svg id="svgAltitude" viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram interaktif tinggi hilal" style="width: 100%; height: auto; cursor: default;">
-          <defs>
-            <linearGradient id="isky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e3a5f" stop-opacity="0.1"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/></linearGradient>
-            <radialGradient id="isunGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fbbf24" stop-opacity="0.4"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
-            <radialGradient id="imoonGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f0c56d" stop-opacity="0.35"/><stop offset="100%" stop-color="#f0c56d" stop-opacity="0"/></radialGradient>
-          </defs>
-
-          <!-- Sky -->
-          <rect x="40" y="20" width="620" height="220" rx="10" fill="url(#isky1)"/>
-
-          <!-- Horizon -->
-          <line x1="40" y1="240" x2="660" y2="240" stroke="#c2410c" stroke-width="2.5"/>
-          <text x="668" y="244" fill="#c2410c" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">UFUK (0°)</text>
-
-          <!-- Ground -->
-          <rect x="40" y="240" width="620" height="50" fill="currentColor" fill-opacity="0.03"/>
-          <text x="350" y="262" text-anchor="middle" fill="currentColor" fill-opacity="0.12" font-family="Plus Jakarta Sans, sans-serif" font-size="11">permukaan bumi</text>
-
-          <!-- CRITERIA LINES -->
-          <!-- Wujudul Hilal: 0° = horizon line itself -->
-          <line x1="40" y1="240" x2="660" y2="240" stroke="#6fcf97" stroke-width="1" stroke-dasharray="3,6" opacity="0.5"/>
-
-          <!-- MABIMS 3° line: y = 240 - (3/10)*200 = 180 -->
-          <line id="mabims3line" x1="40" y1="180" x2="660" y2="180" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" opacity="0.7"/>
-          <rect x="475" y="168" width="185" height="20" rx="4" fill="var(--surface)" stroke="var(--amber)" stroke-width="1" opacity="0.9"/>
-          <text x="567" y="182" text-anchor="middle" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">MABIMS ≥ 3° (imkanur rukyah)</text>
-
-          <!-- Label for wujudul hilal at 0° -->
-          <rect x="475" y="244" width="185" height="20" rx="4" fill="var(--surface)" stroke="#6fcf97" stroke-width="1" opacity="0.9"/>
-          <text x="567" y="258" text-anchor="middle" fill="#2d6a4f" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">Wujudul Hilal ≥ 0° (ufuk)</text>
-
-          <!-- Degree markers on left -->
-          <text x="32" y="244" text-anchor="end" fill="currentColor" fill-opacity="0.3" font-family="JetBrains Mono, monospace" font-size="9">0°</text>
-          <line x1="36" y1="220" x2="42" y2="220" stroke="currentColor" stroke-opacity="0.15"/>
-          <text x="32" y="224" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">1°</text>
-          <line x1="36" y1="200" x2="42" y2="200" stroke="currentColor" stroke-opacity="0.15"/>
-          <text x="32" y="204" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">2°</text>
-          <text x="32" y="184" text-anchor="end" fill="#d97706" fill-opacity="0.6" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">3°</text>
-          <line x1="36" y1="160" x2="42" y2="160" stroke="currentColor" stroke-opacity="0.15"/>
-          <text x="32" y="164" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">4°</text>
-          <line x1="36" y1="140" x2="42" y2="140" stroke="currentColor" stroke-opacity="0.15"/>
-          <text x="32" y="144" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">5°</text>
-
-          <!-- Zone coloring -->
-          <!-- Below horizon: red zone -->
-          <rect x="40" y="240" width="620" height="50" fill="#b71c1c" fill-opacity="0.03"/>
-          <!-- 0° to 3°: yellow zone -->
-          <rect x="40" y="180" width="620" height="60" fill="#d97706" fill-opacity="0.04"/>
-          <!-- Above 3°: green zone -->
-          <rect x="40" y="20" width="620" height="160" fill="#2d6a4f" fill-opacity="0.03"/>
-
-          <!-- Zone labels on right edge -->
-          <text x="48" y="38" fill="#2d6a4f" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">ZONA IMKAN (bisa dilihat)</text>
-          <text x="48" y="195" fill="#d97706" fill-opacity="0.5" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">ZONA WUJUD (ada tapi sulit dilihat)</text>
-
-          <!-- Observer -->
-          <circle cx="140" cy="240" r="6" fill="currentColor" fill-opacity="0.35"/>
-          <line x1="140" y1="240" x2="140" y2="222" stroke="currentColor" stroke-opacity="0.35" stroke-width="2.5"/>
-          <circle cx="140" cy="218" r="5" fill="currentColor" fill-opacity="0.35"/>
-          <text x="140" y="258" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600">pengamat</text>
-
-          <!-- Sun -->
-          <circle cx="80" cy="240" r="26" fill="url(#isunGlow)"/>
-          <circle cx="80" cy="240" r="14" fill="#f59e0b" opacity="0.7"/>
-          <rect x="60" y="240" width="40" height="14" fill="var(--bg)" opacity="0.5"/>
-          <text x="80" y="220" text-anchor="middle" fill="#d97706" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600">Matahari</text>
-
-          <!-- Moon (will be moved by JS) -->
-          <g id="moonGroup" style="transition: transform 0.15s ease-out;">
-            <circle id="moonGlowCircle" r="24" fill="url(#imoonGlow)"/>
-            <circle id="moonBody" r="13" fill="#f0c56d" opacity="0.85"/>
-            <circle id="moonShadow" cx="6" cy="-2" r="10" fill="url(#isky1)"/>
-            <text id="moonLabel" y="-28" text-anchor="middle" fill="#c17f24" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600">Hilal ☽</text>
-          </g>
-
-          <!-- Angle arc (dynamic) -->
-          <path id="altArc" d="" fill="none" stroke="#c17f24" stroke-width="2.5" opacity="0.8"/>
-          <text id="altArcLabel" fill="#c17f24" font-family="JetBrains Mono, monospace" font-size="14" font-weight="600"></text>
-
-          <!-- Line from observer to moon (dynamic) -->
-          <line id="altSightLine" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.6"/>
-
-          <!-- Status badge (dynamic) -->
-          <rect id="statusBg" x="250" y="295" width="200" height="45" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
-          <text id="statusLine1" x="350" y="312" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600"></text>
-          <text id="statusLine2" x="350" y="328" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9"></text>
-        </svg>
-
-        <!-- Slider for altitude -->
-        <div style="margin-top: 1rem;">
-          <label style="display: block; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 0.4rem;">Geser tinggi hilal: −2° (di bawah ufuk) sampai 8°</label>
-          <div style="display: flex; align-items: center; gap: 1rem;">
-            <input type="range" id="conceptAltSlider" min="-2" max="8" step="0.1" value="3.1" style="position: relative; top: 0; flex: 1; height: 6px; background: var(--surface-alt); border-radius: 3px;">
-          </div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono); margin-top: 0.25rem;">
-            <span>−2° (di bawah ufuk)</span>
-            <span style="color: #6fcf97;">0° wujudul hilal</span>
-            <span style="color: var(--amber);">3° MABIMS</span>
-            <span>8°</span>
-          </div>
-        </div>
-
-        <!-- City presets -->
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
-          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); align-self: center;">Data 19 Mar:</span>
-          <button onclick="setConceptAlt(3.13)" style="padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid var(--green); background: var(--green-bg); color: var(--green); cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">Sabang 3,13°</button>
-          <button onclick="setConceptAlt(2.88)" style="padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid var(--amber); background: var(--amber-bg); color: var(--amber); cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">B. Aceh 2,88°</button>
-          <button onclick="setConceptAlt(1.73)" style="padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid var(--amber); background: var(--amber-bg); color: var(--amber); cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">Jakarta 1,73°</button>
-          <button onclick="setConceptAlt(0.82)" style="padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid var(--amber); background: var(--amber-bg); color: var(--amber); cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">Merauke 0,82°</button>
-          <button onclick="setConceptAlt(-1)" style="padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid var(--red); background: var(--red-bg); color: var(--red); cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">Di bawah ufuk</button>
-        </div>
+      <!-- Tab switcher -->
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+        <button class="chart-tab active" id="tabRamadhan" onclick="switchSkyTab('ramadhan')">Awal Ramadhan — 17 Feb</button>
+        <button class="chart-tab" id="tabSyawal" onclick="switchSkyTab('syawal')">Akhir Ramadhan — 19 Mar</button>
       </div>
 
-      <!-- Interactive Elongation Diagram -->
-      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
-          <span style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); font-weight: 600;">Elongasi (Elongation) — Geser Jarak Bulan-Matahari</span>
-          <span id="eloDegreeDisplay" style="font-family: var(--font-mono); font-size: 1.3rem; font-weight: 600; color: var(--amber);">6.1°</span>
+      <!-- === DIAGRAM 1: AWAL RAMADHAN === -->
+      <div id="skyRamadhan" style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); font-weight: 600; margin-bottom: 0.25rem;">Sidang Isbat Awal Ramadhan — Selasa, 17 Februari 2026</div>
+            <div style="font-size: 0.85rem; color: var(--text-dim);">Ijtimak: Selasa, 17 Feb 2026 pukul 19:01 WIB (setelah maghrib)</div>
+          </div>
+          <div style="text-align: right;">
+            <div id="ram_cityName" style="font-family: var(--font-mono); font-size: 1rem; font-weight: 600; color: var(--gold);">Sabang, Aceh</div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 0.25rem;">
+              <span style="font-family: var(--font-mono); font-size: 0.8rem;">h = <strong id="ram_altVal" style="color: var(--gold);">+0,93°</strong></span>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem;">ε = <strong id="ram_eloVal" style="color: var(--amber);">1,89°</strong></span>
+            </div>
+          </div>
         </div>
 
-        <svg id="svgElongation" viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram interaktif elongasi" style="width: 100%; height: auto;">
+        <svg id="svgRam" viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
           <defs>
-            <linearGradient id="isky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e3a5f" stop-opacity="0.1"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/></linearGradient>
-            <radialGradient id="iwestGlow" cx="85%" cy="85%" r="35%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/></radialGradient>
+            <linearGradient id="rsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e3a5f" stop-opacity="0.12"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/></linearGradient>
+            <radialGradient id="rsunG" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fbbf24" stop-opacity="0.4"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
+            <radialGradient id="rmoonG" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f0c56d" stop-opacity="0.35"/><stop offset="100%" stop-color="#f0c56d" stop-opacity="0"/></radialGradient>
+            <radialGradient id="rwestG" cx="90%" cy="85%" r="35%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.12"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/></radialGradient>
           </defs>
 
           <!-- Sky -->
-          <rect x="40" y="20" width="620" height="220" rx="10" fill="url(#isky2)"/>
-          <rect x="40" y="20" width="620" height="220" rx="10" fill="url(#iwestGlow)"/>
+          <rect x="40" y="30" width="620" height="210" rx="10" fill="url(#rsky)"/>
+          <rect x="40" y="30" width="620" height="210" rx="10" fill="url(#rwestG)"/>
+          <text x="55" y="48" fill="currentColor" fill-opacity="0.2" font-size="9">TIMUR ←</text>
+          <text x="610" y="48" fill="currentColor" fill-opacity="0.2" font-size="9">→ BARAT</text>
 
-          <!-- Direction -->
-          <text x="55" y="38" fill="currentColor" fill-opacity="0.2" font-family="Plus Jakarta Sans, sans-serif" font-size="9">TIMUR ←</text>
-          <text x="610" y="38" fill="currentColor" fill-opacity="0.2" font-family="Plus Jakarta Sans, sans-serif" font-size="9">→ BARAT</text>
+          <!-- Zone coloring -->
+          <rect x="40" y="240" width="620" height="40" fill="#b71c1c" fill-opacity="0.04"/>
+          <rect x="40" y="195" width="620" height="45" fill="#d97706" fill-opacity="0.04"/>
+          <rect x="40" y="30" width="620" height="165" fill="#2d6a4f" fill-opacity="0.03"/>
+          <text x="48" y="50" fill="#2d6a4f" fill-opacity="0.3" font-size="8" font-weight="600">ZONA IMKAN (≥ 3°)</text>
+          <text x="48" y="210" fill="#d97706" fill-opacity="0.4" font-size="8" font-weight="600">ZONA WUJUD (0° – 3°)</text>
+          <text x="48" y="257" fill="#b71c1c" fill-opacity="0.4" font-size="8" font-weight="600">DI BAWAH UFUK</text>
 
-          <!-- Horizon -->
+          <!-- Horizon (0°) at y=240. Scale: 15px per degree -->
           <line x1="40" y1="240" x2="660" y2="240" stroke="#c2410c" stroke-width="2.5"/>
-          <text x="668" y="244" fill="#c2410c" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">UFUK</text>
+          <text x="668" y="244" fill="#c2410c" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">UFUK</text>
 
-          <!-- Ground -->
-          <rect x="40" y="240" width="620" height="50" fill="currentColor" fill-opacity="0.03"/>
+          <!-- MABIMS 3° line: y = 240 - 3*15 = 195 -->
+          <line x1="40" y1="195" x2="660" y2="195" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+          <!-- Wujudul hilal 0° = horizon -->
+          <line x1="40" y1="240" x2="660" y2="240" stroke="#6fcf97" stroke-width="1" stroke-dasharray="3,6" opacity="0.4"/>
 
           <!-- Criteria labels -->
-          <!-- Danjon Limit ~7° -->
-          <line x1="40" y1="240" x2="660" y2="240" stroke="currentColor" stroke-opacity="0.1"/>
+          <rect x="500" y="183" width="160" height="18" rx="4" fill="var(--surface)" stroke="var(--amber)" stroke-width="1" opacity="0.85"/>
+          <text x="580" y="196" text-anchor="middle" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">MABIMS ≥ 3° tinggi</text>
+          <rect x="500" y="244" width="160" height="18" rx="4" fill="var(--surface)" stroke="#6fcf97" stroke-width="1" opacity="0.85"/>
+          <text x="580" y="256" text-anchor="middle" fill="#2d6a4f" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">Wujudul Hilal ≥ 0°</text>
+
+          <!-- Degree markers -->
+          <text x="32" y="244" text-anchor="end" fill="currentColor" fill-opacity="0.3" font-family="JetBrains Mono, monospace" font-size="8">0°</text>
+          <text x="32" y="199" text-anchor="end" fill="#d97706" fill-opacity="0.5" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">3°</text>
+          <text x="32" y="259" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">-1°</text>
+          <text x="32" y="274" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">-2°</text>
+
+          <!-- Ground -->
+          <rect x="40" y="280" width="620" height="30" fill="currentColor" fill-opacity="0.02"/>
+          <text x="350" y="298" text-anchor="middle" fill="currentColor" fill-opacity="0.1" font-size="10">permukaan bumi</text>
 
           <!-- Observer -->
-          <circle cx="350" cy="305" r="6" fill="currentColor" fill-opacity="0.35"/>
-          <line x1="350" y1="305" x2="350" y2="287" stroke="currentColor" stroke-opacity="0.35" stroke-width="2.5"/>
-          <circle cx="350" cy="283" r="5" fill="currentColor" fill-opacity="0.35"/>
-          <text x="350" y="322" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600">pengamat</text>
+          <circle cx="350" cy="310" r="5" fill="currentColor" fill-opacity="0.3"/>
+          <line x1="350" y1="310" x2="350" y2="296" stroke="currentColor" stroke-opacity="0.3" stroke-width="2"/>
+          <circle cx="350" cy="293" r="4" fill="currentColor" fill-opacity="0.3"/>
+          <text x="350" y="326" text-anchor="middle" fill="currentColor" fill-opacity="0.35" font-size="8">pengamat</text>
 
-          <!-- Sun (fixed position, setting in the west/right) -->
-          <circle cx="580" cy="240" r="28" fill="url(#isunGlow)"/>
-          <circle cx="580" cy="240" r="15" fill="#f59e0b" opacity="0.7"/>
-          <rect x="558" y="240" width="44" height="16" fill="var(--bg)" opacity="0.5"/>
-          <text x="580" y="222" text-anchor="middle" fill="#d97706" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600">Matahari</text>
-          <text x="580" y="212" text-anchor="middle" fill="#d97706" font-family="Plus Jakarta Sans, sans-serif" font-size="8">(terbenam)</text>
+          <!-- Sun (at horizon, west/right) -->
+          <circle cx="580" cy="240" r="24" fill="url(#rsunG)"/>
+          <circle cx="580" cy="240" r="13" fill="#f59e0b" opacity="0.7"/>
+          <rect x="562" y="240" width="36" height="13" fill="var(--bg)" opacity="0.5"/>
+          <text x="580" y="225" text-anchor="middle" fill="#d97706" font-size="9" font-weight="600">Matahari</text>
 
-          <!-- Line from observer to sun -->
-          <line x1="350" y1="283" x2="578" y2="242" stroke="#d97706" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.4"/>
-
-          <!-- Moon (will be moved by JS) -->
-          <g id="eloMoonGroup" style="transition: transform 0.15s ease-out;">
-            <circle r="24" fill="url(#imoonGlow)"/>
-            <circle r="13" fill="#f0c56d" opacity="0.85"/>
-            <circle cx="6" cy="-2" r="10" fill="url(#isky2)"/>
-            <text y="-28" text-anchor="middle" fill="#c17f24" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600">Hilal ☽</text>
+          <!-- Moon (dynamic) -->
+          <g id="ram_moon" style="transition: transform 0.3s ease-out;">
+            <circle r="20" fill="url(#rmoonG)"/>
+            <circle r="11" fill="#f0c56d" opacity="0.85"/>
+            <circle cx="5" cy="-2" r="8.5" fill="url(#rsky)"/>
+            <text y="-25" text-anchor="middle" fill="#c17f24" font-size="10" font-weight="600">Hilal ☽</text>
           </g>
 
-          <!-- Line from observer to moon -->
-          <line id="eloSightLine" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
+          <!-- Sight lines (dynamic) -->
+          <line id="ram_sightAlt" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
+          <line id="ram_sightSun" stroke="#d97706" stroke-width="1" stroke-dasharray="5,4" opacity="0.3"/>
+
+          <!-- Altitude arc -->
+          <path id="ram_altArc" d="" fill="none" stroke="#c17f24" stroke-width="2" opacity="0.7"/>
+          <text id="ram_altArcLbl" fill="#c17f24" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600"></text>
 
           <!-- Elongation arc -->
-          <path id="eloArc" d="" fill="none" stroke="#d97706" stroke-width="2.5" opacity="0.8"/>
-          <text id="eloArcLabel" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="14" font-weight="600"></text>
+          <path id="ram_eloArc" d="" fill="none" stroke="#d97706" stroke-width="2" opacity="0.7"/>
+          <text id="ram_eloArcLbl" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600"></text>
 
-          <!-- Status -->
-          <rect id="eloStatusBg" x="60" y="68" width="250" height="65" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1" opacity="0.95"/>
-          <text id="eloStatusLine1" x="185" y="88" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600"></text>
-          <text id="eloStatusLine2" x="185" y="104" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9"></text>
-          <text id="eloStatusLine3" x="185" y="120" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9"></text>
+          <!-- Status panel -->
+          <rect id="ram_statusBg" x="40" y="340" width="620" height="50" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+          <text id="ram_status1" x="350" y="360" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600"></text>
+          <text id="ram_status2" x="350" y="378" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9" fill="var(--text-dim)"></text>
         </svg>
 
-        <!-- Slider for elongation -->
+        <!-- City selector -->
         <div style="margin-top: 1rem;">
-          <label style="display: block; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 0.4rem;">Geser elongasi: 0° (menempel Matahari) sampai 30°</label>
-          <div style="display: flex; align-items: center; gap: 1rem;">
-            <input type="range" id="conceptEloSlider" min="0" max="30" step="0.1" value="6.1" style="position: relative; top: 0; flex: 1; height: 6px; background: var(--surface-alt); border-radius: 3px;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.5rem;">PILIH KOTA — Data 17 Februari 2026 (saat maghrib):</div>
+          <div id="ram_cityBtns" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+        </div>
+
+        <div id="ram_verdict" style="margin-top: 1rem; padding: 1rem 1.25rem; border-radius: 10px; background: var(--surface-alt); font-size: 0.85rem; color: var(--text-mid); line-height: 1.6; transition: all 0.3s;"></div>
+      </div>
+
+      <!-- === DIAGRAM 2: AKHIR RAMADHAN === -->
+      <div id="skySyawal" style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-top: 1.5rem; display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); font-weight: 600; margin-bottom: 0.25rem;">Sidang Isbat Akhir Ramadhan — Kamis, 19 Maret 2026</div>
+            <div style="font-size: 0.85rem; color: var(--text-dim);">Ijtimak: Kamis, 19 Mar 2026 pukul 08:26 WIB</div>
           </div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono); margin-top: 0.25rem;">
-            <span>0°</span>
-            <span style="color: var(--amber);">6,4° MABIMS</span>
-            <span style="color: var(--gold);">~7° Danjon</span>
-            <span style="color: var(--green);">8° Shaukat</span>
-            <span>30°</span>
+          <div style="text-align: right;">
+            <div id="syw_cityName" style="font-family: var(--font-mono); font-size: 1rem; font-weight: 600; color: var(--gold);">Sabang, Aceh</div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 0.25rem;">
+              <span style="font-family: var(--font-mono); font-size: 0.8rem;">h = <strong id="syw_altVal" style="color: var(--gold);">+3,13°</strong></span>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem;">ε = <strong id="syw_eloVal" style="color: var(--amber);">6,10°</strong></span>
+            </div>
           </div>
         </div>
 
-        <!-- City presets -->
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
-          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); align-self: center;">Data 19 Mar:</span>
-          <button onclick="setConceptElo(6.10)" style="padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid var(--amber); background: var(--amber-bg); color: var(--amber); cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">B. Aceh 6,10°</button>
-          <button onclick="setConceptElo(5.75)" style="padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid var(--amber); background: var(--amber-bg); color: var(--amber); cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">Jakarta 5,75°</button>
-          <button onclick="setConceptElo(4.36)" style="padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid var(--amber); background: var(--amber-bg); color: var(--amber); cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">Merauke 4,36°</button>
-          <button onclick="setConceptElo(8.0)" style="padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid var(--green); background: var(--green-bg); color: var(--green); cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">Shaukat 8°</button>
-          <button onclick="setConceptElo(15)" style="padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid var(--green); background: var(--green-bg); color: var(--green); cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">Sabit jelas 15°</button>
+        <svg id="svgSyw" viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
+          <defs>
+            <linearGradient id="ssky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e3a5f" stop-opacity="0.12"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/></linearGradient>
+            <radialGradient id="ssunG" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fbbf24" stop-opacity="0.4"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
+            <radialGradient id="smoonG" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f0c56d" stop-opacity="0.35"/><stop offset="100%" stop-color="#f0c56d" stop-opacity="0"/></radialGradient>
+            <radialGradient id="swestG" cx="90%" cy="85%" r="35%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.12"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/></radialGradient>
+          </defs>
+
+          <rect x="40" y="30" width="620" height="210" rx="10" fill="url(#ssky)"/>
+          <rect x="40" y="30" width="620" height="210" rx="10" fill="url(#swestG)"/>
+          <text x="55" y="48" fill="currentColor" fill-opacity="0.2" font-size="9">TIMUR ←</text>
+          <text x="610" y="48" fill="currentColor" fill-opacity="0.2" font-size="9">→ BARAT</text>
+
+          <!-- Zone coloring -->
+          <rect x="40" y="240" width="620" height="40" fill="#b71c1c" fill-opacity="0.04"/>
+          <rect x="40" y="195" width="620" height="45" fill="#d97706" fill-opacity="0.04"/>
+          <rect x="40" y="30" width="620" height="165" fill="#2d6a4f" fill-opacity="0.03"/>
+          <text x="48" y="50" fill="#2d6a4f" fill-opacity="0.3" font-size="8" font-weight="600">ZONA IMKAN (≥ 3°)</text>
+          <text x="48" y="210" fill="#d97706" fill-opacity="0.4" font-size="8" font-weight="600">ZONA WUJUD (0° – 3°)</text>
+          <text x="48" y="257" fill="#b71c1c" fill-opacity="0.4" font-size="8" font-weight="600">DI BAWAH UFUK</text>
+
+          <line x1="40" y1="240" x2="660" y2="240" stroke="#c2410c" stroke-width="2.5"/>
+          <text x="668" y="244" fill="#c2410c" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">UFUK</text>
+
+          <line x1="40" y1="195" x2="660" y2="195" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+          <line x1="40" y1="240" x2="660" y2="240" stroke="#6fcf97" stroke-width="1" stroke-dasharray="3,6" opacity="0.4"/>
+
+          <rect x="500" y="183" width="160" height="18" rx="4" fill="var(--surface)" stroke="var(--amber)" stroke-width="1" opacity="0.85"/>
+          <text x="580" y="196" text-anchor="middle" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">MABIMS ≥ 3° tinggi</text>
+          <rect x="500" y="244" width="160" height="18" rx="4" fill="var(--surface)" stroke="#6fcf97" stroke-width="1" opacity="0.85"/>
+          <text x="580" y="256" text-anchor="middle" fill="#2d6a4f" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">Wujudul Hilal ≥ 0°</text>
+
+          <text x="32" y="244" text-anchor="end" fill="currentColor" fill-opacity="0.3" font-family="JetBrains Mono, monospace" font-size="8">0°</text>
+          <text x="32" y="229" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">1°</text>
+          <text x="32" y="214" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">2°</text>
+          <text x="32" y="199" text-anchor="end" fill="#d97706" fill-opacity="0.5" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">3°</text>
+          <text x="32" y="184" text-anchor="end" fill="currentColor" fill-opacity="0.2" font-family="JetBrains Mono, monospace" font-size="8">4°</text>
+
+          <rect x="40" y="280" width="620" height="30" fill="currentColor" fill-opacity="0.02"/>
+          <text x="350" y="298" text-anchor="middle" fill="currentColor" fill-opacity="0.1" font-size="10">permukaan bumi</text>
+
+          <circle cx="350" cy="310" r="5" fill="currentColor" fill-opacity="0.3"/>
+          <line x1="350" y1="310" x2="350" y2="296" stroke="currentColor" stroke-opacity="0.3" stroke-width="2"/>
+          <circle cx="350" cy="293" r="4" fill="currentColor" fill-opacity="0.3"/>
+          <text x="350" y="326" text-anchor="middle" fill="currentColor" fill-opacity="0.35" font-size="8">pengamat</text>
+
+          <circle cx="580" cy="240" r="24" fill="url(#ssunG)"/>
+          <circle cx="580" cy="240" r="13" fill="#f59e0b" opacity="0.7"/>
+          <rect x="562" y="240" width="36" height="13" fill="var(--bg)" opacity="0.5"/>
+          <text x="580" y="225" text-anchor="middle" fill="#d97706" font-size="9" font-weight="600">Matahari</text>
+
+          <g id="syw_moon" style="transition: transform 0.3s ease-out;">
+            <circle r="20" fill="url(#smoonG)"/>
+            <circle r="11" fill="#f0c56d" opacity="0.85"/>
+            <circle cx="5" cy="-2" r="8.5" fill="url(#ssky)"/>
+            <text y="-25" text-anchor="middle" fill="#c17f24" font-size="10" font-weight="600">Hilal ☽</text>
+          </g>
+
+          <line id="syw_sightAlt" stroke="#c17f24" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
+          <line id="syw_sightSun" stroke="#d97706" stroke-width="1" stroke-dasharray="5,4" opacity="0.3"/>
+          <path id="syw_altArc" d="" fill="none" stroke="#c17f24" stroke-width="2" opacity="0.7"/>
+          <text id="syw_altArcLbl" fill="#c17f24" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600"></text>
+          <path id="syw_eloArc" d="" fill="none" stroke="#d97706" stroke-width="2" opacity="0.7"/>
+          <text id="syw_eloArcLbl" fill="#d97706" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600"></text>
+
+          <rect id="syw_statusBg" x="40" y="340" width="620" height="50" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+          <text id="syw_status1" x="350" y="360" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600"></text>
+          <text id="syw_status2" x="350" y="378" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9" fill="var(--text-dim)"></text>
+        </svg>
+
+        <div style="margin-top: 1rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.5rem;">PILIH KOTA — Data 19 Maret 2026 (saat maghrib):</div>
+          <div id="syw_cityBtns" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
         </div>
+
+        <div id="syw_verdict" style="margin-top: 1rem; padding: 1rem 1.25rem; border-radius: 10px; background: var(--surface-alt); font-size: 0.85rem; color: var(--text-mid); line-height: 1.6; transition: all 0.3s;"></div>
       </div>
 
       <!-- Standards comparison -->
       <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; margin-top: 1.5rem;">
         <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); margin-bottom: 1rem;">Perbandingan Standar Penentuan Awal Bulan</div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="concept-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
           <div style="padding: 1.25rem; border-radius: 10px; border: 2px solid #6fcf97; background: var(--green-bg);">
             <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); font-weight: 600; margin-bottom: 0.5rem;">Hisab Wujudul Hilal</div>
             <div style="font-size: 0.9rem; color: var(--text-mid); line-height: 1.6;">
-              <strong style="color: var(--text);">Muhammadiyah</strong> — Cukup hilal "wujud" (ada di atas ufuk = <strong>tinggi > 0°</strong>), tanpa harus bisa dilihat secara fisik.<br>
-              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--green); font-weight: 600;">→ 1 Syawal = Jumat, 20 Maret 2026</span>
+              <strong style="color: var(--text);">Muhammadiyah</strong> — Cukup hilal "wujud" (ada di atas ufuk = <strong>tinggi &gt; 0°</strong>), tanpa harus bisa dilihat.<br>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--green); font-weight: 600;">→ 1 Syawal = Jumat, 20 Mar 2026</span>
             </div>
           </div>
           <div style="padding: 1.25rem; border-radius: 10px; border: 2px solid var(--amber); background: var(--amber-bg);">
             <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber); font-weight: 600; margin-bottom: 0.5rem;">Imkanur Rukyah MABIMS</div>
             <div style="font-size: 0.9rem; color: var(--text-mid); line-height: 1.6;">
-              <strong style="color: var(--text);">Pemerintah (Sidang Isbat)</strong> — Hilal harus memenuhi 3 syarat sekaligus: tinggi <strong>≥ 3°</strong>, elongasi <strong>≥ 6,4°</strong>, umur bulan <strong>≥ 8 jam</strong>.<br>
-              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--amber); font-weight: 600;">→ 1 Syawal = Sabtu, 21 Maret 2026</span>
+              <strong style="color: var(--text);">Pemerintah (Sidang Isbat)</strong> — Tinggi <strong>≥ 3°</strong> + elongasi <strong>≥ 6,4°</strong> + umur bulan <strong>≥ 8 jam</strong>.<br>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--amber); font-weight: 600;">→ 1 Syawal = Sabtu, 21 Mar 2026</span>
             </div>
           </div>
         </div>
         <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-dim); line-height: 1.7;">
-          Perbedaan ini menyebabkan Muhammadiyah berlebaran satu hari lebih awal dari pemerintah. Meski berbeda metode, keduanya sama-sama berdasarkan ilmu falak — perbedaannya pada <strong>ambang batas minimum</strong> yang digunakan.
+          <strong>Awal Ramadhan:</strong> Kedua metode sepakat — hilal di bawah ufuk, Ramadhan dimulai 19 Feb.<br>
+          <strong>Akhir Ramadhan:</strong> Berbeda — hilal sudah wujud (&gt; 0°) tapi belum imkan (&lt; 3° di sebagian besar wilayah, elongasi &lt; 6,4° di seluruh wilayah). Muhammadiyah Lebaran Jumat 20 Mar, Pemerintah Sabtu 21 Mar.
         </div>
       </div>
 
@@ -757,9 +752,8 @@
         <div class="insight__icon" style="font-size: 1.2rem;">💡</div>
         <div class="insight__text">
           <strong>Singkatnya:</strong><br>
-          <strong>Tinggi hilal</strong> = seberapa tinggi Bulan di atas cakrawala. Semakin tinggi, semakin mudah dilihat.<br>
-          <strong>Elongasi</strong> = seberapa jauh Bulan dari Matahari. Semakin jauh, semakin terang sabit Bulan.<br><br>
-          Keduanya harus memenuhi batas minimum: <strong>tinggi ≥ 3°</strong> dan <strong>elongasi ≥ 6,4°</strong> (MABIMS), atau cukup <strong>> 0°</strong> di atas ufuk (wujudul hilal Muhammadiyah).
+          <strong>Tinggi hilal (h)</strong> = seberapa tinggi Bulan di atas cakrawala. <strong>Elongasi (ε)</strong> = seberapa jauh Bulan dari Matahari di langit.<br><br>
+          Diagram di atas menunjukkan keduanya sekaligus. Klik kota berbeda untuk melihat bagaimana posisi hilal berubah dari barat (Aceh, tinggi) ke timur (Papua, rendah).
         </div>
       </div>
     </div>
@@ -1063,218 +1057,204 @@
     renderBars('altitude');
     renderBars('elongation');
 
-    // === INTERACTIVE CONCEPT DIAGRAMS ===
+    // === UNIFIED SKY DIAGRAMS ===
 
-    // --- Altitude diagram ---
-    const conceptAltSlider = document.getElementById('conceptAltSlider');
-    const altDegreeDisplay = document.getElementById('altDegreeDisplay');
-    const moonGroup = document.getElementById('moonGroup');
-    const altArc = document.getElementById('altArc');
-    const altArcLabel = document.getElementById('altArcLabel');
-    const altSightLine = document.getElementById('altSightLine');
-    const statusBg = document.getElementById('statusBg');
-    const statusLine1 = document.getElementById('statusLine1');
-    const statusLine2 = document.getElementById('statusLine2');
+    // Data: Awal Ramadhan (17 Feb 2026, saat maghrib)
+    // Hilal belum wujud di seluruh Indonesia (di bawah ufuk)
+    const ramCities = [
+      { name: 'Sabang',    alt: 0.93,   elo: 1.89,  note: 'Tertinggi di Indonesia', src: 'Kemenag' },
+      { name: 'Jakarta',   alt: -0.90,  elo: 1.30,  note: 'Tinggi −0°54\'14"', src: 'Kanwil Kemenag' },
+      { name: 'Semarang',  alt: -1.10,  elo: 1.15,  note: 'Bulan terbenam sebelum Matahari', src: 'BMKG' },
+      { name: 'Yogyakarta',alt: -1.50,  elo: 1.10,  note: 'Hilal mustahil terlihat', src: 'Kemenag Bantul' },
+      { name: 'Lombok',    alt: -1.27,  elo: 1.21,  note: 'Tinggi −1,268°', src: 'Kemenag NTB' },
+      { name: 'Merauke',   alt: -2.41,  elo: 0.94,  note: 'Terendah di Indonesia', src: 'Kemenag' },
+    ];
 
-    // Observer position in SVG coords
-    const OBS_X = 140, OBS_Y = 240;
-    // Horizon at y=240, scale: 20px per degree
-    const ALT_SCALE = 20; // px per degree
+    // Data: Akhir Ramadhan (19 Mar 2026, saat maghrib)
+    const sywCities = [
+      { name: 'Sabang',    alt: 3.13,  elo: 6.10,  note: 'Tertinggi — tinggi ✓ elongasi ✗', src: 'BMKG' },
+      { name: 'B. Aceh',   alt: 2.88,  elo: 6.15,  note: 'Elongasi tertinggi', src: 'LF PBNU' },
+      { name: 'Jakarta',   alt: 1.73,  elo: 5.75,  note: 'Belum imkan', src: 'LF PBNU' },
+      { name: 'Malang',    alt: 1.65,  elo: 5.10,  note: 'Awan tebal, tidak terlihat', src: 'Lapangan' },
+      { name: 'Waris',     alt: 0.91,  elo: 4.54,  note: 'Papua — umur bulan 7,41 jam', src: 'BMKG' },
+      { name: 'Merauke',   alt: 0.82,  elo: 4.36,  note: 'Terendah di Indonesia', src: 'LF PBNU' },
+    ];
 
-    function updateAltitudeDiagram(deg) {
-      altDegreeDisplay.textContent = deg.toFixed(1) + '°';
+    // SVG constants
+    const SKY_HORIZON = 240;  // y for 0°
+    const SKY_SCALE = 15;     // px per degree
+    const SKY_SUN_X = 580, SKY_SUN_Y = 240;
+    const SKY_OBS_X = 350, SKY_OBS_Y = 293;
 
-      // Moon position: place at angle from horizon
-      const moonDist = 180; // distance from observer
-      const angleRad = deg * Math.PI / 180;
-      const moonX = OBS_X + moonDist * Math.cos(angleRad);
-      const moonY = OBS_Y - moonDist * Math.sin(angleRad);
+    function updateSkyDiagram(prefix, city) {
+      const moonEl = document.getElementById(prefix + '_moon');
+      const sightAlt = document.getElementById(prefix + '_sightAlt');
+      const sightSun = document.getElementById(prefix + '_sightSun');
+      const altArc = document.getElementById(prefix + '_altArc');
+      const altLbl = document.getElementById(prefix + '_altArcLbl');
+      const eloArc = document.getElementById(prefix + '_eloArc');
+      const eloLbl = document.getElementById(prefix + '_eloArcLbl');
+      const status1 = document.getElementById(prefix + '_status1');
+      const status2 = document.getElementById(prefix + '_status2');
+      const statusBg = document.getElementById(prefix + '_statusBg');
+      const cityNameEl = document.getElementById(prefix + '_cityName');
+      const altValEl = document.getElementById(prefix + '_altVal');
+      const eloValEl = document.getElementById(prefix + '_eloVal');
+      const verdictEl = document.getElementById(prefix + '_verdict');
 
-      moonGroup.setAttribute('transform', `translate(${moonX}, ${moonY})`);
+      const alt = city.alt;
+      const elo = city.elo;
 
-      // Sight line
-      altSightLine.setAttribute('x1', OBS_X);
-      altSightLine.setAttribute('y1', OBS_Y - 4);
-      altSightLine.setAttribute('x2', moonX);
-      altSightLine.setAttribute('y2', moonY);
+      // Update header
+      cityNameEl.textContent = city.name;
+      const altSign = alt >= 0 ? '+' : '';
+      altValEl.textContent = altSign + alt.toFixed(2) + '°';
+      eloValEl.textContent = elo.toFixed(2) + '°';
 
-      // Arc (from horizontal to line-to-moon)
-      const arcR = 50;
-      const arcEndX = OBS_X + arcR * Math.cos(angleRad);
-      const arcEndY = OBS_Y - arcR * Math.sin(angleRad);
-      const largeArc = Math.abs(deg) > 180 ? 1 : 0;
-      const sweep = deg >= 0 ? 0 : 1;
-      if (Math.abs(deg) > 0.5) {
-        altArc.setAttribute('d', `M ${OBS_X + arcR},${OBS_Y} A ${arcR},${arcR} 0 ${largeArc},${sweep} ${arcEndX},${arcEndY}`);
-        // Label
-        const labelAngle = angleRad / 2;
-        const labelR = arcR + 18;
-        altArcLabel.setAttribute('x', OBS_X + labelR * Math.cos(labelAngle));
-        altArcLabel.setAttribute('y', OBS_Y - labelR * Math.sin(labelAngle) + 5);
-        altArcLabel.textContent = deg.toFixed(1) + '°';
-      } else {
-        altArc.setAttribute('d', '');
-        altArcLabel.textContent = '';
-      }
+      // Moon position: combine altitude and elongation
+      // Use altitude for Y, and place horizontally relative to sun based on elongation
+      const moonY = SKY_HORIZON - alt * SKY_SCALE;
+      // Elongation moves moon away from sun (leftward), scale ~8px per degree
+      const eloScale = 8;
+      const moonX = SKY_SUN_X - elo * eloScale;
 
-      // Color the degree display
-      let displayColor, statusText, statusDetail, statusColor, borderColor;
-      if (deg < 0) {
-        displayColor = 'var(--red)';
-        statusColor = 'var(--red)';
-        borderColor = 'var(--red)';
-        statusText = 'DI BAWAH UFUK';
-        statusDetail = 'Hilal belum wujud — kedua metode sepakat belum masuk bulan baru';
-      } else if (deg < 3) {
-        displayColor = '#6fcf97';
-        statusColor = '#6fcf97';
-        borderColor = '#6fcf97';
-        statusText = 'WUJUD — tapi belum imkan';
-        statusDetail = 'Muhammadiyah: sudah bulan baru ✓ | MABIMS: belum (tinggi < 3°) ✗';
-      } else {
-        displayColor = 'var(--green)';
-        statusColor = 'var(--green)';
-        borderColor = 'var(--green)';
-        statusText = 'MEMENUHI KEDUA KRITERIA';
-        statusDetail = 'Wujudul hilal ✓ dan Imkanur Rukyah (tinggi ≥ 3°) ✓';
-      }
-
-      altDegreeDisplay.style.color = displayColor;
-      statusLine1.setAttribute('fill', statusColor);
-      statusLine1.textContent = statusText;
-      statusLine2.setAttribute('fill', 'var(--text-dim)');
-      statusLine2.textContent = statusDetail;
-      statusBg.setAttribute('stroke', borderColor);
-
-      // Adjust status box width for long text
-      const textLen = statusDetail.length;
-      const boxW = Math.max(260, Math.min(460, textLen * 5.5));
-      statusBg.setAttribute('width', boxW);
-      statusBg.setAttribute('x', 350 - boxW/2);
-      statusLine1.setAttribute('x', 350);
-      statusLine2.setAttribute('x', 350);
-
-      // Moon opacity when below horizon
-      moonGroup.style.opacity = deg < -1.5 ? 0.3 : deg < 0 ? 0.5 : 1;
-    }
-
-    function setConceptAlt(val) {
-      conceptAltSlider.value = val;
-      updateAltitudeDiagram(val);
-    }
-
-    conceptAltSlider.addEventListener('input', function() {
-      updateAltitudeDiagram(parseFloat(this.value));
-    });
-
-    // Initial
-    updateAltitudeDiagram(3.1);
-
-    // --- Elongation diagram ---
-    const conceptEloSlider = document.getElementById('conceptEloSlider');
-    const eloDegreeDisplay = document.getElementById('eloDegreeDisplay');
-    const eloMoonGroup = document.getElementById('eloMoonGroup');
-    const eloSightLine = document.getElementById('eloSightLine');
-    const eloArc2 = document.getElementById('eloArc');
-    const eloArcLabel2 = document.getElementById('eloArcLabel');
-    const eloStatusLine1 = document.getElementById('eloStatusLine1');
-    const eloStatusLine2 = document.getElementById('eloStatusLine2');
-    const eloStatusLine3 = document.getElementById('eloStatusLine3');
-    const eloStatusBg = document.getElementById('eloStatusBg');
-
-    // Sun is fixed at (580, 240). Observer at (350, 283).
-    const SUN_X = 580, SUN_Y = 240;
-    const ELO_OBS_X = 350, ELO_OBS_Y = 283;
-
-    function updateElongationDiagram(deg) {
-      eloDegreeDisplay.textContent = deg.toFixed(1) + '°';
-
-      // Moon position: angular offset from sun, as seen from observer
-      // Place moon along an arc, with the sun as reference
-      // The angle is measured at the observer between sun and moon directions
-      const sunAngle = Math.atan2(SUN_Y - ELO_OBS_Y, SUN_X - ELO_OBS_X);
-      // Moon is offset by `deg` degrees (counterclockwise from sun direction = higher in sky)
-      const moonAngle = sunAngle - (deg * Math.PI / 180);
-      const moonDist = 200;
-      const moonX = ELO_OBS_X + moonDist * Math.cos(moonAngle);
-      const moonY = ELO_OBS_Y + moonDist * Math.sin(moonAngle);
-
-      eloMoonGroup.setAttribute('transform', `translate(${moonX}, ${moonY})`);
+      moonEl.setAttribute('transform', `translate(${moonX}, ${moonY})`);
+      moonEl.style.opacity = alt < -1.5 ? 0.25 : alt < 0 ? 0.4 : elo < 3 ? 0.5 : elo < 7 ? 0.7 : 1;
 
       // Sight line to moon
-      eloSightLine.setAttribute('x1', ELO_OBS_X);
-      eloSightLine.setAttribute('y1', ELO_OBS_Y);
-      eloSightLine.setAttribute('x2', moonX);
-      eloSightLine.setAttribute('y2', moonY);
+      sightAlt.setAttribute('x1', SKY_OBS_X);
+      sightAlt.setAttribute('y1', SKY_OBS_Y);
+      sightAlt.setAttribute('x2', moonX);
+      sightAlt.setAttribute('y2', moonY);
 
-      // Arc between sun-line and moon-line at observer
-      if (deg > 0.5) {
-        const arcR = 45;
-        const arcStartX = ELO_OBS_X + arcR * Math.cos(sunAngle);
-        const arcStartY = ELO_OBS_Y + arcR * Math.sin(sunAngle);
-        const arcEndX = ELO_OBS_X + arcR * Math.cos(moonAngle);
-        const arcEndY = ELO_OBS_Y + arcR * Math.sin(moonAngle);
-        const sweep = 0; // counterclockwise
-        eloArc2.setAttribute('d', `M ${arcStartX},${arcStartY} A ${arcR},${arcR} 0 0,${sweep} ${arcEndX},${arcEndY}`);
+      // Sight line to sun
+      sightSun.setAttribute('x1', SKY_OBS_X);
+      sightSun.setAttribute('y1', SKY_OBS_Y);
+      sightSun.setAttribute('x2', SKY_SUN_X);
+      sightSun.setAttribute('y2', SKY_SUN_Y);
 
-        const midAngle = sunAngle - (deg/2 * Math.PI / 180);
-        const labelR = arcR + 20;
-        eloArcLabel2.setAttribute('x', ELO_OBS_X + labelR * Math.cos(midAngle));
-        eloArcLabel2.setAttribute('y', ELO_OBS_Y + labelR * Math.sin(midAngle) + 5);
-        eloArcLabel2.textContent = deg.toFixed(1) + '°';
+      // Altitude arc (at moon's horizontal position, from horizon upward)
+      if (Math.abs(alt) > 0.3) {
+        const arcR = 30;
+        const horizY = SKY_HORIZON;
+        const angleRad = alt * Math.PI / 180;
+        // Small visual arc near the moon
+        const arcCX = moonX;
+        const startY = horizY;
+        const endY = moonY;
+        // Simple vertical arc indicator
+        altArc.setAttribute('d', `M ${moonX - 15},${horizY} Q ${moonX - 25},${(horizY + moonY)/2} ${moonX - 10},${moonY + 10}`);
+        altLbl.setAttribute('x', moonX - 35);
+        altLbl.setAttribute('y', (horizY + moonY) / 2 + 4);
+        altLbl.textContent = 'h=' + alt.toFixed(1) + '°';
       } else {
-        eloArc2.setAttribute('d', '');
-        eloArcLabel2.textContent = '';
+        altArc.setAttribute('d', '');
+        altLbl.textContent = '';
       }
 
-      // Moon opacity based on elongation (crescent visibility)
-      eloMoonGroup.style.opacity = deg < 3 ? 0.25 : deg < 7 ? 0.5 + (deg - 3) * 0.1 : 1;
+      // Elongation arc (between sun and moon directions from observer)
+      if (elo > 0.3) {
+        const sunAng = Math.atan2(SKY_SUN_Y - SKY_OBS_Y, SKY_SUN_X - SKY_OBS_X);
+        const moonAng = Math.atan2(moonY - SKY_OBS_Y, moonX - SKY_OBS_X);
+        const arcR = 40;
+        const sX = SKY_OBS_X + arcR * Math.cos(sunAng);
+        const sY = SKY_OBS_Y + arcR * Math.sin(sunAng);
+        const eX = SKY_OBS_X + arcR * Math.cos(moonAng);
+        const eY = SKY_OBS_Y + arcR * Math.sin(moonAng);
+        eloArc.setAttribute('d', `M ${sX},${sY} A ${arcR},${arcR} 0 0,0 ${eX},${eY}`);
+        const midAng = (sunAng + moonAng) / 2;
+        eloLbl.setAttribute('x', SKY_OBS_X + (arcR + 16) * Math.cos(midAng));
+        eloLbl.setAttribute('y', SKY_OBS_Y + (arcR + 16) * Math.sin(midAng) + 4);
+        eloLbl.textContent = 'ε=' + elo.toFixed(1) + '°';
+      } else {
+        eloArc.setAttribute('d', '');
+        eloLbl.textContent = '';
+      }
 
       // Status
-      let color, line1, line2, line3;
-      if (deg < 6.4) {
-        color = 'var(--red)';
-        line1 = 'DI BAWAH MABIMS (< 6,4°)';
-        line2 = deg < 7 ? 'Di bawah Danjon Limit (~7°) — sabit tidak terbentuk' : '';
-        line3 = 'Hilal secara fisika sangat sulit/mustahil diamati';
-      } else if (deg < 7) {
-        color = 'var(--amber)';
-        line1 = 'MEMENUHI MABIMS (≥ 6,4°)';
-        line2 = 'Tapi masih di bawah Danjon Limit (~7°)';
-        line3 = 'Hanya bisa diamati dengan peralatan modern, kondisi sempurna';
-      } else if (deg < 8) {
-        color = 'var(--gold)';
-        line1 = 'DI ATAS DANJON LIMIT';
-        line2 = 'Sabit secara fisika mulai terbentuk';
-        line3 = 'Sulit dilihat mata telanjang, perlu alat bantu';
+      let sColor, sText, sDetail;
+      const altOk = alt >= 3;
+      const eloOk = elo >= 6.4;
+      const wujud = alt > 0;
+
+      if (alt < 0) {
+        sColor = 'var(--red)';
+        sText = 'HILAL DI BAWAH UFUK — belum wujud';
+        sDetail = 'Kedua metode sepakat: belum masuk bulan baru';
+      } else if (!altOk && !eloOk) {
+        sColor = '#6fcf97';
+        sText = 'WUJUD (> 0°) — tapi belum imkan rukyah';
+        sDetail = 'Muhammadiyah: bulan baru ✓ | MABIMS: belum (tinggi < 3°, elongasi < 6,4°) ✗';
+      } else if (altOk && !eloOk) {
+        sColor = 'var(--amber)';
+        sText = 'TINGGI ✓ tapi ELONGASI ✗';
+        sDetail = 'Tinggi memenuhi MABIMS (≥ 3°), tapi elongasi kurang (< 6,4°)';
+      } else if (!altOk && eloOk) {
+        sColor = 'var(--amber)';
+        sText = 'ELONGASI ✓ tapi TINGGI ✗';
+        sDetail = 'Elongasi memenuhi MABIMS (≥ 6,4°), tapi tinggi kurang (< 3°)';
       } else {
-        color = 'var(--green)';
-        line1 = 'DI ATAS KRITERIA SHAUKAT (≥ 8°)';
-        line2 = 'Sabit cukup terang untuk diamati mata telanjang';
-        line3 = deg >= 15 ? 'Sabit jelas terlihat, mudah diamati' : 'Dengan kondisi langit cerah, hilal bisa dilihat';
+        sColor = 'var(--green)';
+        sText = 'MEMENUHI SEMUA KRITERIA MABIMS';
+        sDetail = 'Tinggi ≥ 3° ✓ | Elongasi ≥ 6,4° ✓ | Kedua metode sepakat: bulan baru ✓';
       }
 
-      eloDegreeDisplay.style.color = color;
-      eloStatusLine1.setAttribute('fill', color);
-      eloStatusLine1.textContent = line1;
-      eloStatusLine2.setAttribute('fill', 'var(--text-dim)');
-      eloStatusLine2.textContent = line2;
-      eloStatusLine3.setAttribute('fill', 'var(--text-dim)');
-      eloStatusLine3.textContent = line3;
-      eloStatusBg.setAttribute('stroke', color);
+      status1.setAttribute('fill', sColor);
+      status1.textContent = sText;
+      status2.textContent = sDetail;
+      statusBg.setAttribute('stroke', sColor);
+
+      // Color the value displays
+      altValEl.style.color = alt < 0 ? 'var(--red)' : altOk ? 'var(--green)' : '#6fcf97';
+      eloValEl.style.color = eloOk ? 'var(--green)' : 'var(--amber)';
+
+      // Verdict text
+      if (verdictEl) {
+        verdictEl.innerHTML = `<strong>${city.name}</strong> (${city.src}): ${city.note}`;
+      }
     }
 
-    function setConceptElo(val) {
-      conceptEloSlider.value = val;
-      updateElongationDiagram(val);
+    // Build city buttons
+    function buildCityButtons(prefix, cityList) {
+      const container = document.getElementById(prefix + '_cityBtns');
+      cityList.forEach((c, i) => {
+        const btn = document.createElement('button');
+        const isGreen = (prefix === 'syw' && c.alt >= 3) || (prefix === 'ram' && c.alt > 0);
+        const isRed = c.alt < 0;
+        const borderColor = isGreen ? 'var(--green)' : isRed ? 'var(--red)' : 'var(--amber)';
+        const bgColor = isGreen ? 'var(--green-bg)' : isRed ? 'var(--red-bg)' : 'var(--amber-bg)';
+        const txtColor = isGreen ? 'var(--green)' : isRed ? 'var(--red)' : 'var(--amber)';
+        btn.style.cssText = `padding: 0.3rem 0.8rem; border-radius: 100px; border: 1px solid ${borderColor}; background: ${bgColor}; color: ${txtColor}; cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; transition: all 0.2s;`;
+        const altSign = c.alt >= 0 ? '+' : '';
+        btn.textContent = `${c.name} ${altSign}${c.alt.toFixed(2)}°`;
+        btn.addEventListener('click', () => {
+          updateSkyDiagram(prefix, c);
+          // Highlight active button
+          container.querySelectorAll('button').forEach(b => b.style.outline = 'none');
+          btn.style.outline = `2px solid ${txtColor}`;
+          btn.style.outlineOffset = '2px';
+        });
+        if (i === 0) {
+          btn.style.outline = `2px solid ${txtColor}`;
+          btn.style.outlineOffset = '2px';
+        }
+        container.appendChild(btn);
+      });
     }
 
-    conceptEloSlider.addEventListener('input', function() {
-      updateElongationDiagram(parseFloat(this.value));
-    });
+    // Tab switching
+    function switchSkyTab(tab) {
+      document.getElementById('skyRamadhan').style.display = tab === 'ramadhan' ? 'block' : 'none';
+      document.getElementById('skySyawal').style.display = tab === 'syawal' ? 'block' : 'none';
+      document.getElementById('tabRamadhan').classList.toggle('active', tab === 'ramadhan');
+      document.getElementById('tabSyawal').classList.toggle('active', tab === 'syawal');
+    }
 
-    // Initial
-    updateElongationDiagram(6.1);
+    // Initialize
+    buildCityButtons('ram', ramCities);
+    buildCityButtons('syw', sywCities);
+    updateSkyDiagram('ram', ramCities[0]);
+    updateSkyDiagram('syw', sywCities[0]);
   </script>
 </body>
 </html>
