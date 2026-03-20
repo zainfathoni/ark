@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Memory Management — PARA + QMD + Decay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+    --bg: #faf9f7;
+    --surface: #ffffff;
+    --surface2: #f3f1ed;
+    --surface-elevated: #fffefa;
+    --border: rgba(0, 0, 0, 0.08);
+    --border-bright: rgba(0, 0, 0, 0.15);
+    --text: #1e1e1e;
+    --text-dim: #7a7468;
+    --text-bright: #0f0f0f;
+
+    --navy: #1e3a5f;
+    --navy-dim: rgba(30, 58, 95, 0.08);
+    --gold: #b8860b;
+    --gold-dim: rgba(184, 134, 11, 0.08);
+    --teal: #0d7377;
+    --teal-dim: rgba(13, 115, 119, 0.08);
+    --terracotta: #b45309;
+    --terracotta-dim: rgba(180, 83, 9, 0.08);
+    --sage: #4d7c0f;
+    --sage-dim: rgba(77, 124, 15, 0.08);
+    --rose: #9f1239;
+    --rose-dim: rgba(159, 18, 57, 0.08);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111110;
+      --surface: #1a1918;
+      --surface2: #242321;
+      --surface-elevated: #2a2826;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-bright: rgba(255, 255, 255, 0.14);
+      --text: #e8e4de;
+      --text-dim: #9a9389;
+      --text-bright: #f5f2ed;
+
+      --navy: #7db4e0;
+      --navy-dim: rgba(125, 180, 224, 0.1);
+      --gold: #e4b94e;
+      --gold-dim: rgba(228, 185, 78, 0.1);
+      --teal: #5cc9cd;
+      --teal-dim: rgba(92, 201, 205, 0.1);
+      --terracotta: #f59e0b;
+      --terracotta-dim: rgba(245, 158, 11, 0.1);
+      --sage: #a3e635;
+      --sage-dim: rgba(163, 230, 53, 0.1);
+      --rose: #fda4af;
+      --rose-dim: rgba(253, 164, 175, 0.1);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 15% 0%, var(--navy-dim) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 80%, var(--gold-dim) 0%, transparent 40%);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding: 48px 24px 80px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeScale {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .anim {
+    animation: fadeUp 0.45s ease-out both;
+    animation-delay: calc(var(--i, 0) * 0.06s);
+  }
+
+  .anim-scale {
+    animation: fadeScale 0.4s ease-out both;
+    animation-delay: calc(var(--i, 0) * 0.06s);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    text-align: center;
+    padding: 20px 0 52px;
+  }
+
+  .hero__kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+    text-wrap: balance;
+  }
+
+  .hero__subtitle {
+    font-size: 18px;
+    color: var(--text-dim);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ===== PROBLEM ===== */
+  .problem {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--rose);
+    border-radius: 0 12px 12px 0;
+    padding: 24px 28px;
+    margin-bottom: 48px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .problem__title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--rose);
+    margin-bottom: 10px;
+  }
+
+  .problem p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* ===== SECTION ===== */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .section__label .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* ===== PILLAR CARDS ===== */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .pillar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .pillar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .pillar__num {
+    font-family: var(--font-display);
+    font-size: 42px;
+    color: var(--border-bright);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .pillar__name {
+    font-family: var(--font-display);
+    font-size: 24px;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+
+  .pillar__tagline {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+
+  .pillar__desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-dim);
+  }
+
+  .pillar--para { border-top: 3px solid var(--navy); }
+  .pillar--para .pillar__tagline { color: var(--navy); }
+
+  .pillar--qmd { border-top: 3px solid var(--teal); }
+  .pillar--qmd .pillar__tagline { color: var(--teal); }
+
+  .pillar--decay { border-top: 3px solid var(--gold); }
+  .pillar--decay .pillar__tagline { color: var(--gold); }
+
+  /* ===== FLOW ARROW ===== */
+  .flow-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 10px 0;
+  }
+
+  .flow-arrow svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: var(--border-bright);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ===== PARA STRUCTURE ===== */
+  .para-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .para-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 16px;
+    text-align: center;
+  }
+
+  .para-card__icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .para-card__letter {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .para-card__name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin: 6px 0 10px;
+  }
+
+  .para-card__examples {
+    list-style: none;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    text-align: left;
+  }
+
+  .para-card__examples li {
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .para-card__examples li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .para-card__examples code {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: var(--navy-dim);
+    color: var(--navy);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  /* ===== DECAY TIERS ===== */
+  .decay-tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .decay-tier {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .decay-tier__temp {
+    font-family: var(--font-display);
+    font-size: 36px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .decay-tier__label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .decay-tier__desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-dim);
+  }
+
+  .decay-tier__range {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .decay-tier--hot { border-top: 3px solid var(--terracotta); }
+  .decay-tier--hot .decay-tier__temp { color: var(--terracotta); }
+  .decay-tier--hot .decay-tier__label { color: var(--terracotta); }
+
+  .decay-tier--warm { border-top: 3px solid var(--gold); }
+  .decay-tier--warm .decay-tier__temp { color: var(--gold); }
+  .decay-tier--warm .decay-tier__label { color: var(--gold); }
+
+  .decay-tier--cold { border-top: 3px solid var(--navy); }
+  .decay-tier--cold .decay-tier__temp { color: var(--navy); }
+  .decay-tier--cold .decay-tier__label { color: var(--navy); }
+
+  /* ===== QMD BOX ===== */
+  .qmd-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .qmd-box__title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+
+  .qmd-box__subtitle {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .qmd-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .qmd-step {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    text-align: center;
+    min-width: 140px;
+  }
+
+  .qmd-step__name {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+
+  .qmd-step__detail {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+  }
+
+  .qmd-arrow {
+    color: var(--border-bright);
+    font-size: 18px;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* ===== AGENT GRID ===== */
+  .agent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  .agent-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    transition: border-color 0.15s;
+  }
+
+  .agent-chip:hover { border-color: var(--border-bright); }
+
+  .agent-chip__emoji { font-size: 18px; }
+  .agent-chip__name { font-weight: 600; }
+  .agent-chip__role {
+    font-size: 11px;
+    color: var(--text-dim);
+    display: block;
+  }
+
+  /* ===== HOW IT WORKS (CALLOUT) ===== */
+  .how-it-works {
+    background: var(--surface-elevated);
+    border: 1px solid color-mix(in srgb, var(--border) 50%, var(--gold) 50%);
+    border-radius: 12px;
+    padding: 28px 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .how-it-works__title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    color: var(--text-bright);
+    margin-bottom: 20px;
+  }
+
+  .step-list {
+    list-style: none;
+    counter-reset: steps;
+  }
+
+  .step-list li {
+    counter-increment: steps;
+    padding-left: 36px;
+    position: relative;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .step-list li::before {
+    content: counter(steps);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    background: var(--gold-dim);
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-list li strong {
+    color: var(--text-bright);
+  }
+
+  /* ===== SCHEMA BOX ===== */
+  .schema-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    color: var(--text-dim);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .schema-box .key { color: var(--navy); }
+  .schema-box .val { color: var(--terracotta); }
+  .schema-box .comment { color: var(--text-dim); opacity: 0.6; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding-top: 48px;
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  .footer__text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+  }
+
+  .footer__link {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .footer__link:hover { text-decoration: underline; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    body { padding: 24px 16px 60px; }
+    .pillars { grid-template-columns: 1fr; }
+    .para-grid { grid-template-columns: repeat(2, 1fr); }
+    .decay-tiers { grid-template-columns: 1fr; }
+    .qmd-flow { flex-direction: column; gap: 8px; }
+    .qmd-arrow { transform: rotate(90deg); padding: 2px 0; }
+    .agent-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .para-grid { grid-template-columns: 1fr; }
+    .agent-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero anim" style="--i:0">
+    <div class="hero__kicker">AI Agent Memory Architecture</div>
+    <h1 class="hero__title">How Our AI Agents Remember</h1>
+    <p class="hero__subtitle">A three-pillar system for giving AI agents persistent, searchable, self-maintaining memory — built on PARA, semantic search, and automatic decay.</p>
+  </div>
+
+  <!-- PROBLEM -->
+  <div class="problem anim" style="--i:1">
+    <div class="problem__title">The Problem</div>
+    <p>AI agents wake up with amnesia every session. They can't remember yesterday's conversation, your preferences, or what they were working on. Without a memory system, every interaction starts from scratch — and your agents never truly <em>learn</em>.</p>
+  </div>
+
+  <!-- THREE PILLARS -->
+  <section class="section">
+    <div class="section__label anim" style="--i:2">
+      <span class="dot" style="background: var(--gold)"></span>
+      <span style="color: var(--gold)">The Three Pillars</span>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar pillar--para anim" style="--i:3">
+        <div class="pillar__num">1</div>
+        <div class="pillar__name">PARA</div>
+        <div class="pillar__tagline">Structured Knowledge</div>
+        <div class="pillar__desc">Organize everything agents know into a clean hierarchy: shared facts, personal context, work projects, and family info. Facts are atomic and never deleted — only superseded.</div>
+      </div>
+
+      <div class="pillar pillar--qmd anim" style="--i:4">
+        <div class="pillar__num">2</div>
+        <div class="pillar__name">QMD</div>
+        <div class="pillar__tagline">Semantic Search</div>
+        <div class="pillar__desc">Every memory file is indexed for semantic search. Agents can find relevant context by meaning, not just keywords. Works as a fallback when primary memory tools are unavailable.</div>
+      </div>
+
+      <div class="pillar pillar--decay anim" style="--i:5">
+        <div class="pillar__num">3</div>
+        <div class="pillar__name">Decay</div>
+        <div class="pillar__tagline">Self-Maintenance</div>
+        <div class="pillar__desc">A weekly automated process classifies memories as Hot, Warm, or Cold based on recency and access frequency. Cold memories get archived. The knowledge base stays lean.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARA DEEP DIVE -->
+  <div class="flow-arrow anim" style="--i:6">
+    <svg viewBox="0 0 20 20"><path d="M10 4 L10 16 M6 12 L10 16 L14 12"/></svg>
+    how it's structured
+  </div>
+
+  <section class="section">
+    <div class="section__label anim" style="--i:7">
+      <span class="dot" style="background: var(--navy)"></span>
+      <span style="color: var(--navy)">Pillar 1 — PARA Knowledge Graph</span>
+    </div>
+
+    <div class="para-grid">
+      <div class="para-card anim" style="--i:8">
+        <span class="para-card__icon">🤝</span>
+        <div class="para-card__letter">S</div>
+        <div class="para-card__name">Shared</div>
+        <ul class="para-card__examples">
+          <li>Cross-agent conventions</li>
+          <li>People & contacts</li>
+          <li>Calendar events</li>
+          <li>Fact schema: <code>facts.json</code></li>
+        </ul>
+      </div>
+
+      <div class="para-card anim" style="--i:9">
+        <span class="para-card__icon">🧑</span>
+        <div class="para-card__letter">P</div>
+        <div class="para-card__name">Personal</div>
+        <ul class="para-card__examples">
+          <li>Health & fitness data</li>
+          <li>Financial notes</li>
+          <li>Tax documents</li>
+          <li>Personal preferences</li>
+        </ul>
+      </div>
+
+      <div class="para-card anim" style="--i:10">
+        <span class="para-card__icon">💼</span>
+        <div class="para-card__letter">W</div>
+        <div class="para-card__name">Work</div>
+        <ul class="para-card__examples">
+          <li>Active projects</li>
+          <li>Companies & contacts</li>
+          <li>Business opportunities</li>
+          <li>Client context</li>
+        </ul>
+      </div>
+
+      <div class="para-card anim" style="--i:11">
+        <span class="para-card__icon">👨‍👩‍👧‍👦</span>
+        <div class="para-card__letter">F</div>
+        <div class="para-card__name">Family</div>
+        <ul class="para-card__examples">
+          <li>Family members</li>
+          <li>Important dates</li>
+          <li>Shared activities</li>
+          <li>Private context</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <div class="schema-box anim" style="--i:12">{
+  <span class="key">"id"</span>: <span class="val">"vika-002"</span>,
+  <span class="key">"fact"</span>: <span class="val">"Vika and Zain work out together"</span>,
+  <span class="key">"category"</span>: <span class="val">"context"</span>,
+  <span class="key">"status"</span>: <span class="val">"active"</span>,          <span class="comment">// never deleted, only superseded</span>
+  <span class="key">"relatedEntities"</span>: [<span class="val">"personal/health"</span>],
+  <span class="key">"lastAccessed"</span>: <span class="val">"2026-02-01"</span>,  <span class="comment">// drives decay classification</span>
+  <span class="key">"accessCount"</span>: <span class="val">3</span>
+}</div>
+    </div>
+  </section>
+
+  <!-- DECAY DEEP DIVE -->
+  <div class="flow-arrow anim" style="--i:13">
+    <svg viewBox="0 0 20 20"><path d="M10 4 L10 16 M6 12 L10 16 L14 12"/></svg>
+    how it stays clean
+  </div>
+
+  <section class="section">
+    <div class="section__label anim" style="--i:14">
+      <span class="dot" style="background: var(--gold)"></span>
+      <span style="color: var(--gold)">Pillar 3 — Memory Decay</span>
+    </div>
+
+    <div class="decay-tiers">
+      <div class="decay-tier decay-tier--hot anim-scale" style="--i:15">
+        <div class="decay-tier__temp">Hot</div>
+        <div class="decay-tier__label">Active Memory</div>
+        <div class="decay-tier__desc">Recently accessed, highly relevant. Stays in working files. Agents see this every session.</div>
+        <div class="decay-tier__range">Accessed within 7 days</div>
+      </div>
+
+      <div class="decay-tier decay-tier--warm anim-scale" style="--i:16">
+        <div class="decay-tier__temp">Warm</div>
+        <div class="decay-tier__label">Background Context</div>
+        <div class="decay-tier__desc">Still useful but not urgent. Available via search. Summarized during weekly grooming.</div>
+        <div class="decay-tier__range">Accessed 8–30 days ago</div>
+      </div>
+
+      <div class="decay-tier decay-tier--cold anim-scale" style="--i:17">
+        <div class="decay-tier__temp">Cold</div>
+        <div class="decay-tier__label">Archived</div>
+        <div class="decay-tier__desc">Old context moved to archive. Retrievable via semantic search if needed, but out of the working set.</div>
+        <div class="decay-tier__range">Not accessed in 30+ days</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QMD DEEP DIVE -->
+  <div class="flow-arrow anim" style="--i:18">
+    <svg viewBox="0 0 20 20"><path d="M10 4 L10 16 M6 12 L10 16 L14 12"/></svg>
+    how agents find things
+  </div>
+
+  <section class="section">
+    <div class="section__label anim" style="--i:19">
+      <span class="dot" style="background: var(--teal)"></span>
+      <span style="color: var(--teal)">Pillar 2 — QMD Semantic Search</span>
+    </div>
+
+    <div class="qmd-box anim" style="--i:20">
+      <div class="qmd-box__title">Query by Meaning, Not Keywords</div>
+      <div class="qmd-box__subtitle">Every markdown file is indexed. When an agent needs context, it searches by semantic similarity — "what was that conversation about the gym?" finds relevant facts even if the word "gym" isn't in the file.</div>
+
+      <div class="qmd-flow">
+        <div class="qmd-step">
+          <div class="qmd-step__name">Agent Query</div>
+          <div class="qmd-step__detail">"gym schedule"</div>
+        </div>
+        <div class="qmd-arrow">→</div>
+        <div class="qmd-step">
+          <div class="qmd-step__name">Embed</div>
+          <div class="qmd-step__detail">vector encoding</div>
+        </div>
+        <div class="qmd-arrow">→</div>
+        <div class="qmd-step">
+          <div class="qmd-step__name">Search Index</div>
+          <div class="qmd-step__detail">cosine similarity</div>
+        </div>
+        <div class="qmd-arrow">→</div>
+        <div class="qmd-step">
+          <div class="qmd-step__name">Top Results</div>
+          <div class="qmd-step__detail">ranked snippets</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MULTI-AGENT -->
+  <div class="flow-arrow anim" style="--i:21">
+    <svg viewBox="0 0 20 20"><path d="M10 4 L10 16 M6 12 L10 16 L14 12"/></svg>
+    who uses this
+  </div>
+
+  <section class="section">
+    <div class="section__label anim" style="--i:22">
+      <span class="dot" style="background: var(--terracotta)"></span>
+      <span style="color: var(--terracotta)">The Agents</span>
+    </div>
+
+    <div class="agent-grid">
+      <div class="agent-chip anim" style="--i:23">
+        <span class="agent-chip__emoji">🍠</span>
+        <div><span class="agent-chip__name">Optimus</span><span class="agent-chip__role">Coordinator</span></div>
+      </div>
+      <div class="agent-chip anim" style="--i:24">
+        <span class="agent-chip__emoji">🛠️</span>
+        <div><span class="agent-chip__name">Wheeljack</span><span class="agent-chip__role">Coding</span></div>
+      </div>
+      <div class="agent-chip anim" style="--i:25">
+        <span class="agent-chip__emoji">🚔</span>
+        <div><span class="agent-chip__name">Prowl</span><span class="agent-chip__role">Career & Finance</span></div>
+      </div>
+      <div class="agent-chip anim" style="--i:26">
+        <span class="agent-chip__emoji">🐝</span>
+        <div><span class="agent-chip__name">Bumblebee</span><span class="agent-chip__role">Family</span></div>
+      </div>
+      <div class="agent-chip anim" style="--i:27">
+        <span class="agent-chip__emoji">🔬</span>
+        <div><span class="agent-chip__name">Perceptor</span><span class="agent-chip__role">Research</span></div>
+      </div>
+      <div class="agent-chip anim" style="--i:28">
+        <span class="agent-chip__emoji">🎷</span>
+        <div><span class="agent-chip__name">Jazz</span><span class="agent-chip__role">Public Voice</span></div>
+      </div>
+      <div class="agent-chip anim" style="--i:29">
+        <span class="agent-chip__emoji">📼</span>
+        <div><span class="agent-chip__name">Rewind</span><span class="agent-chip__role">Blog Writing</span></div>
+      </div>
+      <div class="agent-chip anim" style="--i:30">
+        <span class="agent-chip__emoji">🎯</span>
+        <div><span class="agent-chip__name">Bluestreak</span><span class="agent-chip__role">Strategy</span></div>
+      </div>
+    </div>
+
+    <p style="font-size: 13px; color: var(--text-dim); margin-top: 14px; text-align: center; font-style: italic;">Each agent has its own memory space, but shares the knowledge graph. Privacy boundaries are enforced — some agents are air-gapped.</p>
+  </section>
+
+  <!-- HOW IT WORKS TOGETHER -->
+  <div class="flow-arrow anim" style="--i:31">
+    <svg viewBox="0 0 20 20"><path d="M10 4 L10 16 M6 12 L10 16 L14 12"/></svg>
+    putting it all together
+  </div>
+
+  <div class="how-it-works anim" style="--i:32">
+    <div class="how-it-works__title">The Daily Rhythm</div>
+    <ol class="step-list">
+      <li><strong>Agent wakes up</strong> — reads its identity, the user profile, today's and yesterday's daily notes, and long-term memory file.</li>
+      <li><strong>Needs context?</strong> — searches the QMD semantic index across all its memory files and the shared knowledge graph.</li>
+      <li><strong>Learns something new?</strong> — writes it to today's daily note as a structured fact with categories and related entities.</li>
+      <li><strong>Weekly grooming (Sundays)</strong> — the decay script runs: Hot facts stay, Warm facts get summarized, Cold facts are archived. Daily notes older than 7 days move to the archive.</li>
+      <li><strong>Knowledge extraction</strong> — important facts from daily notes get promoted to the permanent knowledge graph, organized by PARA categories.</li>
+    </ol>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer anim" style="--i:33">
+    <p class="footer__text">Built with <a class="footer__link" href="https://openclaw.ai" target="_blank" rel="noopener">OpenClaw</a> · Inspired by Tiago Forte's PARA method</p>
+  </div>
+
+</div>
+
+</body>
+</html>

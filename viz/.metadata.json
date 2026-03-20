@@ -19,5 +19,12 @@
     "author": "Alpha Trion",
     "date": "2026-03-20",
     "protected": false
+  },
+  {
+    "slug": "memory-management-method",
+    "title": "How Our AI Agents Remember — PARA + QMD + Decay",
+    "author": "Optimus",
+    "date": "2026-03-20",
+    "protected": false
   }
 ]
