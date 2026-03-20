@@ -524,13 +524,13 @@
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
           <div>
             <div style="font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); font-weight: 600; margin-bottom: 0.25rem;">Sidang Isbat Awal Ramadhan — Selasa, 17 Februari 2026</div>
-            <div style="font-size: 0.85rem; color: var(--text-dim);">Ijtimak: Selasa, 17 Feb 2026 pukul 19:01 WIB (setelah maghrib)</div>
+            <div style="font-size: 0.85rem; color: var(--text-dim);">Ijtimak: 17 Feb 2026 pukul <strong style="color:var(--red);">19:01 WIB</strong> — <em>setelah</em> maghrib seluruh Indonesia (terakhir Sabang 18:51)</div>
           </div>
           <div style="text-align: right;">
-            <div id="ram_cityName" style="font-family: var(--font-mono); font-size: 1rem; font-weight: 600; color: var(--gold);">Sabang, Aceh</div>
+            <div id="ram_cityName" style="font-family: var(--font-mono); font-size: 1rem; font-weight: 600; color: var(--gold);">Sabang</div>
             <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 0.25rem;">
-              <span style="font-family: var(--font-mono); font-size: 0.8rem;">h = <strong id="ram_altVal" style="color: var(--gold);">+0,93°</strong></span>
-              <span style="font-family: var(--font-mono); font-size: 0.8rem;">ε = <strong id="ram_eloVal" style="color: var(--amber);">1,89°</strong></span>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem;">h = <strong id="ram_altVal" style="color: var(--red);">−0,93°</strong></span>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem;">ε = <strong id="ram_eloVal" style="color: var(--amber);">0,94°</strong></span>
             </div>
           </div>
         </div>
@@ -622,7 +622,7 @@
 
         <!-- City selector -->
         <div style="margin-top: 1rem;">
-          <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.5rem;">PILIH KOTA — Data 17 Februari 2026 (saat maghrib):</div>
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.5rem;">PILIH KOTA — Data 17 Feb 2026 saat maghrib (ijtimak belum terjadi → hilal belum lahir):</div>
           <div id="ram_cityBtns" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
         </div>
 
@@ -743,7 +743,7 @@
           </div>
         </div>
         <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-dim); line-height: 1.7;">
-          <strong>Awal Ramadhan:</strong> Kedua metode sepakat — hilal di bawah ufuk, Ramadhan dimulai 19 Feb.<br>
+          <strong>Awal Ramadhan (17 Feb):</strong> Kedua metode sepakat — ijtimak terjadi pukul 19:01 WIB, <em>setelah</em> maghrib seluruh Indonesia (terakhir Sabang 18:51). Hilal belum lahir. Sya'ban digenapkan 30 hari, Ramadhan dimulai 19 Feb.<br>
           <strong>Akhir Ramadhan:</strong> Berbeda — hilal sudah wujud (&gt; 0°) tapi belum imkan (&lt; 3° di sebagian besar wilayah, elongasi &lt; 6,4° di seluruh wilayah). Muhammadiyah Lebaran Jumat 20 Mar, Pemerintah Sabtu 21 Mar.
         </div>
       </div>
@@ -1059,15 +1059,18 @@
 
     // === UNIFIED SKY DIAGRAMS ===
 
-    // Data: Awal Ramadhan (17 Feb 2026, saat maghrib)
-    // Hilal belum wujud di seluruh Indonesia (di bawah ufuk)
+    // Data: Awal Ramadhan — Senin 17 Feb 2026 saat maghrib
+    // Ijtimak terjadi 17 Feb 2026 pukul 19:01 WIB
+    // Maghrib terakhir (Sabang) pukul 18:51 WIB → ijtimak SETELAH maghrib
+    // Artinya: saat observasi, hilal baru BELUM LAHIR di seluruh Indonesia
+    // Data di bawah adalah posisi bulan lama (pra-konjungsi), BUKAN hilal baru
     const ramCities = [
-      { name: 'Sabang',    alt: 0.93,   elo: 1.89,  note: 'Tertinggi di Indonesia', src: 'Kemenag' },
-      { name: 'Jakarta',   alt: -0.90,  elo: 1.30,  note: 'Tinggi −0°54\'14"', src: 'Kanwil Kemenag' },
-      { name: 'Semarang',  alt: -1.10,  elo: 1.15,  note: 'Bulan terbenam sebelum Matahari', src: 'BMKG' },
-      { name: 'Yogyakarta',alt: -1.50,  elo: 1.10,  note: 'Hilal mustahil terlihat', src: 'Kemenag Bantul' },
-      { name: 'Lombok',    alt: -1.27,  elo: 1.21,  note: 'Tinggi −1,268°', src: 'Kemenag NTB' },
-      { name: 'Merauke',   alt: -2.41,  elo: 0.94,  note: 'Terendah di Indonesia', src: 'Kemenag' },
+      { name: 'Sabang',    alt: -0.93,  elo: 0.94,  note: 'Ijtimak 19:01 WIB > maghrib 18:51 — hilal belum lahir', src: 'Kemenag' },
+      { name: 'Jakarta',   alt: -0.90,  elo: 0.93,  note: 'Tinggi −0°54\'14" — bulan lama, bukan hilal baru', src: 'Kanwil Kemenag' },
+      { name: 'Semarang',  alt: -1.10,  elo: 0.88,  note: 'Bulan terbenam sebelum Matahari', src: 'BMKG' },
+      { name: 'Yogyakarta',alt: -1.50,  elo: 0.85,  note: 'Hilal mustahil — ijtimak belum terjadi', src: 'Kemenag Bantul' },
+      { name: 'Lombok',    alt: -1.27,  elo: 1.21,  note: 'Tinggi −1,268°, elongasi 1,208°', src: 'Kemenag NTB' },
+      { name: 'Merauke',   alt: -2.41,  elo: 0.56,  note: 'Terendah — hilal belum lahir', src: 'Kemenag' },
     ];
 
     // Data: Akhir Ramadhan (19 Mar 2026, saat maghrib)
@@ -1177,7 +1180,14 @@
       const eloOk = elo >= 6.4;
       const wujud = alt > 0;
 
-      if (alt < 0) {
+      // Special case for Ramadhan diagram: ijtimak after maghrib
+      const isRamDiagram = prefix === 'ram';
+
+      if (alt < 0 && isRamDiagram) {
+        sColor = 'var(--red)';
+        sText = 'HILAL BELUM LAHIR — ijtimak setelah maghrib';
+        sDetail = 'Ijtimak 19:01 WIB > maghrib — kedua metode sepakat: belum masuk Ramadhan';
+      } else if (alt < 0) {
         sColor = 'var(--red)';
         sText = 'HILAL DI BAWAH UFUK — belum wujud';
         sDetail = 'Kedua metode sepakat: belum masuk bulan baru';
