@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selamat Idul Fitri 1447 H</title>
+
+  <!-- OG Tags -->
+  <meta property="og:title" content="Selamat Idul Fitri 1447 H">
+  <meta property="og:description" content="Taqabbalallahu minna wa minkum — Mohon maaf lahir dan batin 🌙">
+  <meta property="og:image" content="https://ark.zainf.dev/viz/og/idul-fitri-1447h.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://ark.zainf.dev/viz/idul-fitri-1447h.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Selamat Idul Fitri 1447 H">
+  <meta name="twitter:description" content="Taqabbalallahu minna wa minkum — Mohon maaf lahir dan batin 🌙">
+  <meta name="twitter:image" content="https://ark.zainf.dev/viz/og/idul-fitri-1447h.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #faf6f0;
+      --surface: #fff8ef;
+      --surface-glow: #fff3e0;
+      --border: rgba(180, 140, 80, 0.15);
+      --text: #2c1810;
+      --text-dim: #8b7355;
+      --gold: #b8860b;
+      --gold-light: #d4a73a;
+      --gold-dim: rgba(184, 134, 11, 0.1);
+      --emerald: #1a6b4a;
+      --emerald-dim: rgba(26, 107, 74, 0.08);
+      --cream: #f5ead6;
+      --warm-white: #fefcf7;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f0d0a;
+        --surface: #1a1610;
+        --surface-glow: #231e14;
+        --border: rgba(212, 167, 58, 0.12);
+        --text: #f0e6d3;
+        --text-dim: #9c8b72;
+        --gold: #d4a73a;
+        --gold-light: #e6be5a;
+        --gold-dim: rgba(212, 167, 58, 0.1);
+        --emerald: #4ade80;
+        --emerald-dim: rgba(74, 222, 128, 0.08);
+        --cream: #2a2318;
+        --warm-white: #1f1b14;
+      }
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Subtle background pattern — Islamic geometric hint */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 30%, var(--gold-dim) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, var(--emerald-dim) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      width: 90%;
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+
+    /* Decorative top border */
+    .card::before {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      margin: 0 auto 2rem;
+      border-radius: 2px;
+    }
+
+    /* Crescent & Star SVG */
+    .crescent-wrap {
+      margin-bottom: 1.5rem;
+      animation: fadeDown 1s ease-out both;
+    }
+
+    .crescent-svg {
+      width: 120px;
+      height: 120px;
+      filter: drop-shadow(0 4px 20px rgba(184, 134, 11, 0.2));
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .crescent-svg { filter: drop-shadow(0 4px 25px rgba(212, 167, 58, 0.3)); }
+    }
+
+    /* Arabic greeting */
+    .arabic {
+      font-family: 'Amiri', serif;
+      font-size: 2.2rem;
+      color: var(--gold);
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+      direction: rtl;
+      animation: fadeUp 0.8s ease-out 0.2s both;
+    }
+
+    .transliteration {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.02em;
+      animation: fadeUp 0.8s ease-out 0.35s both;
+    }
+
+    /* Main greeting */
+    .greeting-main {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2.8rem;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      animation: fadeUp 0.8s ease-out 0.5s both;
+    }
+
+    .greeting-year {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s ease-out 0.6s both;
+    }
+
+    /* Divider ornament */
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s ease-out 0.7s both;
+    }
+
+    .ornament-line {
+      width: 60px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .ornament-diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* Message */
+    .message {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease-out 0.85s both;
+    }
+
+    .message em {
+      color: var(--emerald);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .maaf {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.8s ease-out 1s both;
+    }
+
+    /* Geometric decoration bottom */
+    .geo-pattern {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease-out 1.1s both;
+    }
+
+    .geo-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.4;
+    }
+
+    .geo-dot:nth-child(odd) {
+      opacity: 0.7;
+      background: var(--emerald);
+    }
+
+    .geo-dot:nth-child(3) {
+      opacity: 1;
+      background: var(--gold);
+      width: 8px;
+      height: 8px;
+      margin-top: -1px;
+    }
+
+    .footer-note {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      animation: fadeUp 0.8s ease-out 1.2s both;
+    }
+
+    .footer-note a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    /* Stars scattered */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+
+    .star:nth-child(1) { top: 10%; left: 15%; animation-delay: 0s; }
+    .star:nth-child(2) { top: 20%; left: 80%; animation-delay: 0.7s; width: 3px; height: 3px; }
+    .star:nth-child(3) { top: 60%; left: 10%; animation-delay: 1.4s; }
+    .star:nth-child(4) { top: 75%; left: 85%; animation-delay: 2.1s; width: 3px; height: 3px; }
+    .star:nth-child(5) { top: 40%; left: 90%; animation-delay: 0.3s; width: 5px; height: 5px; }
+    .star:nth-child(6) { top: 85%; left: 40%; animation-delay: 1.8s; }
+    .star:nth-child(7) { top: 5%; left: 55%; animation-delay: 0.9s; width: 3px; height: 3px; }
+    .star:nth-child(8) { top: 50%; left: 5%; animation-delay: 2.5s; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 0.6; transform: scale(1); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .star { animation: none; opacity: 0.3; }
+      .crescent-wrap, .arabic, .transliteration,
+      .greeting-main, .greeting-year, .ornament,
+      .message, .maaf, .geo-pattern, .footer-note {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 2rem 1.5rem; }
+      .arabic { font-size: 1.7rem; }
+      .greeting-main { font-size: 2.2rem; }
+      .crescent-svg { width: 90px; height: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars">
+    <div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div>
+  </div>
+
+  <main class="card">
+    <div class="crescent-wrap">
+      <svg class="crescent-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Crescent moon -->
+        <circle cx="55" cy="55" r="35" fill="var(--gold)"/>
+        <circle cx="68" cy="48" r="30" fill="var(--bg)"/>
+        <!-- Star -->
+        <polygon points="95,30 97.5,37 105,37 99,41.5 101,49 95,44.5 89,49 91,41.5 85,37 92.5,37"
+                 fill="var(--gold)" opacity="0.9"/>
+        <!-- Small stars -->
+        <circle cx="82" cy="22" r="1.5" fill="var(--gold)" opacity="0.6"/>
+        <circle cx="105" cy="55" r="1.8" fill="var(--gold)" opacity="0.5"/>
+        <circle cx="78" cy="65" r="1.2" fill="var(--gold)" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <p class="arabic">تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ</p>
+    <p class="transliteration">Taqabbalallāhu minnā wa minkum</p>
+
+    <h1 class="greeting-main">Selamat Idul Fitri</h1>
+    <p class="greeting-year">1 Syawal 1447 H</p>
+
+    <div class="ornament">
+      <span class="ornament-line"></span>
+      <span class="ornament-diamond"></span>
+      <span class="ornament-line"></span>
+    </div>
+
+    <p class="message">
+      Semoga amal ibadah Ramadhan kita diterima Allah ﷻ.<br>
+      Semoga kita termasuk hamba-hamba-Nya yang <em>kembali suci</em>,<br>
+      bagai bayi yang baru dilahirkan.
+    </p>
+
+    <p class="maaf">Mohon maaf lahir dan batin 🙏</p>
+
+    <div class="geo-pattern">
+      <span class="geo-dot"></span>
+      <span class="geo-dot"></span>
+      <span class="geo-dot"></span>
+      <span class="geo-dot"></span>
+      <span class="geo-dot"></span>
+    </div>
+
+    <p class="footer-note">Dari keluarga Zain Fathoni</p>
+  </main>
+
+</body>
+</html>
