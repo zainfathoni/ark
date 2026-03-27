@@ -29,13 +29,13 @@
     --green-dim: rgba(22, 163, 74, 0.08);
     --red: #dc2626;
     --red-dim: rgba(220, 38, 38, 0.08);
-    --slate: #475569;
-    --slate-dim: rgba(71, 85, 105, 0.08);
 
     --ups1: #0369a1;
     --ups1-dim: rgba(3, 105, 161, 0.10);
-    --ups23: #059669;
-    --ups23-dim: rgba(5, 150, 105, 0.10);
+    --apc: #c2410c;
+    --apc-dim: rgba(194, 65, 12, 0.10);
+    --eco: #059669;
+    --eco-dim: rgba(5, 150, 105, 0.10);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -49,17 +49,17 @@
       --text: #dceeff;
       --text-dim: #7a9ab8;
       --teal: #38bdf8;
-      --teal-dim: rgba(56, 189, 248, 0.1);
+      --teal-dim: rgba(56,189,248,0.1);
       --amber: #fbbf24;
-      --amber-dim: rgba(251, 191, 36, 0.1);
+      --amber-dim: rgba(251,191,36,0.1);
       --green: #4ade80;
-      --green-dim: rgba(74, 222, 128, 0.1);
-      --red: #f87171;
-      --red-dim: rgba(248, 113, 113, 0.1);
+      --green-dim: rgba(74,222,128,0.1);
       --ups1: #38bdf8;
       --ups1-dim: rgba(56,189,248,0.1);
-      --ups23: #34d399;
-      --ups23-dim: rgba(52,211,153,0.1);
+      --apc: #fb923c;
+      --apc-dim: rgba(251,146,60,0.12);
+      --eco: #34d399;
+      --eco-dim: rgba(52,211,153,0.1);
     }
   }
 
@@ -68,8 +68,8 @@
   body {
     background: var(--bg);
     background-image:
-      radial-gradient(ellipse at 20% 10%, var(--teal-dim) 0%, transparent 40%),
-      radial-gradient(ellipse at 80% 90%, var(--ups23-dim) 0%, transparent 40%);
+      radial-gradient(ellipse at 15% 10%, var(--ups1-dim) 0%, transparent 40%),
+      radial-gradient(ellipse at 85% 90%, var(--eco-dim) 0%, transparent 40%);
     color: var(--text);
     font-family: var(--font-body);
     padding: 40px 20px;
@@ -81,122 +81,78 @@
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
   .animate { animation: fadeUp 0.4s ease-out both; animation-delay: calc(var(--i,0) * 0.06s); }
-
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; }
   }
 
-  .container { max-width: 900px; margin: 0 auto; }
+  .container { max-width: 960px; margin: 0 auto; }
 
   /* HEADER */
   .page-header { margin-bottom: 36px; }
   .page-header h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
   .page-header .meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
 
-  /* FLOOR SECTION */
-  .floor-section { margin-bottom: 32px; }
+  /* FLOOR LABEL */
   .floor-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: var(--text-dim);
-    margin-bottom: 14px;
-    padding: 4px 12px 4px 4px;
-    border-radius: 6px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-dim);
+    margin-bottom: 14px; padding: 4px 12px 4px 4px;
+    border-radius: 6px; background: var(--surface2); border: 1px solid var(--border);
   }
-  .floor-label .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-  }
+  .floor-label .dot { width: 8px; height: 8px; border-radius: 50%; }
 
   /* UPS CARD */
   .ups-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden; margin-bottom: 16px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
-
   .ups-card__header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 18px 20px;
-    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 20px; border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
   }
-
   .ups-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 12px;
-    border-radius: 6px;
-    white-space: nowrap;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    padding: 4px 12px; border-radius: 6px; white-space: nowrap;
   }
-
   .ups-badge--1 { background: var(--ups1-dim); color: var(--ups1); }
-  .ups-badge--23 { background: var(--ups23-dim); color: var(--ups23); }
-
-  .ups-card__title { font-size: 16px; font-weight: 600; flex: 1; }
-  .ups-card__price {
-    font-family: var(--font-mono);
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--teal);
-  }
-
+  .ups-badge--23 { background: var(--apc-dim); color: var(--apc); }
+  .ups-card__title { font-size: 16px; font-weight: 600; flex: 1; min-width: 180px; }
+  .ups-card__price { font-family: var(--font-mono); font-size: 15px; font-weight: 600; color: var(--teal); }
   .ups-card__body { padding: 18px 20px; }
 
+  /* SECTION DIVIDER */
+  .section-divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 10px 0 14px;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim);
+  }
+  .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-bright); }
+
   /* DEVICES TABLE */
-  .devices-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
+  .devices-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
   .devices-table th {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-dim);
-    text-align: left;
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--border-bright);
+    font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim);
+    text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border-bright);
   }
   .devices-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
   .devices-table tbody tr:last-child td { border-bottom: none; }
   .devices-table tbody tr:nth-child(even) { background: var(--surface2); }
-  .devices-table .num { font-family: var(--font-mono); font-size: 12px; text-align: right; tabular-nums: always; }
+  .devices-table .num { font-family: var(--font-mono); font-size: 12px; text-align: right; }
+  .devices-table small { display: block; color: var(--text-dim); font-size: 11px; margin-top: 2px; }
   .devices-table tfoot td {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 600;
-    border-top: 2px solid var(--border-bright);
-    border-bottom: none;
-    padding: 10px 10px;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    border-top: 2px solid var(--border-bright); border-bottom: none; padding: 10px 10px;
   }
 
-  /* RUNTIME STATS */
-  .runtime-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-    margin-top: 4px;
-  }
-
-  .runtime-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-  }
+  /* RUNTIME GRID */
+  .runtime-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 4px; }
+  .runtime-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
   .runtime-card__scenario { font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
   .runtime-card__load { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); margin-bottom: 6px; }
   .runtime-card__time { font-size: 20px; font-weight: 600; font-family: var(--font-mono); }
@@ -204,109 +160,109 @@
   .runtime-card__time--ok { color: var(--amber); }
   .runtime-card__time--warn { color: var(--red); }
 
-  .section-divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 10px 0 14px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-dim);
+  /* NOTES */
+  .notes {
+    font-size: 12px; color: var(--text-dim); line-height: 1.7;
+    margin-top: 12px; padding: 12px 16px;
+    background: var(--surface2); border-radius: 8px;
   }
-  .section-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border-bright);
+  .notes strong { color: var(--text); }
+  .notes--teal { border-left: 3px solid var(--teal); }
+  .notes--apc { border-left: 3px solid var(--apc); }
+  .notes--eco { border-left: 3px solid var(--eco); }
+
+  /* OPTIONS SECTION */
+  .options-label {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-dim); margin-bottom: 12px;
   }
 
-  /* SUMMARY TABLE */
-  .summary-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 24px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  }
-  .summary-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-    font-weight: 600;
-  }
-  .summary-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .summary-table th {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-dim);
-    text-align: left;
-    padding: 10px 16px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border-bright);
-  }
-  .summary-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  .summary-table tbody tr:last-child td { border-bottom: none; }
-  .summary-table tfoot td {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 600;
-    border-top: 2px solid var(--border-bright);
-    background: var(--surface2);
-    padding: 12px 16px;
-    border-bottom: none;
-  }
-  .summary-table .price-col {
-    font-family: var(--font-mono);
-    font-weight: 600;
-    color: var(--teal);
-    white-space: nowrap;
-  }
-  .summary-table .total-price {
-    color: var(--green);
-    font-size: 14px;
-  }
+  .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
+  @media (max-width: 640px) { .option-grid { grid-template-columns: 1fr; } }
 
-  /* STATUS BADGE */
+  .option-card {
+    border: 2px solid var(--border); border-radius: 12px;
+    overflow: hidden; transition: border-color 0.15s;
+  }
+  .option-card--apc { border-color: var(--apc-dim); }
+  .option-card--eco { border-color: var(--eco-dim); }
+
+  .option-card__header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border-bottom: 1px solid var(--border);
+  }
+  .option-tag {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+    padding: 3px 10px; border-radius: 5px; white-space: nowrap;
+  }
+  .option-tag--apc { background: var(--apc-dim); color: var(--apc); }
+  .option-tag--eco { background: var(--eco-dim); color: var(--eco); }
+
+  .option-card__name { font-size: 13px; font-weight: 600; flex: 1; }
+  .option-card__price { font-family: var(--font-mono); font-size: 13px; font-weight: 600; }
+  .option-tag--apc + .option-card__name ~ .option-card__price { color: var(--apc); }
+  .option-tag--eco + .option-card__name ~ .option-card__price { color: var(--eco); }
+
+  .option-card__body { padding: 14px 16px; font-size: 12px; }
+
+  .spec-row { display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start; }
+  .spec-key { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); min-width: 70px; padding-top: 1px; }
+  .spec-val { flex: 1; font-size: 12px; }
+  .spec-val strong { font-weight: 600; }
+
+  .runtime-mini { font-family: var(--font-mono); font-size: 18px; font-weight: 600; margin-top: 10px; }
+  .runtime-mini small { font-size: 11px; font-weight: 400; color: var(--text-dim); display: block; }
+
+  /* BADGE */
   .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 6px;
-    white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+    padding: 3px 10px; border-radius: 6px; white-space: nowrap;
   }
   .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
   .badge--green { background: var(--green-dim); color: var(--green); }
   .badge--amber { background: var(--amber-dim); color: var(--amber); }
   .badge--teal { background: var(--teal-dim); color: var(--teal); }
+  .badge--apc { background: var(--apc-dim); color: var(--apc); }
+  .badge--eco { background: var(--eco-dim); color: var(--eco); }
 
-  /* NOTES */
-  .notes {
-    font-size: 12px;
-    color: var(--text-dim);
-    line-height: 1.7;
-    margin-top: 12px;
-    padding: 12px 16px;
-    background: var(--surface2);
-    border-radius: 8px;
-    border-left: 3px solid var(--teal);
+  /* SUMMARY TABLE */
+  .summary-section { margin-top: 32px; }
+  .summary-section h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .summary-grid { grid-template-columns: 1fr; } }
+
+  .summary-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   }
-  .notes strong { color: var(--text); }
+  .summary-card__header {
+    padding: 14px 16px; border-bottom: 1px solid var(--border);
+    font-weight: 600; font-size: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .summary-card__body { padding: 0; }
+
+  .sum-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .sum-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .sum-table tbody tr:last-child td { border-bottom: none; }
+  .sum-table .label { color: var(--text-dim); font-family: var(--font-mono); font-size: 10px; white-space: nowrap; }
+  .sum-table .val { font-weight: 500; }
+  .sum-table tfoot td {
+    border-top: 2px solid var(--border-bright); border-bottom: none;
+    background: var(--surface2); font-family: var(--font-mono);
+    font-weight: 700; font-size: 13px; padding: 12px 14px;
+  }
+  .price-total { color: var(--green); }
+  .price-apc { color: var(--apc); }
+  .price-eco { color: var(--eco); }
 
   @media (max-width: 600px) {
     body { padding: 20px 14px; }
-    .ups-card__header { flex-wrap: wrap; gap: 8px; }
-    .runtime-grid { grid-template-columns: 1fr 1fr; }
+    .ups-card__header { gap: 8px; }
   }
 </style>
 </head>
@@ -316,10 +272,10 @@
   <!-- HEADER -->
   <div class="page-header animate" style="--i:0">
     <h1>Rekomendasi UPS — Zain's Setup</h1>
-    <p class="meta">2 unit · Final recommendation · Maret 2026</p>
+    <p class="meta">3 units · 2 opsi untuk Lantai 2 · Maret 2026</p>
   </div>
 
-  <!-- ============ FLOOR 1 ============ -->
+  <!-- ============ FLOOR 1 — FIXED ============ -->
   <div class="floor-section animate" style="--i:1">
     <div class="floor-label">
       <span class="dot" style="background:var(--ups1)"></span>
@@ -329,38 +285,29 @@
     <div class="ups-card">
       <div class="ups-card__header">
         <span class="ups-badge ups-badge--1">UPS 1</span>
-        <div class="ups-card__title">APC Back-UPS BX2200MI-MS</div>
+        <div class="ups-card__title">APC Back-UPS BX2200MI-MS · 2200VA / 1200W</div>
         <div class="ups-card__price">Rp 3.104.100</div>
       </div>
       <div class="ups-card__body">
-
         <div class="section-divider">Devices</div>
         <div style="overflow-x:auto">
-        <table class="devices-table">
-          <thead>
-            <tr>
-              <th>Device</th>
-              <th class="num">Typical (W)</th>
-              <th class="num">Max (W)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Xiaomi TV A Pro 65"</td><td class="num">120</td><td class="num">175</td></tr>
-            <tr><td>PS5 Pro</td><td class="num">200</td><td class="num">240</td></tr>
-            <tr><td>Apple TV</td><td class="num">4</td><td class="num">6</td></tr>
-            <tr><td>Nintendo Switch dock</td><td class="num">15</td><td class="num">18</td></tr>
-            <tr><td>ASUS RT-AX53U router</td><td class="num">10</td><td class="num">18</td></tr>
-          </tbody>
-          <tfoot>
-            <tr><td>Total</td><td class="num">349 W</td><td class="num">457 W</td></tr>
-          </tfoot>
-        </table>
+          <table class="devices-table">
+            <thead><tr><th>Device</th><th class="num">Typical (W)</th><th class="num">Max (W)</th></tr></thead>
+            <tbody>
+              <tr><td>Xiaomi TV A Pro 65"</td><td class="num">120</td><td class="num">175</td></tr>
+              <tr><td>PS5 Pro</td><td class="num">200</td><td class="num">240</td></tr>
+              <tr><td>Apple TV</td><td class="num">4</td><td class="num">6</td></tr>
+              <tr><td>Nintendo Switch dock</td><td class="num">15</td><td class="num">18</td></tr>
+              <tr><td>ASUS RT-AX53U router</td><td class="num">10</td><td class="num">18</td></tr>
+            </tbody>
+            <tfoot><tr><td>Total</td><td class="num">349 W</td><td class="num">457 W</td></tr></tfoot>
+          </table>
         </div>
 
         <div class="section-divider">Runtime Estimate</div>
         <div class="runtime-grid">
           <div class="runtime-card">
-            <div class="runtime-card__scenario">Full gaming</div>
+            <div class="runtime-card__scenario">Full gaming (PS5 + TV)</div>
             <div class="runtime-card__load">~450W</div>
             <div class="runtime-card__time runtime-card__time--ok">~25 min</div>
           </div>
@@ -376,130 +323,164 @@
           </div>
         </div>
 
-        <p class="notes" style="margin-top:16px">
-          <strong>Tujuan:</strong> Graceful shutdown PS5 + TV saat PLN mati. 25 menit lebih dari cukup.
-          Battery: 216 Wh · Garansi Resmi APC 2 tahun · Battery life 1–2 tahun.
-          Tersedia di <strong>Shopee APC Official Store</strong>.
-        </p>
+        <div class="notes notes--teal">
+          <strong>Tujuan:</strong> Graceful shutdown PS5 + TV · Battery: 216 Wh ·
+          Garansi Resmi APC 2 tahun · Tersedia di <strong>Shopee APC Official Store</strong>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ============ FLOOR 2 ============ -->
+  <!-- ============ FLOOR 2 — TWO OPTIONS ============ -->
   <div class="floor-section animate" style="--i:2">
     <div class="floor-label">
-      <span class="dot" style="background:var(--ups23)"></span>
-      Lantai 2 — Mac mini &amp; Starlink
+      <span class="dot" style="background:var(--apc)"></span>
+      Lantai 2 — Mac mini &amp; Starlink · 2 Opsi
     </div>
 
     <div class="ups-card">
       <div class="ups-card__header">
         <span class="ups-badge ups-badge--23">UPS 2 + 3</span>
-        <div class="ups-card__title">EcoFlow RIVER 2 Pro 768Wh</div>
-        <div class="ups-card__price">~Rp 7.500.000</div>
+        <div class="ups-card__title">Pilih salah satu opsi di bawah</div>
       </div>
       <div class="ups-card__body">
 
-        <div class="section-divider">Devices</div>
+        <div class="section-divider">Devices (sama untuk kedua opsi)</div>
         <div style="overflow-x:auto">
-        <table class="devices-table">
-          <thead>
-            <tr>
-              <th>Device</th>
-              <th class="num">Typical (W)</th>
-              <th class="num">Max (W)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Mac mini M2 Pro <small>(server/headless mode)</small></td><td class="num">25</td><td class="num">185</td></tr>
-            <tr><td>Starlink Standard</td><td class="num">65</td><td class="num">100</td></tr>
-          </tbody>
-          <tfoot>
-            <tr><td>Total (server mode)</td><td class="num">~90 W</td><td class="num">285 W</td></tr>
-          </tfoot>
-        </table>
+          <table class="devices-table">
+            <thead><tr><th>Device</th><th class="num">Typical (W)</th><th class="num">Max (W)</th></tr></thead>
+            <tbody>
+              <tr><td>Mac mini M2 Pro <small>server/headless mode — jalanin OpenClaw</small></td><td class="num">25</td><td class="num">185</td></tr>
+              <tr><td>Starlink Standard</td><td class="num">65</td><td class="num">100</td></tr>
+            </tbody>
+            <tfoot><tr><td>Total (server mode)</td><td class="num">~90 W</td><td class="num">285 W</td></tr></tfoot>
+          </table>
         </div>
 
-        <div class="section-divider">Runtime Estimate</div>
-        <div class="runtime-grid">
-          <div class="runtime-card">
-            <div class="runtime-card__scenario">Mac mini + Starlink</div>
-            <div class="runtime-card__load">~90W (server mode)</div>
-            <div class="runtime-card__time runtime-card__time--great">~7.7 jam</div>
-          </div>
-          <div class="runtime-card">
-            <div class="runtime-card__scenario">Starlink saja</div>
-            <div class="runtime-card__load">~65W</div>
-            <div class="runtime-card__time runtime-card__time--great">~10 jam</div>
-          </div>
-          <div class="runtime-card">
-            <div class="runtime-card__scenario">Mac mini saja</div>
-            <div class="runtime-card__load">~25W</div>
-            <div class="runtime-card__time runtime-card__time--great">~27 jam</div>
-          </div>
-        </div>
+        <div class="section-divider">Pilih Opsi</div>
+        <div class="option-grid">
 
-        <p class="notes" style="margin-top:16px">
-          <strong>Tujuan:</strong> Keep OpenClaw + internet hidup saat PLN mati. Target 2–4 jam → tercapai jauh (~7.7 jam).
-          Switchover &lt;30ms (aman untuk Mac mini). Garansi <strong>5 tahun</strong> termasuk baterai.
-          Tempatkan di titik strategis antara ruang Mac mini &amp; Starlink — pakai kabel ekstensi bila perlu.
-          Tersedia di <strong>Tokopedia EcoFlow ID</strong>.
-        </p>
+          <!-- OPTION A: APC -->
+          <div class="option-card option-card--apc">
+            <div class="option-card__header">
+              <span class="option-tag option-tag--apc">Opsi A — APC</span>
+              <div class="option-card__name">BVX 1200VA (dari bundle × 2)</div>
+              <div class="option-card__price" style="color:var(--apc)">Rp 1.619.100</div>
+            </div>
+            <div class="option-card__body">
+              <div class="spec-row"><span class="spec-key">Kapasitas</span><span class="spec-val">108 Wh (12V × 9Ah)</span></div>
+              <div class="spec-row"><span class="spec-key">Max load</span><span class="spec-val">650W / 1200VA</span></div>
+              <div class="spec-row"><span class="spec-key">Garansi</span><span class="spec-val">2 tahun Resmi APC</span></div>
+              <div class="spec-row"><span class="spec-key">Baterai</span><span class="spec-val">3–5 tahun</span></div>
+              <div class="spec-row"><span class="spec-key">Toko</span><span class="spec-val">Shopee APC Official (bundle 2 unit)</span></div>
+              <div class="runtime-mini runtime-card__time--ok">~60 menit
+                <small>@ 90W (Mac mini + Starlink)</small>
+              </div>
+              <div class="notes notes--apc" style="margin-top:10px">
+                <strong>Cocok jika:</strong> 1 jam sudah cukup, mau serba APC, harga paling murah. Beli bundle → 1 unit untuk UPS 1 (Starlink), 1 unit spare/atau bisa dipakai juga untuk Starlink saja.
+              </div>
+            </div>
+          </div>
+
+          <!-- OPTION B: EcoFlow RIVER 2 -->
+          <div class="option-card option-card--eco">
+            <div class="option-card__header">
+              <span class="option-tag option-tag--eco">Opsi B — EcoFlow</span>
+              <div class="option-card__name">RIVER 2 256Wh / 300W</div>
+              <div class="option-card__price" style="color:var(--eco)">~Rp 3.500.000</div>
+            </div>
+            <div class="option-card__body">
+              <div class="spec-row"><span class="spec-key">Kapasitas</span><span class="spec-val"><strong>256 Wh</strong> — 2.4× lebih besar</span></div>
+              <div class="spec-row"><span class="spec-key">Max load</span><span class="spec-val">300W (surge 600W)</span></div>
+              <div class="spec-row"><span class="spec-key">Garansi</span><span class="spec-val"><strong>5 tahun</strong> termasuk baterai</span></div>
+              <div class="spec-row"><span class="spec-key">Switchover</span><span class="spec-val">&lt;30ms (UPS Mode di app)</span></div>
+              <div class="spec-row"><span class="spec-key">Toko</span><span class="spec-val">Tokopedia EcoFlow ID</span></div>
+              <div class="runtime-mini runtime-card__time--great">~2.5 jam
+                <small>@ 90W (Mac mini + Starlink)</small>
+              </div>
+              <div class="notes notes--eco" style="margin-top:10px">
+                <strong>Cocok jika:</strong> Mau lebih dari 1 jam backup, garansi 5 tahun lebih tenang. Harga ~Rp 1.9 juta lebih mahal dari APC, tapi runtime 2.5× lebih lama.
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ============ SUMMARY ============ -->
-  <div class="summary-wrap animate" style="--i:3">
-    <div class="summary-header">Shopping List Final</div>
-    <div style="overflow-x:auto">
-    <table class="summary-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Item</th>
-          <th>Lokasi</th>
-          <th>Runtime</th>
-          <th>Garansi</th>
-          <th>Harga</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="badge badge--teal">UPS 1</span></td>
-          <td>APC BX2200MI-MS 2200VA/1200W<br><small>Floor 1 — TV, PS5, router</small></td>
-          <td>Shopee APC Official</td>
-          <td>~25 min @ 450W</td>
-          <td>2 tahun</td>
-          <td class="price-col">Rp 3.104.100</td>
-        </tr>
-        <tr>
-          <td><span class="badge badge--green">UPS 2+3</span></td>
-          <td>EcoFlow RIVER 2 Pro 768Wh/800W<br><small>Floor 2 — Mac mini + Starlink</small></td>
-          <td>Tokopedia EcoFlow ID</td>
-          <td>~7.7 jam @ 90W</td>
-          <td>5 tahun ✓ baterai</td>
-          <td class="price-col">~Rp 7.500.000</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="5">Total estimasi</td>
-          <td class="price-col total-price">~Rp 10.600.000</td>
-        </tr>
-      </tfoot>
-    </table>
-    </div>
-  </div>
+  <div class="summary-section animate" style="--i:3">
+    <h2>Shopping List — Perbandingan Total</h2>
+    <div class="summary-grid">
 
-  <!-- TIPS -->
-  <div class="animate" style="--i:4">
-    <div class="notes">
-      <strong>Tips Implementasi:</strong><br>
-      · Aktifkan <strong>UPS Mode</strong> di EcoFlow app agar switchover otomatis &lt;30ms<br>
-      · Gunakan kabel ekstensi berkualitas (minimal 1.5mm²) untuk koneksi Mac mini ↔ EcoFlow<br>
-      · Jangan letakkan EcoFlow di ruangan tertutup tanpa ventilasi — fan aktif saat charging<br>
-      · Cek harga EcoFlow secara berkala — harga sering naik/turun di Tokopedia
+      <!-- ALL APC -->
+      <div class="summary-card">
+        <div class="summary-card__header">
+          <span class="badge badge--apc">All APC</span>
+          Serba APC
+        </div>
+        <div class="summary-card__body">
+          <table class="sum-table">
+            <tbody>
+              <tr>
+                <td class="label">UPS 1</td>
+                <td class="val">APC BX2200MI-MS<br><small style="color:var(--text-dim)">Shopee APC Official</small></td>
+                <td class="val price-apc" style="text-align:right;white-space:nowrap">Rp 3.104.100</td>
+              </tr>
+              <tr>
+                <td class="label">UPS 2+3</td>
+                <td class="val">APC BVX 1200VA (1 dari bundle)<br><small style="color:var(--text-dim)">Runtime ~60 menit · Shopee APC Official</small></td>
+                <td class="val price-apc" style="text-align:right;white-space:nowrap">Rp 1.619.100</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="2">Total</td>
+                <td class="price-total" style="text-align:right">Rp 4.723.200</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- APC + EcoFlow -->
+      <div class="summary-card">
+        <div class="summary-card__header">
+          <span class="badge badge--eco">APC + EcoFlow</span>
+          Kombinasi Hemat
+        </div>
+        <div class="summary-card__body">
+          <table class="sum-table">
+            <tbody>
+              <tr>
+                <td class="label">UPS 1</td>
+                <td class="val">APC BX2200MI-MS<br><small style="color:var(--text-dim)">Shopee APC Official</small></td>
+                <td class="val price-apc" style="text-align:right;white-space:nowrap">Rp 3.104.100</td>
+              </tr>
+              <tr>
+                <td class="label">UPS 2+3</td>
+                <td class="val">EcoFlow RIVER 2 256Wh<br><small style="color:var(--text-dim)">Runtime ~2.5 jam · Tokopedia EcoFlow ID</small></td>
+                <td class="val price-eco" style="text-align:right;white-space:nowrap">~Rp 3.500.000</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="2">Total</td>
+                <td class="price-total" style="text-align:right">~Rp 6.604.100</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="notes notes--teal" style="margin-top:16px">
+      <strong>Keputusan utama:</strong> UPS 1 (APC BX2200MI) sudah fixed untuk kedua opsi.
+      Pilihannya cuma di UPS 2+3: <strong>APC (~60 menit, Rp 1.6 juta)</strong> vs
+      <strong>EcoFlow RIVER 2 (~2.5 jam, Rp 3.5 juta)</strong>.
+      Selisih Rp 1.9 juta untuk 1.5 jam runtime tambahan.
     </div>
   </div>
 
