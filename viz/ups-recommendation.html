@@ -260,6 +260,21 @@
   .price-apc { color: var(--apc); }
   .price-eco { color: var(--eco); }
 
+  /* BUY LINKS */
+  .buy-link {
+    display: inline-block; margin-top: 10px;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    padding: 7px 14px; border-radius: 7px; text-decoration: none;
+    background: var(--teal-dim); color: var(--teal);
+    border: 1px solid rgba(3,105,161,0.2);
+    transition: background 0.15s, transform 0.1s;
+  }
+  .buy-link:hover { background: var(--teal); color: #fff; transform: translateY(-1px); }
+  .buy-link--apc { background: var(--apc-dim); color: var(--apc); border-color: rgba(194,65,12,0.2); }
+  .buy-link--apc:hover { background: var(--apc); color: #fff; }
+  .buy-link--eco { background: var(--eco-dim); color: var(--eco); border-color: rgba(5,150,105,0.2); }
+  .buy-link--eco:hover { background: var(--eco); color: #fff; }
+
   @media (max-width: 600px) {
     body { padding: 20px 14px; }
     .ups-card__header { gap: 8px; }
@@ -325,7 +340,8 @@
 
         <div class="notes notes--teal">
           <strong>Tujuan:</strong> Graceful shutdown PS5 + TV · Battery: 216 Wh ·
-          Garansi Resmi APC 2 tahun · Tersedia di <strong>Shopee APC Official Store</strong>
+          Garansi Resmi APC 2 tahun ·
+          <a href="https://shopee.co.id/APC-Back-UPS-BX-2200VA-230V-AVR-BX2200MI-MS-i.300472189.6672004664" target="_blank" class="buy-link">🛒 Beli di Shopee APC Official</a>
         </div>
       </div>
     </div>
@@ -377,8 +393,9 @@
                 <small>@ 90W (Mac mini + Starlink)</small>
               </div>
               <div class="notes notes--apc" style="margin-top:10px">
-                <strong>Cocok jika:</strong> 1 jam sudah cukup, mau serba APC, harga paling murah. Beli bundle → 1 unit untuk UPS 1 (Starlink), 1 unit spare/atau bisa dipakai juga untuk Starlink saja.
+                <strong>Cocok jika:</strong> 1 jam sudah cukup, mau serba APC, harga paling murah. Beli bundle → 1 unit untuk UPS 2+3 (Starlink), 1 unit untuk UPS 1 (Floor 1).
               </div>
+              <a href="https://shopee.co.id/product/300472189/23955866149" target="_blank" class="buy-link buy-link--apc">🛒 Beli Bundle BVX 1200VA × 2 di Shopee</a>
             </div>
           </div>
 
@@ -401,6 +418,7 @@
               <div class="notes notes--eco" style="margin-top:10px">
                 <strong>Cocok jika:</strong> Mau lebih dari 1 jam backup, garansi 5 tahun lebih tenang. Harga ~Rp 1.9 juta lebih mahal dari APC, tapi runtime 2.5× lebih lama.
               </div>
+              <a href="https://www.tokopedia.com/ecoflow-id/ecoflow-river-2-pro-768wh-800w-portable-power-station-camping-rv-genset-listrik-portabel-1733131200683934955" target="_blank" class="buy-link buy-link--eco">🛒 Beli EcoFlow RIVER 2 di Tokopedia</a>
             </div>
           </div>
 
@@ -425,19 +443,19 @@
             <tbody>
               <tr>
                 <td class="label">UPS 1</td>
-                <td class="val">APC BX2200MI-MS<br><small style="color:var(--text-dim)">Shopee APC Official</small></td>
+                <td class="val">APC BX2200MI-MS<br><small><a href="https://shopee.co.id/APC-Back-UPS-BX-2200VA-230V-AVR-BX2200MI-MS-i.300472189.6672004664" target="_blank" style="color:var(--apc)">🛒 Shopee APC Official</a></small></td>
                 <td class="val price-apc" style="text-align:right;white-space:nowrap">Rp 3.104.100</td>
               </tr>
               <tr>
                 <td class="label">UPS 2+3</td>
-                <td class="val">APC BVX 1200VA (1 dari bundle)<br><small style="color:var(--text-dim)">Runtime ~60 menit · Shopee APC Official</small></td>
-                <td class="val price-apc" style="text-align:right;white-space:nowrap">Rp 1.619.100</td>
+                <td class="val">APC BVX 1200VA × 2 bundle<br><small>Runtime ~60 menit · <a href="https://shopee.co.id/product/300472189/23955866149" target="_blank" style="color:var(--apc)">🛒 Shopee APC Official</a></small></td>
+                <td class="val price-apc" style="text-align:right;white-space:nowrap">Rp 3.238.200</td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
                 <td colspan="2">Total</td>
-                <td class="price-total" style="text-align:right">Rp 4.723.200</td>
+                <td class="price-total" style="text-align:right">Rp 6.342.300</td>
               </tr>
             </tfoot>
           </table>
@@ -455,12 +473,12 @@
             <tbody>
               <tr>
                 <td class="label">UPS 1</td>
-                <td class="val">APC BX2200MI-MS<br><small style="color:var(--text-dim)">Shopee APC Official</small></td>
+                <td class="val">APC BX2200MI-MS<br><small><a href="https://shopee.co.id/APC-Back-UPS-BX-2200VA-230V-AVR-BX2200MI-MS-i.300472189.6672004664" target="_blank" style="color:var(--apc)">🛒 Shopee APC Official</a></small></td>
                 <td class="val price-apc" style="text-align:right;white-space:nowrap">Rp 3.104.100</td>
               </tr>
               <tr>
                 <td class="label">UPS 2+3</td>
-                <td class="val">EcoFlow RIVER 2 256Wh<br><small style="color:var(--text-dim)">Runtime ~2.5 jam · Tokopedia EcoFlow ID</small></td>
+                <td class="val">EcoFlow RIVER 2 256Wh<br><small>Runtime ~2.5 jam · <a href="https://www.tokopedia.com/search?st=product&q=ecoflow+river+2+256wh&sort=5" target="_blank" style="color:var(--eco)">🛒 Tokopedia EcoFlow ID</a></small></td>
                 <td class="val price-eco" style="text-align:right;white-space:nowrap">~Rp 3.500.000</td>
               </tr>
             </tbody>
