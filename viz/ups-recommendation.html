@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rekomendasi UPS — Zain's Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8edf2;
+    --surface-elevated: #ffffff;
+    --border: rgba(0,0,0,0.08);
+    --border-bright: rgba(0,0,0,0.15);
+    --text: #1a2332;
+    --text-dim: #5a6878;
+
+    --teal: #0369a1;
+    --teal-dim: rgba(3, 105, 161, 0.08);
+    --amber: #d97706;
+    --amber-dim: rgba(217, 119, 6, 0.08);
+    --green: #16a34a;
+    --green-dim: rgba(22, 163, 74, 0.08);
+    --red: #dc2626;
+    --red-dim: rgba(220, 38, 38, 0.08);
+    --slate: #475569;
+    --slate-dim: rgba(71, 85, 105, 0.08);
+
+    --ups1: #0369a1;
+    --ups1-dim: rgba(3, 105, 161, 0.10);
+    --ups23: #059669;
+    --ups23-dim: rgba(5, 150, 105, 0.10);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d1520;
+      --surface: #152030;
+      --surface2: #1c2a3a;
+      --surface-elevated: #1f3045;
+      --border: rgba(255,255,255,0.07);
+      --border-bright: rgba(255,255,255,0.14);
+      --text: #dceeff;
+      --text-dim: #7a9ab8;
+      --teal: #38bdf8;
+      --teal-dim: rgba(56, 189, 248, 0.1);
+      --amber: #fbbf24;
+      --amber-dim: rgba(251, 191, 36, 0.1);
+      --green: #4ade80;
+      --green-dim: rgba(74, 222, 128, 0.1);
+      --red: #f87171;
+      --red-dim: rgba(248, 113, 113, 0.1);
+      --ups1: #38bdf8;
+      --ups1-dim: rgba(56,189,248,0.1);
+      --ups23: #34d399;
+      --ups23-dim: rgba(52,211,153,0.1);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 20% 10%, var(--teal-dim) 0%, transparent 40%),
+      radial-gradient(ellipse at 80% 90%, var(--ups23-dim) 0%, transparent 40%);
+    color: var(--text);
+    font-family: var(--font-body);
+    padding: 40px 20px;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate { animation: fadeUp 0.4s ease-out both; animation-delay: calc(var(--i,0) * 0.06s); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; }
+  }
+
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* HEADER */
+  .page-header { margin-bottom: 36px; }
+  .page-header h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .page-header .meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
+
+  /* FLOOR SECTION */
+  .floor-section { margin-bottom: 32px; }
+  .floor-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    padding: 4px 12px 4px 4px;
+    border-radius: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+  .floor-label .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+
+  /* UPS CARD */
+  .ups-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  .ups-card__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ups-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .ups-badge--1 { background: var(--ups1-dim); color: var(--ups1); }
+  .ups-badge--23 { background: var(--ups23-dim); color: var(--ups23); }
+
+  .ups-card__title { font-size: 16px; font-weight: 600; flex: 1; }
+  .ups-card__price {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--teal);
+  }
+
+  .ups-card__body { padding: 18px 20px; }
+
+  /* DEVICES TABLE */
+  .devices-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
+  .devices-table th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border-bright);
+  }
+  .devices-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .devices-table tbody tr:last-child td { border-bottom: none; }
+  .devices-table tbody tr:nth-child(even) { background: var(--surface2); }
+  .devices-table .num { font-family: var(--font-mono); font-size: 12px; text-align: right; tabular-nums: always; }
+  .devices-table tfoot td {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    border-top: 2px solid var(--border-bright);
+    border-bottom: none;
+    padding: 10px 10px;
+  }
+
+  /* RUNTIME STATS */
+  .runtime-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .runtime-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .runtime-card__scenario { font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
+  .runtime-card__load { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); margin-bottom: 6px; }
+  .runtime-card__time { font-size: 20px; font-weight: 600; font-family: var(--font-mono); }
+  .runtime-card__time--great { color: var(--green); }
+  .runtime-card__time--ok { color: var(--amber); }
+  .runtime-card__time--warn { color: var(--red); }
+
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+  }
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-bright);
+  }
+
+  /* SUMMARY TABLE */
+  .summary-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .summary-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .summary-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .summary-table th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border-bright);
+  }
+  .summary-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .summary-table tbody tr:last-child td { border-bottom: none; }
+  .summary-table tfoot td {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    border-top: 2px solid var(--border-bright);
+    background: var(--surface2);
+    padding: 12px 16px;
+    border-bottom: none;
+  }
+  .summary-table .price-col {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--teal);
+    white-space: nowrap;
+  }
+  .summary-table .total-price {
+    color: var(--green);
+    font-size: 14px;
+  }
+
+  /* STATUS BADGE */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .badge--green { background: var(--green-dim); color: var(--green); }
+  .badge--amber { background: var(--amber-dim); color: var(--amber); }
+  .badge--teal { background: var(--teal-dim); color: var(--teal); }
+
+  /* NOTES */
+  .notes {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border-radius: 8px;
+    border-left: 3px solid var(--teal);
+  }
+  .notes strong { color: var(--text); }
+
+  @media (max-width: 600px) {
+    body { padding: 20px 14px; }
+    .ups-card__header { flex-wrap: wrap; gap: 8px; }
+    .runtime-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="page-header animate" style="--i:0">
+    <h1>Rekomendasi UPS — Zain's Setup</h1>
+    <p class="meta">2 unit · Final recommendation · Maret 2026</p>
+  </div>
+
+  <!-- ============ FLOOR 1 ============ -->
+  <div class="floor-section animate" style="--i:1">
+    <div class="floor-label">
+      <span class="dot" style="background:var(--ups1)"></span>
+      Lantai 1 — TV &amp; Gaming
+    </div>
+
+    <div class="ups-card">
+      <div class="ups-card__header">
+        <span class="ups-badge ups-badge--1">UPS 1</span>
+        <div class="ups-card__title">APC Back-UPS BX2200MI-MS</div>
+        <div class="ups-card__price">Rp 3.104.100</div>
+      </div>
+      <div class="ups-card__body">
+
+        <div class="section-divider">Devices</div>
+        <div style="overflow-x:auto">
+        <table class="devices-table">
+          <thead>
+            <tr>
+              <th>Device</th>
+              <th class="num">Typical (W)</th>
+              <th class="num">Max (W)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Xiaomi TV A Pro 65"</td><td class="num">120</td><td class="num">175</td></tr>
+            <tr><td>PS5 Pro</td><td class="num">200</td><td class="num">240</td></tr>
+            <tr><td>Apple TV</td><td class="num">4</td><td class="num">6</td></tr>
+            <tr><td>Nintendo Switch dock</td><td class="num">15</td><td class="num">18</td></tr>
+            <tr><td>ASUS RT-AX53U router</td><td class="num">10</td><td class="num">18</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td>Total</td><td class="num">349 W</td><td class="num">457 W</td></tr>
+          </tfoot>
+        </table>
+        </div>
+
+        <div class="section-divider">Runtime Estimate</div>
+        <div class="runtime-grid">
+          <div class="runtime-card">
+            <div class="runtime-card__scenario">Full gaming</div>
+            <div class="runtime-card__load">~450W</div>
+            <div class="runtime-card__time runtime-card__time--ok">~25 min</div>
+          </div>
+          <div class="runtime-card">
+            <div class="runtime-card__scenario">TV only (PS5 off)</div>
+            <div class="runtime-card__load">~175W</div>
+            <div class="runtime-card__time runtime-card__time--great">~55 min</div>
+          </div>
+          <div class="runtime-card">
+            <div class="runtime-card__scenario">Standby</div>
+            <div class="runtime-card__load">~50W</div>
+            <div class="runtime-card__time runtime-card__time--great">3+ jam</div>
+          </div>
+        </div>
+
+        <p class="notes" style="margin-top:16px">
+          <strong>Tujuan:</strong> Graceful shutdown PS5 + TV saat PLN mati. 25 menit lebih dari cukup.
+          Battery: 216 Wh · Garansi Resmi APC 2 tahun · Battery life 1–2 tahun.
+          Tersedia di <strong>Shopee APC Official Store</strong>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FLOOR 2 ============ -->
+  <div class="floor-section animate" style="--i:2">
+    <div class="floor-label">
+      <span class="dot" style="background:var(--ups23)"></span>
+      Lantai 2 — Mac mini &amp; Starlink
+    </div>
+
+    <div class="ups-card">
+      <div class="ups-card__header">
+        <span class="ups-badge ups-badge--23">UPS 2 + 3</span>
+        <div class="ups-card__title">EcoFlow RIVER 2 Pro 768Wh</div>
+        <div class="ups-card__price">~Rp 7.500.000</div>
+      </div>
+      <div class="ups-card__body">
+
+        <div class="section-divider">Devices</div>
+        <div style="overflow-x:auto">
+        <table class="devices-table">
+          <thead>
+            <tr>
+              <th>Device</th>
+              <th class="num">Typical (W)</th>
+              <th class="num">Max (W)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Mac mini M2 Pro <small>(server/headless mode)</small></td><td class="num">25</td><td class="num">185</td></tr>
+            <tr><td>Starlink Standard</td><td class="num">65</td><td class="num">100</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td>Total (server mode)</td><td class="num">~90 W</td><td class="num">285 W</td></tr>
+          </tfoot>
+        </table>
+        </div>
+
+        <div class="section-divider">Runtime Estimate</div>
+        <div class="runtime-grid">
+          <div class="runtime-card">
+            <div class="runtime-card__scenario">Mac mini + Starlink</div>
+            <div class="runtime-card__load">~90W (server mode)</div>
+            <div class="runtime-card__time runtime-card__time--great">~7.7 jam</div>
+          </div>
+          <div class="runtime-card">
+            <div class="runtime-card__scenario">Starlink saja</div>
+            <div class="runtime-card__load">~65W</div>
+            <div class="runtime-card__time runtime-card__time--great">~10 jam</div>
+          </div>
+          <div class="runtime-card">
+            <div class="runtime-card__scenario">Mac mini saja</div>
+            <div class="runtime-card__load">~25W</div>
+            <div class="runtime-card__time runtime-card__time--great">~27 jam</div>
+          </div>
+        </div>
+
+        <p class="notes" style="margin-top:16px">
+          <strong>Tujuan:</strong> Keep OpenClaw + internet hidup saat PLN mati. Target 2–4 jam → tercapai jauh (~7.7 jam).
+          Switchover &lt;30ms (aman untuk Mac mini). Garansi <strong>5 tahun</strong> termasuk baterai.
+          Tempatkan di titik strategis antara ruang Mac mini &amp; Starlink — pakai kabel ekstensi bila perlu.
+          Tersedia di <strong>Tokopedia EcoFlow ID</strong>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SUMMARY ============ -->
+  <div class="summary-wrap animate" style="--i:3">
+    <div class="summary-header">Shopping List Final</div>
+    <div style="overflow-x:auto">
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Item</th>
+          <th>Lokasi</th>
+          <th>Runtime</th>
+          <th>Garansi</th>
+          <th>Harga</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge--teal">UPS 1</span></td>
+          <td>APC BX2200MI-MS 2200VA/1200W<br><small>Floor 1 — TV, PS5, router</small></td>
+          <td>Shopee APC Official</td>
+          <td>~25 min @ 450W</td>
+          <td>2 tahun</td>
+          <td class="price-col">Rp 3.104.100</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge--green">UPS 2+3</span></td>
+          <td>EcoFlow RIVER 2 Pro 768Wh/800W<br><small>Floor 2 — Mac mini + Starlink</small></td>
+          <td>Tokopedia EcoFlow ID</td>
+          <td>~7.7 jam @ 90W</td>
+          <td>5 tahun ✓ baterai</td>
+          <td class="price-col">~Rp 7.500.000</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5">Total estimasi</td>
+          <td class="price-col total-price">~Rp 10.600.000</td>
+        </tr>
+      </tfoot>
+    </table>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="animate" style="--i:4">
+    <div class="notes">
+      <strong>Tips Implementasi:</strong><br>
+      · Aktifkan <strong>UPS Mode</strong> di EcoFlow app agar switchover otomatis &lt;30ms<br>
+      · Gunakan kabel ekstensi berkualitas (minimal 1.5mm²) untuk koneksi Mac mini ↔ EcoFlow<br>
+      · Jangan letakkan EcoFlow di ruangan tertutup tanpa ventilasi — fan aktif saat charging<br>
+      · Cek harga EcoFlow secara berkala — harga sering naik/turun di Tokopedia
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
