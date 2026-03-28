@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rekomendasi UPS — Zain's Setup</title>
+<title>Rekomendasi UPS — Zain's Setup (Final)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --font-body: 'IBM Plex Sans', system-ui, sans-serif;
@@ -17,7 +17,6 @@
     --teal: #0369a1; --teal-dim: rgba(3,105,161,0.08);
     --amber: #d97706; --amber-dim: rgba(217,119,6,0.08);
     --green: #16a34a; --green-dim: rgba(22,163,74,0.08);
-    --red: #dc2626; --red-dim: rgba(220,38,38,0.08);
     --ups1: #0369a1; --ups1-dim: rgba(3,105,161,0.10);
     --ups2: #7c3aed; --ups2-dim: rgba(124,58,237,0.10);
     --ups3: #059669; --ups3-dim: rgba(5,150,105,0.10);
@@ -30,7 +29,6 @@
       --teal: #38bdf8; --teal-dim: rgba(56,189,248,0.1);
       --amber: #fbbf24; --amber-dim: rgba(251,191,36,0.1);
       --green: #4ade80; --green-dim: rgba(74,222,128,0.1);
-      --red: #f87171; --red-dim: rgba(248,113,113,0.1);
       --ups1: #38bdf8; --ups1-dim: rgba(56,189,248,0.1);
       --ups2: #a78bfa; --ups2-dim: rgba(167,139,250,0.1);
       --ups3: #34d399; --ups3-dim: rgba(52,211,153,0.1);
@@ -47,12 +45,24 @@
   }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   .animate { animation: fadeUp 0.4s ease-out both; animation-delay: calc(var(--i,0) * 0.06s); }
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; } }
   .container { max-width: 960px; margin: 0 auto; }
 
   .page-header { margin-bottom: 36px; }
   .page-header h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
   .page-header .meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
+
+  /* HERO PRICE */
+  .hero-price {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px 28px; margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  }
+  .hero-price__amount { font-family: var(--font-mono); font-size: 32px; font-weight: 700; color: var(--green); }
+  .hero-price__detail { flex: 1; min-width: 200px; }
+  .hero-price__label { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .hero-price__sub { font-size: 12px; color: var(--text-dim); }
 
   .floor-label {
     display: inline-flex; align-items: center; gap: 8px;
@@ -80,7 +90,6 @@
   .ups-badge--2 { background: var(--ups2-dim); color: var(--ups2); }
   .ups-badge--3 { background: var(--ups3-dim); color: var(--ups3); }
   .ups-card__title { font-size: 16px; font-weight: 600; flex: 1; min-width: 180px; }
-  .ups-card__price { font-family: var(--font-mono); font-size: 15px; font-weight: 600; color: var(--teal); }
   .ups-card__body { padding: 18px 20px; }
 
   .section-divider {
@@ -134,13 +143,12 @@
 
   .buy-link {
     display: inline-block; margin-top: 10px;
-    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
-    padding: 7px 14px; border-radius: 7px; text-decoration: none;
-    background: var(--teal-dim); color: var(--teal);
-    border: 1px solid rgba(3,105,161,0.2);
-    transition: background 0.15s, transform 0.1s;
+    font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+    padding: 10px 18px; border-radius: 8px; text-decoration: none;
+    background: var(--green); color: #fff;
+    border: none; transition: background 0.15s, transform 0.1s;
   }
-  .buy-link:hover { background: var(--teal); color: #fff; transform: translateY(-1px); }
+  .buy-link:hover { background: #15803d; transform: translateY(-1px); }
 
   /* SUMMARY */
   .summary-wrap {
@@ -170,6 +178,8 @@
     body { padding: 20px 14px; }
     .ups-card__header { gap: 8px; }
     .runtime-grid { grid-template-columns: 1fr 1fr; }
+    .hero-price { padding: 18px 20px; }
+    .hero-price__amount { font-size: 26px; }
   }
 </style>
 </head>
@@ -178,17 +188,26 @@
 
   <div class="page-header animate" style="--i:0">
     <h1>Rekomendasi UPS — Zain's Setup</h1>
-    <p class="meta">3 unit · All APC · Final — Maret 2026</p>
+    <p class="meta">All APC · 3 unit seragam · Final — Maret 2026</p>
+  </div>
+
+  <!-- HERO PRICE -->
+  <div class="hero-price animate" style="--i:1">
+    <div class="hero-price__amount">Rp 4.857.300</div>
+    <div class="hero-price__detail">
+      <div class="hero-price__label">APC Easy UPS BVX 1200VA 650W × 3 Unit</div>
+      <div class="hero-price__sub">Shopee APC Official Shop · Garansi Resmi 24 bulan · Stok 9 · ⭐ 4.8</div>
+    </div>
+    <a href="https://shopee.co.id/product/300472189/23981366840" target="_blank" class="buy-link">🛒 Beli di Shopee</a>
   </div>
 
   <!-- ============ UPS 1 — FLOOR 1 ============ -->
-  <div class="animate" style="--i:1">
+  <div class="animate" style="--i:2">
     <div class="floor-label"><span class="dot" style="background:var(--ups1)"></span>Lantai 1 — TV &amp; Gaming</div>
     <div class="ups-card">
       <div class="ups-card__header">
         <span class="ups-badge ups-badge--1">UPS 1</span>
-        <div class="ups-card__title">APC Back-UPS BX2200MI-MS · 2200VA / 1200W</div>
-        <div class="ups-card__price">Rp 3.104.100</div>
+        <div class="ups-card__title">APC Easy UPS BVX 1200VA / 650W</div>
       </div>
       <div class="ups-card__body">
         <div class="section-divider">Devices</div>
@@ -210,35 +229,34 @@
           <div class="runtime-card">
             <div class="runtime-card__scenario">Full gaming (PS5 + TV)</div>
             <div class="runtime-card__load">~450W</div>
-            <div class="runtime-card__time runtime-card__time--ok">~25 min</div>
+            <div class="runtime-card__time runtime-card__time--ok">~10–15 min</div>
           </div>
           <div class="runtime-card">
             <div class="runtime-card__scenario">TV only</div>
             <div class="runtime-card__load">~175W</div>
-            <div class="runtime-card__time runtime-card__time--great">~55 min</div>
+            <div class="runtime-card__time runtime-card__time--ok">~30 min</div>
           </div>
           <div class="runtime-card">
             <div class="runtime-card__scenario">Standby</div>
             <div class="runtime-card__load">~50W</div>
-            <div class="runtime-card__time runtime-card__time--great">3+ jam</div>
+            <div class="runtime-card__time runtime-card__time--great">~2 jam</div>
           </div>
         </div>
         <div class="notes notes--teal">
-          <strong>Tujuan:</strong> Graceful shutdown PS5 + TV · Battery: 216 Wh · Garansi Resmi APC 2 tahun<br>
-          <a href="https://shopee.co.id/APC-Back-UPS-BX-2200VA-230V-AVR-BX2200MI-MS-i.300472189.6672004664" target="_blank" class="buy-link">🛒 Beli di Shopee APC Official — Rp 3.104.100</a>
+          <strong>Tujuan:</strong> Graceful shutdown PS5 + TV — save game &amp; matikan. 10–15 menit lebih dari cukup.
+          Elektronik entertainment nggak perlu jalan lama saat mati listrik.
         </div>
       </div>
     </div>
   </div>
 
   <!-- ============ UPS 2 — MAC MINI ============ -->
-  <div class="animate" style="--i:2">
+  <div class="animate" style="--i:3">
     <div class="floor-label"><span class="dot" style="background:var(--ups2)"></span>Lantai 2, Ruang Kerja — Mac mini</div>
     <div class="ups-card">
       <div class="ups-card__header">
         <span class="ups-badge ups-badge--2">UPS 2</span>
         <div class="ups-card__title">APC Easy UPS BVX 1200VA / 650W</div>
-        <div class="ups-card__price">bundle</div>
       </div>
       <div class="ups-card__body">
         <div class="section-divider">Device</div>
@@ -264,21 +282,20 @@
           </div>
         </div>
         <div class="notes notes--purple">
-          <strong>Tujuan:</strong> Keep OpenClaw hidup selama mungkin saat PLN mati · Battery: 108 Wh ·
-          MacBook Pro (M3 Pro) kerja dari baterai sendiri (15–22 jam) — tidak perlu UPS
+          <strong>Tujuan:</strong> Keep OpenClaw hidup selama mungkin saat PLN mati ·
+          MacBook Pro M3 Pro kerja dari baterai sendiri (15–22 jam) — tidak perlu UPS
         </div>
       </div>
     </div>
   </div>
 
   <!-- ============ UPS 3 — STARLINK ============ -->
-  <div class="animate" style="--i:3">
+  <div class="animate" style="--i:4">
     <div class="floor-label"><span class="dot" style="background:var(--ups3)"></span>Lantai 2, Ruang Starlink</div>
     <div class="ups-card">
       <div class="ups-card__header">
         <span class="ups-badge ups-badge--3">UPS 3</span>
         <div class="ups-card__title">APC Easy UPS BVX 1200VA / 650W</div>
-        <div class="ups-card__price">bundle</div>
       </div>
       <div class="ups-card__body">
         <div class="section-divider">Device</div>
@@ -308,20 +325,11 @@
           </div>
         </div>
         <div class="notes notes--green">
-          <strong>Tujuan:</strong> Keep internet hidup saat PLN mati · Battery: 108 Wh ·
-          Actual draw 27W jauh lebih hemat dari spec 65W — cuaca tropis, no snow melting 🌴<br>
+          <strong>Tujuan:</strong> Keep internet hidup saat PLN mati ·
+          Actual draw 27W — cuaca tropis, no snow melting 🌴<br>
           <strong>Skenario PLN mati lama (&gt;3.5 jam):</strong> Starlink mati → MacBook Pro tethering ke HP
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- ============ UPS 2+3 BUY LINK ============ -->
-  <div class="animate" style="--i:4">
-    <div class="notes notes--teal" style="text-align:center; padding: 16px 20px;">
-      <strong>UPS 2 &amp; UPS 3</strong> — beli 1 bundle isi 2 unit, pisah masing-masing<br>
-      <a href="https://shopee.co.id/product/300472189/23955866149" target="_blank" class="buy-link">🛒 Beli Bundle BVX 1200VA × 2 di Shopee APC Official — Rp 3.238.200</a>
-      <br><small style="color:var(--text-dim); margin-top:4px; display:inline-block;">Garansi Resmi APC 2 tahun · Battery life 3–5 tahun</small>
     </div>
   </div>
 
@@ -332,46 +340,50 @@
       <div style="overflow-x:auto">
         <table class="summary-table">
           <thead>
-            <tr><th>#</th><th>Item</th><th>Untuk</th><th>Runtime</th><th style="text-align:right">Harga</th></tr>
+            <tr><th>#</th><th>Item</th><th>Untuk</th><th>Runtime</th></tr>
           </thead>
           <tbody>
             <tr>
               <td><span class="ups-badge ups-badge--1" style="font-size:10px;padding:2px 8px">UPS 1</span></td>
-              <td>APC BX2200MI-MS<br><small style="color:var(--text-dim)"><a href="https://shopee.co.id/APC-Back-UPS-BX-2200VA-230V-AVR-BX2200MI-MS-i.300472189.6672004664" target="_blank" style="color:var(--ups1)">Shopee APC Official</a></small></td>
-              <td>Floor 1 — TV + gaming</td>
-              <td>~25 min</td>
-              <td class="price-col" style="text-align:right">Rp 3.104.100</td>
+              <td>APC BVX 1200VA / 650W</td>
+              <td>Floor 1 — TV + PS5 + router</td>
+              <td>~10–15 min (graceful shutdown)</td>
             </tr>
             <tr>
               <td><span class="ups-badge ups-badge--2" style="font-size:10px;padding:2px 8px">UPS 2</span></td>
-              <td rowspan="2">APC BVX 1200VA × 2 bundle<br><small style="color:var(--text-dim)"><a href="https://shopee.co.id/product/300472189/23955866149" target="_blank" style="color:var(--ups3)">Shopee APC Official</a></small></td>
-              <td>Floor 2 — Mac mini</td>
-              <td>~3.5 jam</td>
-              <td rowspan="2" class="price-col" style="text-align:right; vertical-align:middle">Rp 3.238.200</td>
+              <td>APC BVX 1200VA / 650W</td>
+              <td>Floor 2 — Mac mini (OpenClaw)</td>
+              <td>~3.5 jam (server mode)</td>
             </tr>
             <tr>
               <td><span class="ups-badge ups-badge--3" style="font-size:10px;padding:2px 8px">UPS 3</span></td>
+              <td>APC BVX 1200VA / 650W</td>
               <td>Floor 2 — Starlink</td>
-              <td>~3.5 jam</td>
+              <td>~3.5 jam (actual 27W)</td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="4" style="text-align:right">Total (semua APC, Garansi Resmi)</td>
-              <td class="price-col price-total" style="text-align:right; font-size: 16px;">Rp 6.342.300</td>
+              <td colspan="3" style="text-align:right">
+                Bundle × 3 — Shopee APC Official · Garansi Resmi 24 bulan
+              </td>
+              <td class="price-col price-total" style="font-size:16px;">Rp 4.857.300</td>
             </tr>
           </tfoot>
         </table>
       </div>
     </div>
+    <div style="text-align:center; margin-top: 16px;">
+      <a href="https://shopee.co.id/product/300472189/23981366840" target="_blank" class="buy-link" style="font-size:14px; padding: 12px 24px;">🛒 Beli Bundle BVX 1200VA × 3 — Rp 4.857.300</a>
+    </div>
   </div>
 
   <div class="animate notes notes--teal" style="--i:6; margin-top: 16px;">
-    <strong>Tips Implementasi:</strong><br>
-    · Mac mini + Starlink masing-masing dapat ~3.5 jam — lebih dari target 1 jam ✅<br>
-    · Saat PLN mati: <strong>cabut MacBook dari charger</strong> → MacBook pakai baterai sendiri (15–22 jam)<br>
-    · Starlink actual draw cuma 27W di Jogja (tropis, no snow melting) — jauh dari spec 65W<br>
-    · Semua garansi resmi APC, beli dari Official Store di Shopee Mall
+    <strong>Tips:</strong><br>
+    · Saat PLN mati: <strong>cabut MacBook dari charger</strong> → baterai sendiri 15–22 jam<br>
+    · Mac mini + Starlink masing-masing ~3.5 jam — lebih dari target 1 jam ✅<br>
+    · 3 unit seragam = gampang kalau perlu ganti baterai nanti (semua tipe sama)<br>
+    · Voucher toko tersedia: potongan 10% dan Rp 100RB — klaim sebelum 31 Maret!
   </div>
 
 </div>
