@@ -11,89 +11,49 @@
   :root {
     --font-body: 'IBM Plex Sans', system-ui, sans-serif;
     --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
-
-    --bg: #f0f4f8;
-    --surface: #ffffff;
-    --surface2: #e8edf2;
-    --surface-elevated: #ffffff;
-    --border: rgba(0,0,0,0.08);
-    --border-bright: rgba(0,0,0,0.15);
-    --text: #1a2332;
-    --text-dim: #5a6878;
-
-    --teal: #0369a1;
-    --teal-dim: rgba(3, 105, 161, 0.08);
-    --amber: #d97706;
-    --amber-dim: rgba(217, 119, 6, 0.08);
-    --green: #16a34a;
-    --green-dim: rgba(22, 163, 74, 0.08);
-    --red: #dc2626;
-    --red-dim: rgba(220, 38, 38, 0.08);
-
-    --ups1: #0369a1;
-    --ups1-dim: rgba(3, 105, 161, 0.10);
-    --apc: #c2410c;
-    --apc-dim: rgba(194, 65, 12, 0.10);
-    --eco: #059669;
-    --eco-dim: rgba(5, 150, 105, 0.10);
+    --bg: #f0f4f8; --surface: #ffffff; --surface2: #e8edf2;
+    --border: rgba(0,0,0,0.08); --border-bright: rgba(0,0,0,0.15);
+    --text: #1a2332; --text-dim: #5a6878;
+    --teal: #0369a1; --teal-dim: rgba(3,105,161,0.08);
+    --amber: #d97706; --amber-dim: rgba(217,119,6,0.08);
+    --green: #16a34a; --green-dim: rgba(22,163,74,0.08);
+    --red: #dc2626; --red-dim: rgba(220,38,38,0.08);
+    --ups1: #0369a1; --ups1-dim: rgba(3,105,161,0.10);
+    --ups2: #7c3aed; --ups2-dim: rgba(124,58,237,0.10);
+    --ups3: #059669; --ups3-dim: rgba(5,150,105,0.10);
   }
-
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #0d1520;
-      --surface: #152030;
-      --surface2: #1c2a3a;
-      --surface-elevated: #1f3045;
-      --border: rgba(255,255,255,0.07);
-      --border-bright: rgba(255,255,255,0.14);
-      --text: #dceeff;
-      --text-dim: #7a9ab8;
-      --teal: #38bdf8;
-      --teal-dim: rgba(56,189,248,0.1);
-      --amber: #fbbf24;
-      --amber-dim: rgba(251,191,36,0.1);
-      --green: #4ade80;
-      --green-dim: rgba(74,222,128,0.1);
-      --ups1: #38bdf8;
-      --ups1-dim: rgba(56,189,248,0.1);
-      --apc: #fb923c;
-      --apc-dim: rgba(251,146,60,0.12);
-      --eco: #34d399;
-      --eco-dim: rgba(52,211,153,0.1);
+      --bg: #0d1520; --surface: #152030; --surface2: #1c2a3a;
+      --border: rgba(255,255,255,0.07); --border-bright: rgba(255,255,255,0.14);
+      --text: #dceeff; --text-dim: #7a9ab8;
+      --teal: #38bdf8; --teal-dim: rgba(56,189,248,0.1);
+      --amber: #fbbf24; --amber-dim: rgba(251,191,36,0.1);
+      --green: #4ade80; --green-dim: rgba(74,222,128,0.1);
+      --red: #f87171; --red-dim: rgba(248,113,113,0.1);
+      --ups1: #38bdf8; --ups1-dim: rgba(56,189,248,0.1);
+      --ups2: #a78bfa; --ups2-dim: rgba(167,139,250,0.1);
+      --ups3: #34d399; --ups3-dim: rgba(52,211,153,0.1);
     }
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     background: var(--bg);
     background-image:
       radial-gradient(ellipse at 15% 10%, var(--ups1-dim) 0%, transparent 40%),
-      radial-gradient(ellipse at 85% 90%, var(--eco-dim) 0%, transparent 40%);
-    color: var(--text);
-    font-family: var(--font-body);
-    padding: 40px 20px;
-    min-height: 100vh;
-    line-height: 1.6;
+      radial-gradient(ellipse at 85% 90%, var(--ups3-dim) 0%, transparent 40%);
+    color: var(--text); font-family: var(--font-body);
+    padding: 40px 20px; min-height: 100vh; line-height: 1.6;
   }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   .animate { animation: fadeUp 0.4s ease-out both; animation-delay: calc(var(--i,0) * 0.06s); }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; }
-  }
-
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; } }
   .container { max-width: 960px; margin: 0 auto; }
 
-  /* HEADER */
   .page-header { margin-bottom: 36px; }
   .page-header h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
   .page-header .meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
 
-  /* FLOOR LABEL */
   .floor-label {
     display: inline-flex; align-items: center; gap: 8px;
     font-family: var(--font-mono); font-size: 11px; font-weight: 600;
@@ -103,7 +63,6 @@
   }
   .floor-label .dot { width: 8px; height: 8px; border-radius: 50%; }
 
-  /* UPS CARD */
   .ups-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 14px; overflow: hidden; margin-bottom: 16px;
@@ -111,29 +70,26 @@
   }
   .ups-card__header {
     display: flex; align-items: center; gap: 14px;
-    padding: 18px 20px; border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
+    padding: 18px 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap;
   }
   .ups-badge {
     font-family: var(--font-mono); font-size: 11px; font-weight: 600;
     padding: 4px 12px; border-radius: 6px; white-space: nowrap;
   }
   .ups-badge--1 { background: var(--ups1-dim); color: var(--ups1); }
-  .ups-badge--23 { background: var(--apc-dim); color: var(--apc); }
+  .ups-badge--2 { background: var(--ups2-dim); color: var(--ups2); }
+  .ups-badge--3 { background: var(--ups3-dim); color: var(--ups3); }
   .ups-card__title { font-size: 16px; font-weight: 600; flex: 1; min-width: 180px; }
   .ups-card__price { font-family: var(--font-mono); font-size: 15px; font-weight: 600; color: var(--teal); }
   .ups-card__body { padding: 18px 20px; }
 
-  /* SECTION DIVIDER */
   .section-divider {
-    display: flex; align-items: center; gap: 10px;
-    margin: 10px 0 14px;
+    display: flex; align-items: center; gap: 10px; margin: 10px 0 14px;
     font-family: var(--font-mono); font-size: 11px; font-weight: 600;
     text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim);
   }
   .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-bright); }
 
-  /* DEVICES TABLE */
   .devices-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
   .devices-table th {
     font-family: var(--font-mono); font-size: 10px; font-weight: 600;
@@ -150,7 +106,6 @@
     border-top: 2px solid var(--border-bright); border-bottom: none; padding: 10px 10px;
   }
 
-  /* RUNTIME GRID */
   .runtime-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 4px; }
   .runtime-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
   .runtime-card__scenario { font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
@@ -158,9 +113,7 @@
   .runtime-card__time { font-size: 20px; font-weight: 600; font-family: var(--font-mono); }
   .runtime-card__time--great { color: var(--green); }
   .runtime-card__time--ok { color: var(--amber); }
-  .runtime-card__time--warn { color: var(--red); }
 
-  /* NOTES */
   .notes {
     font-size: 12px; color: var(--text-dim); line-height: 1.7;
     margin-top: 12px; padding: 12px 16px;
@@ -168,99 +121,17 @@
   }
   .notes strong { color: var(--text); }
   .notes--teal { border-left: 3px solid var(--teal); }
-  .notes--apc { border-left: 3px solid var(--apc); }
-  .notes--eco { border-left: 3px solid var(--eco); }
+  .notes--purple { border-left: 3px solid var(--ups2); }
+  .notes--green { border-left: 3px solid var(--ups3); }
 
-  /* OPTIONS SECTION */
-  .options-label {
-    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 1px;
-    color: var(--text-dim); margin-bottom: 12px;
-  }
-
-  .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
-  @media (max-width: 640px) { .option-grid { grid-template-columns: 1fr; } }
-
-  .option-card {
-    border: 2px solid var(--border); border-radius: 12px;
-    overflow: hidden; transition: border-color 0.15s;
-  }
-  .option-card--apc { border-color: var(--apc-dim); }
-  .option-card--eco { border-color: var(--eco-dim); }
-
-  .option-card__header {
-    display: flex; align-items: center; gap: 10px;
-    padding: 14px 16px; border-bottom: 1px solid var(--border);
-  }
-  .option-tag {
-    font-family: var(--font-mono); font-size: 10px; font-weight: 600;
-    padding: 3px 10px; border-radius: 5px; white-space: nowrap;
-  }
-  .option-tag--apc { background: var(--apc-dim); color: var(--apc); }
-  .option-tag--eco { background: var(--eco-dim); color: var(--eco); }
-
-  .option-card__name { font-size: 13px; font-weight: 600; flex: 1; }
-  .option-card__price { font-family: var(--font-mono); font-size: 13px; font-weight: 600; }
-  .option-tag--apc + .option-card__name ~ .option-card__price { color: var(--apc); }
-  .option-tag--eco + .option-card__name ~ .option-card__price { color: var(--eco); }
-
-  .option-card__body { padding: 14px 16px; font-size: 12px; }
-
-  .spec-row { display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start; }
-  .spec-key { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); min-width: 70px; padding-top: 1px; }
-  .spec-val { flex: 1; font-size: 12px; }
-  .spec-val strong { font-weight: 600; }
-
-  .runtime-mini { font-family: var(--font-mono); font-size: 18px; font-weight: 600; margin-top: 10px; }
-  .runtime-mini small { font-size: 11px; font-weight: 400; color: var(--text-dim); display: block; }
-
-  /* BADGE */
-  .badge {
+  .data-badge {
     display: inline-flex; align-items: center; gap: 5px;
     font-family: var(--font-mono); font-size: 10px; font-weight: 600;
     padding: 3px 10px; border-radius: 6px; white-space: nowrap;
+    background: var(--green-dim); color: var(--green);
   }
-  .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-  .badge--green { background: var(--green-dim); color: var(--green); }
-  .badge--amber { background: var(--amber-dim); color: var(--amber); }
-  .badge--teal { background: var(--teal-dim); color: var(--teal); }
-  .badge--apc { background: var(--apc-dim); color: var(--apc); }
-  .badge--eco { background: var(--eco-dim); color: var(--eco); }
+  .data-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-  /* SUMMARY TABLE */
-  .summary-section { margin-top: 32px; }
-  .summary-section h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
-
-  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 640px) { .summary-grid { grid-template-columns: 1fr; } }
-
-  .summary-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  }
-  .summary-card__header {
-    padding: 14px 16px; border-bottom: 1px solid var(--border);
-    font-weight: 600; font-size: 14px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .summary-card__body { padding: 0; }
-
-  .sum-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  .sum-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
-  .sum-table tbody tr:last-child td { border-bottom: none; }
-  .sum-table .label { color: var(--text-dim); font-family: var(--font-mono); font-size: 10px; white-space: nowrap; }
-  .sum-table .val { font-weight: 500; }
-  .sum-table tfoot td {
-    border-top: 2px solid var(--border-bright); border-bottom: none;
-    background: var(--surface2); font-family: var(--font-mono);
-    font-weight: 700; font-size: 13px; padding: 12px 14px;
-  }
-  .price-total { color: var(--green); }
-  .price-apc { color: var(--apc); }
-  .price-eco { color: var(--eco); }
-
-  /* BUY LINKS */
   .buy-link {
     display: inline-block; margin-top: 10px;
     font-family: var(--font-mono); font-size: 11px; font-weight: 600;
@@ -270,33 +141,49 @@
     transition: background 0.15s, transform 0.1s;
   }
   .buy-link:hover { background: var(--teal); color: #fff; transform: translateY(-1px); }
-  .buy-link--apc { background: var(--apc-dim); color: var(--apc); border-color: rgba(194,65,12,0.2); }
-  .buy-link--apc:hover { background: var(--apc); color: #fff; }
-  .buy-link--eco { background: var(--eco-dim); color: var(--eco); border-color: rgba(5,150,105,0.2); }
-  .buy-link--eco:hover { background: var(--eco); color: #fff; }
+
+  /* SUMMARY */
+  .summary-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden; margin-top: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .summary-header { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 16px; font-weight: 600; }
+  .summary-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .summary-table th {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim);
+    text-align: left; padding: 10px 16px; background: var(--surface2);
+    border-bottom: 1px solid var(--border-bright);
+  }
+  .summary-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .summary-table tbody tr:last-child td { border-bottom: none; }
+  .summary-table tfoot td {
+    font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+    border-top: 2px solid var(--border-bright); background: var(--surface2);
+    padding: 14px 16px; border-bottom: none;
+  }
+  .price-col { font-family: var(--font-mono); font-weight: 600; white-space: nowrap; }
+  .price-total { color: var(--green); }
 
   @media (max-width: 600px) {
     body { padding: 20px 14px; }
     .ups-card__header { gap: 8px; }
+    .runtime-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- HEADER -->
   <div class="page-header animate" style="--i:0">
     <h1>Rekomendasi UPS — Zain's Setup</h1>
-    <p class="meta">3 units · 2 opsi untuk Lantai 2 · Maret 2026</p>
+    <p class="meta">3 unit · All APC · Final — Maret 2026</p>
   </div>
 
-  <!-- ============ FLOOR 1 — FIXED ============ -->
-  <div class="floor-section animate" style="--i:1">
-    <div class="floor-label">
-      <span class="dot" style="background:var(--ups1)"></span>
-      Lantai 1 — TV &amp; Gaming
-    </div>
-
+  <!-- ============ UPS 1 — FLOOR 1 ============ -->
+  <div class="animate" style="--i:1">
+    <div class="floor-label"><span class="dot" style="background:var(--ups1)"></span>Lantai 1 — TV &amp; Gaming</div>
     <div class="ups-card">
       <div class="ups-card__header">
         <span class="ups-badge ups-badge--1">UPS 1</span>
@@ -318,7 +205,6 @@
             <tfoot><tr><td>Total</td><td class="num">349 W</td><td class="num">457 W</td></tr></tfoot>
           </table>
         </div>
-
         <div class="section-divider">Runtime Estimate</div>
         <div class="runtime-grid">
           <div class="runtime-card">
@@ -327,7 +213,7 @@
             <div class="runtime-card__time runtime-card__time--ok">~25 min</div>
           </div>
           <div class="runtime-card">
-            <div class="runtime-card__scenario">TV only (PS5 off)</div>
+            <div class="runtime-card__scenario">TV only</div>
             <div class="runtime-card__load">~175W</div>
             <div class="runtime-card__time runtime-card__time--great">~55 min</div>
           </div>
@@ -337,169 +223,155 @@
             <div class="runtime-card__time runtime-card__time--great">3+ jam</div>
           </div>
         </div>
-
         <div class="notes notes--teal">
-          <strong>Tujuan:</strong> Graceful shutdown PS5 + TV · Battery: 216 Wh ·
-          Garansi Resmi APC 2 tahun ·
-          <a href="https://shopee.co.id/APC-Back-UPS-BX-2200VA-230V-AVR-BX2200MI-MS-i.300472189.6672004664" target="_blank" class="buy-link">🛒 Beli di Shopee APC Official</a>
+          <strong>Tujuan:</strong> Graceful shutdown PS5 + TV · Battery: 216 Wh · Garansi Resmi APC 2 tahun<br>
+          <a href="https://shopee.co.id/APC-Back-UPS-BX-2200VA-230V-AVR-BX2200MI-MS-i.300472189.6672004664" target="_blank" class="buy-link">🛒 Beli di Shopee APC Official — Rp 3.104.100</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ============ FLOOR 2 — TWO OPTIONS ============ -->
-  <div class="floor-section animate" style="--i:2">
-    <div class="floor-label">
-      <span class="dot" style="background:var(--apc)"></span>
-      Lantai 2 — Mac mini &amp; Starlink · 2 Opsi
-    </div>
-
+  <!-- ============ UPS 2 — MAC MINI ============ -->
+  <div class="animate" style="--i:2">
+    <div class="floor-label"><span class="dot" style="background:var(--ups2)"></span>Lantai 2, Ruang Kerja — Mac mini</div>
     <div class="ups-card">
       <div class="ups-card__header">
-        <span class="ups-badge ups-badge--23">UPS 2 + 3</span>
-        <div class="ups-card__title">Pilih salah satu opsi di bawah</div>
+        <span class="ups-badge ups-badge--2">UPS 2</span>
+        <div class="ups-card__title">APC Easy UPS BVX 1200VA / 650W</div>
+        <div class="ups-card__price">bundle</div>
       </div>
       <div class="ups-card__body">
-
-        <div class="section-divider">Devices (sama untuk kedua opsi)</div>
+        <div class="section-divider">Device</div>
         <div style="overflow-x:auto">
           <table class="devices-table">
             <thead><tr><th>Device</th><th class="num">Typical (W)</th><th class="num">Max (W)</th></tr></thead>
             <tbody>
-              <tr><td>Mac mini M2 Pro <small>server/headless mode — jalanin OpenClaw</small></td><td class="num">25</td><td class="num">185</td></tr>
-              <tr><td>Starlink Standard</td><td class="num">65</td><td class="num">100</td></tr>
+              <tr><td>Mac mini M2 Pro<small>server/headless mode — jalanin OpenClaw 🚔</small></td><td class="num">25</td><td class="num">185</td></tr>
             </tbody>
-            <tfoot><tr><td>Total (server mode)</td><td class="num">~90 W</td><td class="num">285 W</td></tr></tfoot>
           </table>
         </div>
-
-        <div class="section-divider">Pilih Opsi</div>
-        <div class="option-grid">
-
-          <!-- OPTION A: APC -->
-          <div class="option-card option-card--apc">
-            <div class="option-card__header">
-              <span class="option-tag option-tag--apc">Opsi A — APC</span>
-              <div class="option-card__name">BVX 1200VA (dari bundle × 2)</div>
-              <div class="option-card__price" style="color:var(--apc)">Rp 1.619.100</div>
-            </div>
-            <div class="option-card__body">
-              <div class="spec-row"><span class="spec-key">Kapasitas</span><span class="spec-val">108 Wh (12V × 9Ah)</span></div>
-              <div class="spec-row"><span class="spec-key">Max load</span><span class="spec-val">650W / 1200VA</span></div>
-              <div class="spec-row"><span class="spec-key">Garansi</span><span class="spec-val">2 tahun Resmi APC</span></div>
-              <div class="spec-row"><span class="spec-key">Baterai</span><span class="spec-val">3–5 tahun</span></div>
-              <div class="spec-row"><span class="spec-key">Toko</span><span class="spec-val">Shopee APC Official (bundle 2 unit)</span></div>
-              <div class="runtime-mini runtime-card__time--ok">~60 menit
-                <small>@ 90W (Mac mini + Starlink)</small>
-              </div>
-              <div class="notes notes--apc" style="margin-top:10px">
-                <strong>Cocok jika:</strong> 1 jam sudah cukup, mau serba APC, harga paling murah. Beli bundle → 1 unit untuk UPS 2+3 (Starlink), 1 unit untuk UPS 1 (Floor 1).
-              </div>
-              <a href="https://shopee.co.id/product/300472189/23955866149" target="_blank" class="buy-link buy-link--apc">🛒 Beli Bundle BVX 1200VA × 2 di Shopee</a>
-            </div>
+        <div class="section-divider">Runtime Estimate</div>
+        <div class="runtime-grid">
+          <div class="runtime-card">
+            <div class="runtime-card__scenario">Server mode (headless)</div>
+            <div class="runtime-card__load">~25W</div>
+            <div class="runtime-card__time runtime-card__time--great">~3.5 jam</div>
           </div>
-
-          <!-- OPTION B: EcoFlow RIVER 2 -->
-          <div class="option-card option-card--eco">
-            <div class="option-card__header">
-              <span class="option-tag option-tag--eco">Opsi B — EcoFlow</span>
-              <div class="option-card__name">RIVER 2 256Wh / 300W</div>
-              <div class="option-card__price" style="color:var(--eco)">~Rp 3.500.000</div>
-            </div>
-            <div class="option-card__body">
-              <div class="spec-row"><span class="spec-key">Kapasitas</span><span class="spec-val"><strong>256 Wh</strong> — 2.4× lebih besar</span></div>
-              <div class="spec-row"><span class="spec-key">Max load</span><span class="spec-val">300W (surge 600W)</span></div>
-              <div class="spec-row"><span class="spec-key">Garansi</span><span class="spec-val"><strong>5 tahun</strong> termasuk baterai</span></div>
-              <div class="spec-row"><span class="spec-key">Switchover</span><span class="spec-val">&lt;30ms (UPS Mode di app)</span></div>
-              <div class="spec-row"><span class="spec-key">Toko</span><span class="spec-val">Tokopedia EcoFlow ID</span></div>
-              <div class="runtime-mini runtime-card__time--great">~2.5 jam
-                <small>@ 90W (Mac mini + Starlink)</small>
-              </div>
-              <div class="notes notes--eco" style="margin-top:10px">
-                <strong>Cocok jika:</strong> Mau lebih dari 1 jam backup, garansi 5 tahun lebih tenang. Harga ~Rp 1.9 juta lebih mahal dari APC, tapi runtime 2.5× lebih lama.
-              </div>
-              <a href="https://www.tokopedia.com/ecoflow-id/ecoflow-river-2-pro-768wh-800w-portable-power-station-camping-rv-genset-listrik-portabel-1733131200683934955" target="_blank" class="buy-link buy-link--eco">🛒 Beli EcoFlow RIVER 2 di Tokopedia</a>
-            </div>
+          <div class="runtime-card">
+            <div class="runtime-card__scenario">Full load (rare)</div>
+            <div class="runtime-card__load">~185W</div>
+            <div class="runtime-card__time runtime-card__time--ok">~30 min</div>
           </div>
-
+        </div>
+        <div class="notes notes--purple">
+          <strong>Tujuan:</strong> Keep OpenClaw hidup selama mungkin saat PLN mati · Battery: 108 Wh ·
+          MacBook Pro (M3 Pro) kerja dari baterai sendiri (15–22 jam) — tidak perlu UPS
         </div>
       </div>
     </div>
   </div>
 
+  <!-- ============ UPS 3 — STARLINK ============ -->
+  <div class="animate" style="--i:3">
+    <div class="floor-label"><span class="dot" style="background:var(--ups3)"></span>Lantai 2, Ruang Starlink</div>
+    <div class="ups-card">
+      <div class="ups-card__header">
+        <span class="ups-badge ups-badge--3">UPS 3</span>
+        <div class="ups-card__title">APC Easy UPS BVX 1200VA / 650W</div>
+        <div class="ups-card__price">bundle</div>
+      </div>
+      <div class="ups-card__body">
+        <div class="section-divider">Device</div>
+        <div style="overflow-x:auto">
+          <table class="devices-table">
+            <thead><tr><th>Device</th><th class="num">Actual (W)</th><th class="num">Max (W)</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Starlink Standard<small>Data actual — sore hari, Jogja</small></td>
+                <td class="num">27 <span class="data-badge" style="margin-left:6px">MEASURED</span></td>
+                <td class="num">100</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="section-divider">Runtime Estimate</div>
+        <div class="runtime-grid">
+          <div class="runtime-card">
+            <div class="runtime-card__scenario">Typical (measured)</div>
+            <div class="runtime-card__load">~27W actual</div>
+            <div class="runtime-card__time runtime-card__time--great">~3.5 jam</div>
+          </div>
+          <div class="runtime-card">
+            <div class="runtime-card__scenario">Heavy rain / peak</div>
+            <div class="runtime-card__load">~65–100W</div>
+            <div class="runtime-card__time runtime-card__time--ok">~60–85 min</div>
+          </div>
+        </div>
+        <div class="notes notes--green">
+          <strong>Tujuan:</strong> Keep internet hidup saat PLN mati · Battery: 108 Wh ·
+          Actual draw 27W jauh lebih hemat dari spec 65W — cuaca tropis, no snow melting 🌴<br>
+          <strong>Skenario PLN mati lama (&gt;3.5 jam):</strong> Starlink mati → MacBook Pro tethering ke HP
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ UPS 2+3 BUY LINK ============ -->
+  <div class="animate" style="--i:4">
+    <div class="notes notes--teal" style="text-align:center; padding: 16px 20px;">
+      <strong>UPS 2 &amp; UPS 3</strong> — beli 1 bundle isi 2 unit, pisah masing-masing<br>
+      <a href="https://shopee.co.id/product/300472189/23955866149" target="_blank" class="buy-link">🛒 Beli Bundle BVX 1200VA × 2 di Shopee APC Official — Rp 3.238.200</a>
+      <br><small style="color:var(--text-dim); margin-top:4px; display:inline-block;">Garansi Resmi APC 2 tahun · Battery life 3–5 tahun</small>
+    </div>
+  </div>
+
   <!-- ============ SUMMARY ============ -->
-  <div class="summary-section animate" style="--i:3">
-    <h2>Shopping List — Perbandingan Total</h2>
-    <div class="summary-grid">
-
-      <!-- ALL APC -->
-      <div class="summary-card">
-        <div class="summary-card__header">
-          <span class="badge badge--apc">All APC</span>
-          Serba APC
-        </div>
-        <div class="summary-card__body">
-          <table class="sum-table">
-            <tbody>
-              <tr>
-                <td class="label">UPS 1</td>
-                <td class="val">APC BX2200MI-MS<br><small><a href="https://shopee.co.id/APC-Back-UPS-BX-2200VA-230V-AVR-BX2200MI-MS-i.300472189.6672004664" target="_blank" style="color:var(--apc)">🛒 Shopee APC Official</a></small></td>
-                <td class="val price-apc" style="text-align:right;white-space:nowrap">Rp 3.104.100</td>
-              </tr>
-              <tr>
-                <td class="label">UPS 2+3</td>
-                <td class="val">APC BVX 1200VA × 2 bundle<br><small>Runtime ~60 menit · <a href="https://shopee.co.id/product/300472189/23955866149" target="_blank" style="color:var(--apc)">🛒 Shopee APC Official</a></small></td>
-                <td class="val price-apc" style="text-align:right;white-space:nowrap">Rp 3.238.200</td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colspan="2">Total</td>
-                <td class="price-total" style="text-align:right">Rp 6.342.300</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+  <div class="animate" style="--i:5; margin-top: 24px;">
+    <div class="summary-wrap">
+      <div class="summary-header">🛒 Shopping List Final</div>
+      <div style="overflow-x:auto">
+        <table class="summary-table">
+          <thead>
+            <tr><th>#</th><th>Item</th><th>Untuk</th><th>Runtime</th><th style="text-align:right">Harga</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="ups-badge ups-badge--1" style="font-size:10px;padding:2px 8px">UPS 1</span></td>
+              <td>APC BX2200MI-MS<br><small style="color:var(--text-dim)"><a href="https://shopee.co.id/APC-Back-UPS-BX-2200VA-230V-AVR-BX2200MI-MS-i.300472189.6672004664" target="_blank" style="color:var(--ups1)">Shopee APC Official</a></small></td>
+              <td>Floor 1 — TV + gaming</td>
+              <td>~25 min</td>
+              <td class="price-col" style="text-align:right">Rp 3.104.100</td>
+            </tr>
+            <tr>
+              <td><span class="ups-badge ups-badge--2" style="font-size:10px;padding:2px 8px">UPS 2</span></td>
+              <td rowspan="2">APC BVX 1200VA × 2 bundle<br><small style="color:var(--text-dim)"><a href="https://shopee.co.id/product/300472189/23955866149" target="_blank" style="color:var(--ups3)">Shopee APC Official</a></small></td>
+              <td>Floor 2 — Mac mini</td>
+              <td>~3.5 jam</td>
+              <td rowspan="2" class="price-col" style="text-align:right; vertical-align:middle">Rp 3.238.200</td>
+            </tr>
+            <tr>
+              <td><span class="ups-badge ups-badge--3" style="font-size:10px;padding:2px 8px">UPS 3</span></td>
+              <td>Floor 2 — Starlink</td>
+              <td>~3.5 jam</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" style="text-align:right">Total (semua APC, Garansi Resmi)</td>
+              <td class="price-col price-total" style="text-align:right; font-size: 16px;">Rp 6.342.300</td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
-
-      <!-- APC + EcoFlow -->
-      <div class="summary-card">
-        <div class="summary-card__header">
-          <span class="badge badge--eco">APC + EcoFlow</span>
-          Kombinasi Hemat
-        </div>
-        <div class="summary-card__body">
-          <table class="sum-table">
-            <tbody>
-              <tr>
-                <td class="label">UPS 1</td>
-                <td class="val">APC BX2200MI-MS<br><small><a href="https://shopee.co.id/APC-Back-UPS-BX-2200VA-230V-AVR-BX2200MI-MS-i.300472189.6672004664" target="_blank" style="color:var(--apc)">🛒 Shopee APC Official</a></small></td>
-                <td class="val price-apc" style="text-align:right;white-space:nowrap">Rp 3.104.100</td>
-              </tr>
-              <tr>
-                <td class="label">UPS 2+3</td>
-                <td class="val">EcoFlow RIVER 2 256Wh<br><small>Runtime ~2.5 jam · <a href="https://www.tokopedia.com/search?st=product&q=ecoflow+river+2+256wh&sort=5" target="_blank" style="color:var(--eco)">🛒 Tokopedia EcoFlow ID</a></small></td>
-                <td class="val price-eco" style="text-align:right;white-space:nowrap">~Rp 3.500.000</td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colspan="2">Total</td>
-                <td class="price-total" style="text-align:right">~Rp 6.604.100</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
-
     </div>
+  </div>
 
-    <div class="notes notes--teal" style="margin-top:16px">
-      <strong>Keputusan utama:</strong> UPS 1 (APC BX2200MI) sudah fixed untuk kedua opsi.
-      Pilihannya cuma di UPS 2+3: <strong>APC (~60 menit, Rp 1.6 juta)</strong> vs
-      <strong>EcoFlow RIVER 2 (~2.5 jam, Rp 3.5 juta)</strong>.
-      Selisih Rp 1.9 juta untuk 1.5 jam runtime tambahan.
-    </div>
+  <div class="animate notes notes--teal" style="--i:6; margin-top: 16px;">
+    <strong>Tips Implementasi:</strong><br>
+    · Mac mini + Starlink masing-masing dapat ~3.5 jam — lebih dari target 1 jam ✅<br>
+    · Saat PLN mati: <strong>cabut MacBook dari charger</strong> → MacBook pakai baterai sendiri (15–22 jam)<br>
+    · Starlink actual draw cuma 27W di Jogja (tropis, no snow melting) — jauh dari spec 65W<br>
+    · Semua garansi resmi APC, beli dari Official Store di Shopee Mall
   </div>
 
 </div>
