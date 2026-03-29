@@ -466,16 +466,16 @@
       <p class="subtitle">All automated jobs, heartbeats, and cron schedules — updated 2026-03-29</p>
       <div class="kpi-row">
         <div class="kpi">
-          <div class="kpi-num">11</div>
+          <div class="kpi-num">12</div>
           <div class="kpi-label">Active Jobs</div>
         </div>
         <div class="kpi">
           <div class="kpi-num amber">6</div>
-          <div class="kpi-label">Agents Working</div>
+          <div class="kpi-label">Agents with Crons</div>
         </div>
         <div class="kpi">
-          <div class="kpi-num emerald">8</div>
-          <div class="kpi-label">Bot-Actionable Cards</div>
+          <div class="kpi-num emerald">~5%</div>
+          <div class="kpi-label">Weekly Cost</div>
         </div>
         <div class="kpi">
           <div class="kpi-num rose">1</div>
@@ -491,11 +491,11 @@
 
       <div class="job-card job-card--healthy fade-up">
         <div class="job-header">
-          <div class="job-name">BFS Daily Review</div>
+          <div class="job-name">BTA Daily Progress Review</div>
           <span class="job-agent agent-redalert">🚨 Red Alert</span>
         </div>
         <div class="meta-row"><span class="meta-dot meta-dot--ok"></span><span class="status-badge status-ok">Healthy</span></div>
-        <div class="job-desc">Tracks BTA sprint stories on Shortcut. Summarizes progress, flags risks, recommends daily focus.</div>
+        <div class="job-desc">Tracks all active BTA stories on Shortcut (BFS epic + others). Summarizes progress, flags risks, recommends daily focus. Separate BFS vs non-BFS sections.</div>
         <div class="job-schedule">0 8 * * * (daily 8am)</div>
       </div>
 
@@ -556,7 +556,17 @@
         </div>
         <div class="meta-row"><span class="meta-dot meta-dot--ok"></span><span class="status-badge status-ok">Healthy</span></div>
         <div class="job-desc">Full digest pipeline: research → compile → blog post PR. Runs ~11 minutes.</div>
-        <div class="job-schedule">0 20 * * 0 (Sun 8pm)</div>
+        <div class="job-schedule">0 21 * * 0 (Sun 9pm)</div>
+      </div>
+
+      <div class="job-card job-card--healthy fade-up" style="animation-delay:0.32s">
+        <div class="job-header">
+          <div class="job-name">Ark Viz Refresh</div>
+          <span class="job-agent agent-optimus">🍠 Optimus</span>
+        </div>
+        <div class="meta-row"><span class="meta-dot meta-dot--ok"></span><span class="status-badge status-ok">Healthy</span></div>
+        <div class="job-desc">Weekly refresh of ops + architecture visualizations on ark.zainf.dev. Gathers live data from cron, usage scripts, agents, and MEMORY.md.</div>
+        <div class="job-schedule">0 21 * * 0 (Sun 9pm)</div>
       </div>
 
       <div class="job-card job-card--healthy fade-up" style="animation-delay:0.35s">
@@ -702,10 +712,20 @@
         <div class="tl-label">OpenClaw Backup</div>
         <div class="tl-agent">🍠 Optimus → auto-commit & push</div>
       </div>
+      <div class="tl-item fade-up" style="animation-delay:0.33s">
+        <div class="tl-time">18:00</div>
+        <div class="tl-label">Tax Review (Sun)</div>
+        <div class="tl-agent">🔍 Hound → weekly tax compliance</div>
+      </div>
       <div class="tl-item fade-up" style="animation-delay:0.35s">
         <div class="tl-time">20:00</div>
-        <div class="tl-label">Fuel Check ⛽ + AI Digest (Sun) + Tax Review (Sun)</div>
-        <div class="tl-agent">🍠 Optimus + 🚔 Prowl + 🔍 Hound</div>
+        <div class="tl-label">Fuel Check ⛽</div>
+        <div class="tl-agent">🍠 Optimus → quota monitoring</div>
+      </div>
+      <div class="tl-item fade-up" style="animation-delay:0.37s">
+        <div class="tl-time">21:00</div>
+        <div class="tl-label">AI Digest (Sun) + Ark Viz Refresh (Sun)</div>
+        <div class="tl-agent">🚔 Prowl + 🍠 Optimus</div>
       </div>
       <div class="tl-item fade-up" style="animation-delay:0.4s">
         <div class="tl-time">23:00</div>
@@ -730,7 +750,7 @@
         <tbody>
           <tr>
             <td>🍠 Optimus</td>
-            <td>Morning Summary, Fuel Check (4×), Backup (4×)</td>
+            <td>Morning Summary, Fuel Check (4×), Backup (4×), Ark Viz Refresh (weekly)</td>
             <td>Fizzy + Dispatcher + Daily Health</td>
             <td>Coordinator</td>
           </tr>
@@ -812,8 +832,8 @@
           <span class="status-badge status-ok">OK</span>
         </div>
         <div class="job-desc">
-          Claude (BTA): 5h 0% daily | 25% weekly<br>
-          Amp Free: 91.4% remaining (100% bonus for 12 days)<br>
+          Claude (BTA): 5h 12% daily | 26% weekly<br>
+          Amp Free: 95.6% remaining (resets hourly)<br>
           Codex: Active, no rate limit events<br>
           Copilot Business: 8.7% primary
         </div>
@@ -821,7 +841,7 @@
     </div>
 
     <div class="footer">
-      Autobot Operations Dashboard · Last updated: 2026-03-29 20:30 WIB · <span style="font-family:var(--font-mono)">ark.zainf.dev/viz/</span>
+      Autobot Operations Dashboard · Last updated: 2026-03-29 21:14 WIB · <span style="font-family:var(--font-mono)">ark.zainf.dev/viz/</span>
     </div>
 
   </div>

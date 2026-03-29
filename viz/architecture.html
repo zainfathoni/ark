@@ -6,9 +6,9 @@
   <meta name="viz-author" content="Optimus 🍠">
   <meta name="viz-date"   content="2026-03-29">
   <title>Project Transformers — System Architecture</title>
-  <meta name="description" content="How 15 AI agents coordinate through shared channels, task boards, and knowledge">
+  <meta name="description" content="How 17 AI agents coordinate through shared channels, task boards, and knowledge">
   <meta property="og:title" content="Project Transformers — System Architecture">
-  <meta property="og:description" content="How 15 AI agents coordinate through shared channels, task boards, and knowledge">
+  <meta property="og:description" content="How 17 AI agents coordinate through shared channels, task boards, and knowledge">
   <meta property="og:url" content="https://ark.zainf.dev/viz/architecture.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -859,6 +859,7 @@
     <a href="#s4">04 Interaction Map</a>
     <a href="#s5">05 Digest Pipeline</a>
     <a href="#s6">06 Human-in-the-Loop</a>
+    <a href="#s7">07 Compound Engineering</a>
     <div class="toc-links">
       <a href="https://www.zainfathoni.com/blog/project-transformers-building-personal-ai-army">← Blog Post</a>
       <a href="https://ark.zainf.dev/">The Ark Directory</a>
@@ -871,7 +872,7 @@
     <header class="page-header" style="--i:0; animation: fadeUp 0.5s ease-out both;">
       <div class="page-header__badge">System Architecture</div>
       <h1>Project Transformers</h1>
-      <p class="page-header__sub">How 15 AI agents coordinate through shared channels, task boards, and knowledge — a personal infrastructure for augmented living.</p>
+      <p class="page-header__sub">How 17 AI agents coordinate through shared channels, task boards, and knowledge — a personal infrastructure for augmented living.</p>
       <div style="margin-top:12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">
         <a href="https://www.zainfathoni.com/blog/project-transformers-building-personal-ai-army">Read the blog post</a>
         &nbsp;·&nbsp;
@@ -971,6 +972,13 @@ flowchart TD
             <div class="topic-card__listener">→ Optimus</div>
           </div>
         </div>
+        <div class="topic-card" style="--i:9; border-left: 3px solid var(--emerald);">
+          <div class="topic-card__emoji">📊</div>
+          <div class="topic-card__info">
+            <div class="topic-card__name">Reports</div>
+            <div class="topic-card__listener">→ Fuel checks, usage reports</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1066,11 +1074,11 @@ flowchart TD
       </div>
       <div class="cost-bar" style="--i:3;">
         <div class="cost-bar__header">
-          <span class="cost-bar__label">Week 3 — Stable optimization</span>
-          <span class="cost-bar__value">~15% of baseline</span>
+          <span class="cost-bar__label">Current Week — ~5% of baseline (17 agents, 902 messages)</span>
+          <span class="cost-bar__value">~8.5% of baseline</span>
         </div>
         <div class="cost-bar__track">
-          <div class="cost-bar__fill" style="width: 15%; background: linear-gradient(90deg, var(--teal), var(--emerald));">15%</div>
+          <div class="cost-bar__fill" style="width: 8.5%; background: linear-gradient(90deg, var(--teal), var(--emerald));">8.5%</div>
         </div>
       </div>
     </div>
@@ -1083,41 +1091,46 @@ flowchart TD
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Task Type</th>
-                  <th>Model</th>
-                  <th>Tier</th>
+                  <th>Agent</th>
+                  <th>Primary Model</th>
+                  <th>Weekly Cost</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Conversation</td>
-                  <td><code>Opus</code></td>
-                  <td>Premium</td>
+                  <td>🍠 Optimus</td>
+                  <td><code>Opus 4.6</code></td>
+                  <td>41%</td>
                 </tr>
                 <tr>
-                  <td>Research / Analysis</td>
-                  <td><code>Sonnet</code></td>
-                  <td>Mid-tier</td>
+                  <td>🚔 Prowl</td>
+                  <td><code>Opus 4.6</code></td>
+                  <td>22%</td>
                 </tr>
                 <tr>
-                  <td>Heartbeats / Monitoring</td>
-                  <td><code>Haiku</code></td>
-                  <td>Economy</td>
+                  <td>🐝 Bumblebee</td>
+                  <td><code>Opus 4.6</code></td>
+                  <td>13%</td>
                 </tr>
                 <tr>
-                  <td>Coding (primary)</td>
-                  <td><code>Amp</code></td>
-                  <td><span class="tag tag--free">Free credits</span></td>
+                  <td>🔬 Perceptor</td>
+                  <td><code>Opus + Sonnet</code></td>
+                  <td>8%</td>
                 </tr>
                 <tr>
-                  <td>Coding (fallback 1)</td>
-                  <td><code>OpenCode</code></td>
-                  <td><span class="tag tag--free">Free models</span></td>
+                  <td>🛠️ Wheeljack</td>
+                  <td><code>Codex</code> <span class="tag tag--free">Free</span></td>
+                  <td>4%</td>
                 </tr>
                 <tr>
-                  <td>Coding (fallback 2)</td>
-                  <td><code>Codex CLI</code></td>
-                  <td>Paid fallback</td>
+                  <td>🚨 Red Alert</td>
+                  <td><code>Opus + Sonnet</code></td>
+                  <td>3%</td>
+                </tr>
+                <tr>
+                  <td>Others (8)</td>
+                  <td><code>Sonnet / Opus</code></td>
+                  <td>9%</td>
                 </tr>
               </tbody>
             </table>
@@ -1165,15 +1178,21 @@ flowchart TD
     OP --> WJ["Wheeljack 🛠️<br/>Engineering"]
     OP --> BB["Bumblebee 🐝<br/>Family"]
     OP --> BS["Bluestreak 🎯<br/>Strategy"]
-    OP --> RA["Red Alert 🔴<br/>Work Agent"]
+    OP --> RA["Red Alert 🚨<br/>BTA Night Watch"]
+    OP --> HN["Hound 🔍<br/>Tax"]
+    OP --> PC["Perceptor 🔬<br/>Research"]
+    OP --> RW["Rewind 📼<br/>Blog"]
+    OP --> JZ["Jazz 🎷<br/>Public Voice"]
+    OP --> RV["Rivet 🔩<br/>Vika's Organizer"]
+    OP --> AT["Alpha Trion 📿<br/>Islamic Knowledge"]
 
     PR -->|digest pipeline| WJ
     WJ --> AMP["Amp"]
     WJ --> CDX["Codex CLI"]
     WJ --> OC["OpenCode"]
 
-    RT["Ratchet 🔧"] -.- AIR1["Air-gapped"]
-    AC["Arcee 💜"] -.- AIR2["Air-gapped"]
+    RT["Ratchet ❤️‍🩹"] -.- AIR1["Air-gapped"]
+    AC["Arcee 💗"] -.- AIR2["Air-gapped"]
 
     FIZZY[("Fizzy<br/>Task Board")]
     ARK[("The Ark<br/>Group Chat")]
@@ -1197,7 +1216,7 @@ flowchart TD
     classDef hub fill:#04785733,stroke:#059669,stroke-width:2px
 
     class OP coordinator
-    class PR,WJ,BB,BS,RA agent
+    class PR,WJ,BB,BS,RA,HN,PC,RW,JZ,RV,AT agent
     class AMP,CDX,OC tool
     class RT,AC,AIR1,AIR2 airgap
     class FIZZY,ARK hub
@@ -1206,8 +1225,8 @@ flowchart TD
 
     <div style="margin-top: 20px;" class="card-grid-3">
       <div class="ve-card" style="--i:3; border-top: 3px solid var(--accent-bright);">
-        <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px;">Fully Connected</div>
-        <div style="font-size: 13px; color: var(--text-dim);">Optimus, Prowl, Wheeljack, Bumblebee, Bluestreak — access all 3 channels and can coordinate freely.</div>
+        <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px;">Fully Connected (12)</div>
+        <div style="font-size: 13px; color: var(--text-dim);">Optimus, Prowl, Wheeljack, Bumblebee, Bluestreak, Red Alert, Hound, Perceptor, Rewind, Jazz, Rivet, Alpha Trion — connected via channels and task boards.</div>
       </div>
       <div class="ve-card" style="--i:4; border-top: 3px solid var(--amber);">
         <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px;">Tool Layer</div>
@@ -1315,9 +1334,55 @@ flowchart TD
       The key insight: agents should maximize <em>preparation</em> and minimize decision burden. A PR is ready to merge with one click. A digest is formatted and proofread. The human makes the call, not the busywork.
     </div>
 
+    <!-- ═══ SECTION 7: COMPOUND ENGINEERING ═══ -->
+    <div id="s7" class="sec-head"><span class="sec-num">07</span> Compound Engineering</div>
+    <p class="sec-desc">Post-work rituals that turn completed work into searchable knowledge, reusable patterns, and automated workflows.</p>
+
+    <div class="card-grid-3" style="margin-bottom: 24px;">
+      <div class="ve-card" style="--i:1; border-top: 3px solid var(--emerald);">
+        <div class="ve-card__label" style="color: var(--emerald);">Compound Capture 🧪</div>
+        <p style="font-size:13px; color:var(--text-dim);">After PR merges or bug fixes, captures learnings into <code style="font-family:var(--font-mono);font-size:11px;background:var(--accent-dim);padding:1px 5px;border-radius:3px;">knowledge/solutions/</code> with YAML frontmatter. Triggered by "Compound it 🧪".</p>
+      </div>
+      <div class="ve-card" style="--i:2; border-top: 3px solid var(--accent-bright);">
+        <div class="ve-card__label" style="color: var(--accent-bright);">Fizzy Dispatcher</div>
+        <p style="font-size:13px; color:var(--text-dim);">575-line bash script that auto-routes bot-actionable Fizzy cards to coding agents. Checks fuel levels, respects daily limits (5/day, 2/run), and spawns appropriate agents.</p>
+      </div>
+      <div class="ve-card" style="--i:3; border-top: 3px solid var(--teal);">
+        <div class="ve-card__label" style="color: var(--teal);">PATTERNS.md</div>
+        <p style="font-size:13px; color:var(--text-dim);">Per-repo conventions file read by agents at session start. 90-day decay cycle. Wheeljack owns personal repos, Red Alert owns BTA patterns.</p>
+      </div>
+    </div>
+
+    <div class="card-grid-2" style="margin-bottom: 24px;">
+      <div class="ve-card" style="--i:4; border-left: 3px solid var(--amber);">
+        <div class="ve-card__label" style="color: var(--amber);">Swarm Skills</div>
+        <p style="font-size:13px; color:var(--text-dim); margin-bottom: 8px;">Parallel issue processing with conflict-safe wave grouping:</p>
+        <ul style="font-size:12px; color:var(--text-dim); padding-left:16px; list-style:disc;">
+          <li><strong>amp-swarm</strong> — Amp deep mode → PR per issue</li>
+          <li><strong>claude-swarm</strong> — claude --print → PR per issue</li>
+          <li>Both feed into multi-reviewer pipeline</li>
+        </ul>
+      </div>
+      <div class="ve-card" style="--i:5; border-left: 3px solid var(--rose);">
+        <div class="ve-card__label" style="color: var(--rose);">Multi-Reviewer Pipeline</div>
+        <p style="font-size:13px; color:var(--text-dim); margin-bottom: 8px;">4 parallel Opus reviewers per PR:</p>
+        <ul style="font-size:12px; color:var(--text-dim); padding-left:16px; list-style:disc;">
+          <li>🔒 Security reviewer</li>
+          <li>⚡ Performance reviewer</li>
+          <li>📐 Pattern compliance reviewer</li>
+          <li>🏗️ Architecture reviewer</li>
+        </ul>
+        <p style="font-size:11px; color:var(--text-muted); margin-top:6px;">Findings classified as P1 (block) / P2 (fix) / P3 (note)</p>
+      </div>
+    </div>
+
+    <div class="callout-blueprint" style="--i:6; animation: fadeUp 0.4s ease-out both; animation-delay: 0.36s;">
+      The compound engineering loop: <strong>Plan → Work → Review → Compound</strong>. Every completed task feeds back into the knowledge base, making the next task faster and more informed.
+    </div>
+
     <!-- ═══ Footer ═══ -->
     <div style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-      <span>Project Transformers — Architecture Visualization</span>
+      <span>Project Transformers — Architecture · Updated 2026-03-29 21:14 WIB</span>
       <span>
         <a href="https://www.zainfathoni.com/blog/project-transformers-building-personal-ai-army" style="color: var(--text-muted);">Blog Post</a>
         &nbsp;·&nbsp;
