@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Transformers — System Architecture</title>
+  <meta name="description" content="How 15 AI agents coordinate through shared channels, task boards, and knowledge">
+  <meta property="og:title" content="Project Transformers — System Architecture">
+  <meta property="og:description" content="How 15 AI agents coordinate through shared channels, task boards, and knowledge">
+  <meta property="og:url" content="https://ark.zainf.dev/viz/architecture.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Fragment+Mono&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       BLUEPRINT AESTHETIC — Technical drawing feel
+       Deep slate/blue palette, grid background, monospace labels
+       ═══════════════════════════════════════════════════════════ */
+
+    :root {
+      --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+      --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #f0f4f8;
+      --bg-grid: rgba(30, 58, 95, 0.06);
+      --surface: #ffffff;
+      --surface-elevated: #f8fafc;
+      --surface-recessed: #e8eef4;
+      --border: rgba(30, 58, 95, 0.12);
+      --border-bright: rgba(30, 58, 95, 0.22);
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-muted: #94a3b8;
+      --accent: #1e3a5f;
+      --accent-bright: #2563eb;
+      --accent-dim: rgba(37, 99, 235, 0.08);
+      --gold: #b45309;
+      --gold-dim: rgba(180, 83, 9, 0.08);
+      --teal: #0d9488;
+      --teal-dim: rgba(13, 148, 136, 0.08);
+      --emerald: #047857;
+      --emerald-dim: rgba(4, 120, 87, 0.08);
+      --rose: #be123c;
+      --rose-dim: rgba(190, 18, 60, 0.06);
+      --amber: #d97706;
+      --amber-dim: rgba(217, 119, 6, 0.08);
+      --sky: #0284c7;
+      --sky-dim: rgba(2, 132, 199, 0.08);
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 8px 32px rgba(15, 23, 42, 0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1120;
+      --bg-grid: rgba(148, 163, 184, 0.05);
+      --surface: #131c2e;
+      --surface-elevated: #1a2540;
+      --surface-recessed: #0a0f1a;
+      --border: rgba(148, 163, 184, 0.08);
+      --border-bright: rgba(148, 163, 184, 0.16);
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --text-muted: #64748b;
+      --accent: #93c5fd;
+      --accent-bright: #60a5fa;
+      --accent-dim: rgba(96, 165, 250, 0.1);
+      --gold: #fbbf24;
+      --gold-dim: rgba(251, 191, 36, 0.1);
+      --teal: #2dd4bf;
+      --teal-dim: rgba(45, 212, 191, 0.08);
+      --emerald: #34d399;
+      --emerald-dim: rgba(52, 211, 153, 0.08);
+      --rose: #fb7185;
+      --rose-dim: rgba(251, 113, 133, 0.08);
+      --amber: #fbbf24;
+      --amber-dim: rgba(251, 191, 36, 0.08);
+      --sky: #38bdf8;
+      --sky-dim: rgba(56, 189, 248, 0.08);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 32px 40px 80px;
+      overflow-wrap: break-word;
+      /* Blueprint grid background */
+      background-image:
+        linear-gradient(var(--bg-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    /* ── Layout ── */
+    .wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0 48px;
+    }
+    .main { min-width: 0; }
+
+    /* ── TOC Sidebar ── */
+    .toc {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      padding: 14px 0;
+      grid-row: 1 / -1;
+      max-height: calc(100dvh - 48px);
+      overflow-y: auto;
+    }
+    .toc::-webkit-scrollbar { width: 3px; }
+    .toc::-webkit-scrollbar-thumb { background: var(--surface-elevated); border-radius: 2px; }
+
+    .toc-title {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--text-muted);
+      padding: 0 0 10px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toc a {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      text-decoration: none;
+      padding: 5px 8px;
+      border-radius: 4px;
+      border-left: 2px solid transparent;
+      transition: all 0.15s;
+      line-height: 1.4;
+      margin-bottom: 1px;
+    }
+    .toc a:hover { color: var(--text); background: var(--surface); }
+    .toc a.active { color: var(--accent-bright); border-left-color: var(--accent-bright); background: var(--accent-dim); }
+
+    .toc-links {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .toc-links a {
+      font-size: 10px;
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-left: none;
+    }
+    .toc-links a:hover { color: var(--accent-bright); }
+
+    /* ── Header ── */
+    .page-header {
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 2px solid var(--border-bright);
+    }
+
+    .page-header__badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--accent-bright);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .page-header__badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--accent-bright);
+      border-radius: 2px;
+      transform: rotate(45deg);
+    }
+
+    .page-header h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .page-header__sub {
+      font-size: 16px;
+      color: var(--text-dim);
+      max-width: 600px;
+      line-height: 1.5;
+    }
+
+    /* ── Section Headings ── */
+    .sec-head {
+      font-family: var(--font-body);
+      font-size: 22px;
+      font-weight: 700;
+      margin: 56px 0 20px;
+      padding: 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      scroll-margin-top: 24px;
+    }
+
+    .sec-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--accent-bright);
+      background: var(--accent-dim);
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--accent-bright);
+      letter-spacing: 1px;
+    }
+
+    .sec-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      max-width: 700px;
+    }
+
+    /* ── Cards ── */
+    .ve-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      position: relative;
+      animation: fadeUp 0.4s ease-out both;
+      animation-delay: calc(var(--i, 0) * 0.06s);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .ve-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .ve-card--hero {
+      background: linear-gradient(135deg, var(--surface) 0%, color-mix(in srgb, var(--surface) 92%, var(--accent-bright) 8%) 100%);
+      border-color: color-mix(in srgb, var(--border) 50%, var(--accent-bright) 50%);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .ve-card--recessed {
+      background: var(--surface-recessed);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+
+    .ve-card__label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-bright);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ve-card__label::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ── Mermaid ── */
+    .mermaid-wrap {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px 24px;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+      cursor: grab;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .mermaid-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
+    .mermaid-wrap::-webkit-scrollbar-track { background: transparent; }
+    .mermaid-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .mermaid-wrap.is-panning { cursor: grabbing; user-select: none; }
+
+    .mermaid-wrap .mermaid {
+      zoom: 1.3;
+    }
+
+    .zoom-controls {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: flex;
+      gap: 2px;
+      z-index: 10;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px;
+    }
+    .zoom-controls button {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .zoom-controls button:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+
+    /* Mermaid overrides */
+    .mermaid .nodeLabel { color: var(--text) !important; }
+    .mermaid .edgeLabel { color: var(--text-dim) !important; background-color: var(--bg) !important; }
+    .mermaid .edgeLabel rect { fill: var(--bg) !important; }
+    .mermaid .edgeLabel { font-family: var(--font-mono) !important; font-size: 12px !important; }
+    .mermaid .nodeLabel { font-family: var(--font-body) !important; font-size: 15px !important; }
+
+    /* ── Grid layouts ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* ── Topic cards ── */
+    .topic-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      animation: fadeUp 0.4s ease-out both;
+      animation-delay: calc(var(--i, 0) * 0.06s);
+    }
+    .topic-card__emoji {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .topic-card__info { min-width: 0; }
+    .topic-card__name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .topic-card__listener {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* ── Tree diagram ── */
+    .tree {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 2;
+      padding: 24px;
+      background: var(--surface-recessed);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .tree-root {
+      font-weight: 600;
+      color: var(--accent-bright);
+    }
+    .tree-branch {
+      color: var(--text-muted);
+    }
+    .tree-name {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .tree-desc {
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+    .tree-access {
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-left: 4px;
+    }
+    .tree-access--all { background: var(--emerald-dim); color: var(--emerald); }
+    .tree-access--restricted { background: var(--amber-dim); color: var(--amber); }
+
+    /* ── Flow steps ── */
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .flow-step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 16px;
+      padding: 16px 0;
+      animation: fadeUp 0.4s ease-out both;
+      animation-delay: calc(var(--i, 0) * 0.08s);
+    }
+    .flow-step__num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 2px solid var(--accent-bright);
+      color: var(--accent-bright);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .flow-step:not(:last-child) .flow-step__num::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: calc(100% + 16px);
+      background: var(--border-bright);
+      z-index: -1;
+    }
+    .flow-step__content h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .flow-step__content p {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    .flow-step__agent {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 2px 8px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+    .agent-prowl { background: var(--rose-dim); color: var(--rose); }
+    .agent-wheeljack { background: var(--teal-dim); color: var(--teal); }
+    .agent-optimus { background: var(--accent-dim); color: var(--accent-bright); }
+
+    /* ── Cost chart ── */
+    .cost-bar-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .cost-bar {
+      animation: fadeUp 0.4s ease-out both;
+      animation-delay: calc(var(--i, 0) * 0.1s);
+    }
+    .cost-bar__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .cost-bar__label {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .cost-bar__value {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .cost-bar__track {
+      height: 28px;
+      background: var(--surface-recessed);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .cost-bar__fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 1s ease-out;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+    }
+
+    /* ── Two columns ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .col-header {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 8px 16px;
+      border-radius: 6px 6px 0 0;
+      font-weight: 400;
+    }
+    .col-header--auto {
+      background: var(--emerald-dim);
+      color: var(--emerald);
+      border: 1px solid color-mix(in srgb, var(--emerald) 30%, transparent);
+      border-bottom: 2px solid var(--emerald);
+    }
+    .col-header--human {
+      background: var(--amber-dim);
+      color: var(--amber);
+      border: 1px solid color-mix(in srgb, var(--amber) 30%, transparent);
+      border-bottom: 2px solid var(--amber);
+    }
+
+    .col-body {
+      padding: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0 0 6px 6px;
+      border-top: none;
+    }
+    .col-body ul {
+      list-style: none;
+      padding: 0;
+    }
+    .col-body li {
+      padding: 8px 0 8px 18px;
+      position: relative;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .col-body li:last-child { border-bottom: none; }
+    .col-body li::before {
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    .col-body--auto li::before { content: '▸'; color: var(--emerald); }
+    .col-body--human li::before { content: '●'; color: var(--amber); font-size: 8px; top: 12px; }
+
+    /* ── Tables ── */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .table-scroll { overflow-x: auto; }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .data-table th {
+      background: var(--surface-elevated);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      text-align: left;
+      padding: 10px 16px;
+      border-bottom: 2px solid var(--border-bright);
+      white-space: nowrap;
+    }
+    .data-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .data-table tbody tr:nth-child(even) { background: var(--accent-dim); }
+    .data-table code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--accent-dim);
+      color: var(--accent-bright);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* ── Tags ── */
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .tag--bot { background: var(--emerald-dim); color: var(--emerald); }
+    .tag--human { background: var(--amber-dim); color: var(--amber); }
+    .tag--channel { background: var(--sky-dim); color: var(--sky); }
+    .tag--free { background: var(--teal-dim); color: var(--teal); }
+
+    /* ── Memory flow ── */
+    .memory-flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .memory-flow__step {
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .memory-flow__arrow {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      color: var(--text-muted);
+      padding: 0 8px;
+    }
+
+    /* ── Free tool pipeline ── */
+    .free-pipeline {
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+    }
+    .free-pipeline__step {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      position: relative;
+    }
+    .free-pipeline__step:first-child { border-radius: 8px 0 0 8px; }
+    .free-pipeline__step:last-child { border-radius: 0 8px 8px 0; }
+    .free-pipeline__step:not(:last-child) { border-right: none; }
+    .free-pipeline__step:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text-muted);
+      z-index: 1;
+      background: var(--bg);
+      padding: 2px;
+    }
+    .free-pipeline__name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .free-pipeline__desc {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* ── Principle callout ── */
+    .callout-blueprint {
+      padding: 16px 20px;
+      border-radius: 6px;
+      border-left: 3px solid var(--accent-bright);
+      background: var(--accent-dim);
+      font-style: italic;
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      cursor: pointer;
+      z-index: 300;
+      color: var(--text-dim);
+      transition: background 0.15s, color 0.15s;
+    }
+    .theme-toggle:hover { color: var(--text); background: var(--surface-elevated); }
+    [data-theme="light"] .theme-toggle__moon { display: none; }
+    [data-theme="dark"] .theme-toggle__sun { display: none; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeScale {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ── Links ── */
+    a { color: var(--accent-bright); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1000px) {
+      .wrap { grid-template-columns: 1fr; padding-top: 0; }
+      body { padding: 16px 20px 60px; padding-top: 0; }
+
+      .toc {
+        position: sticky;
+        top: 0;
+        z-index: 200;
+        max-height: none;
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        background: var(--bg);
+        background-image:
+          linear-gradient(var(--bg-grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+        background-size: 32px 32px;
+        border-bottom: 1px solid var(--border);
+        padding: 10px 0;
+        margin: 0 -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        grid-row: auto;
+      }
+      .toc::-webkit-scrollbar { display: none; }
+      .toc-title { display: none; }
+      .toc-links { display: none; }
+
+      .toc a {
+        white-space: nowrap;
+        flex-shrink: 0;
+        border-left: none;
+        border-bottom: 2px solid transparent;
+        border-radius: 4px 4px 0 0;
+        padding: 6px 10px;
+        font-size: 10px;
+      }
+      .toc a.active {
+        border-left: none;
+        border-bottom-color: var(--accent-bright);
+        background: var(--surface);
+      }
+
+      .main { padding-top: 20px; }
+      .sec-head { scroll-margin-top: 52px; }
+
+      .card-grid-3 { grid-template-columns: 1fr; }
+      .card-grid-2 { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .free-pipeline { flex-direction: column; }
+      .free-pipeline__step { border-radius: 0 !important; border-right: 1px solid var(--border) !important; border-bottom: none; }
+      .free-pipeline__step:first-child { border-radius: 8px 8px 0 0 !important; }
+      .free-pipeline__step:last-child { border-radius: 0 0 8px 8px !important; border-bottom: 1px solid var(--border); }
+      .free-pipeline__step:not(:last-child)::after { content: '↓'; right: 50%; top: auto; bottom: -8px; transform: translateX(50%); }
+    }
+
+    @media (max-width: 600px) {
+      .card-grid { grid-template-columns: 1fr; }
+      .memory-flow { flex-direction: column; }
+      .memory-flow__arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+  <svg class="theme-toggle__sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+  <svg class="theme-toggle__moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
+<div class="wrap">
+
+  <nav class="toc" id="toc">
+    <div class="toc-title">Architecture</div>
+    <a href="#s1">01 Communication</a>
+    <a href="#s2">02 Knowledge</a>
+    <a href="#s3">03 Cost Optimization</a>
+    <a href="#s4">04 Interaction Map</a>
+    <a href="#s5">05 Digest Pipeline</a>
+    <a href="#s6">06 Human-in-the-Loop</a>
+    <div class="toc-links">
+      <a href="https://www.zainfathoni.com/blog/project-transformers-building-personal-ai-army">← Blog Post</a>
+      <a href="https://ark.zainf.dev/">The Ark Directory</a>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="page-header" style="--i:0; animation: fadeUp 0.5s ease-out both;">
+      <div class="page-header__badge">System Architecture</div>
+      <h1>Project Transformers</h1>
+      <p class="page-header__sub">How 15 AI agents coordinate through shared channels, task boards, and knowledge — a personal infrastructure for augmented living.</p>
+      <div style="margin-top:12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">
+        <a href="https://www.zainfathoni.com/blog/project-transformers-building-personal-ai-army">Read the blog post</a>
+        &nbsp;·&nbsp;
+        <a href="https://ark.zainf.dev/">The Ark directory</a>
+      </div>
+    </header>
+
+
+    <!-- ═══ SECTION 1: COMMUNICATION ARCHITECTURE ═══ -->
+    <div id="s1" class="sec-head"><span class="sec-num">01</span> Communication Architecture</div>
+    <p class="sec-desc">Three distinct channels serve different coordination patterns: real-time messaging, async task tracking, and topic-based group conversations.</p>
+
+    <div class="mermaid-wrap" style="--i:1; animation: fadeUp 0.5s ease-out both; animation-delay: 0.1s;">
+      <div class="zoom-controls">
+        <button onclick="zoomDiagram(this, 1.2)" title="Zoom in">+</button>
+        <button onclick="zoomDiagram(this, 0.8)" title="Zoom out">&minus;</button>
+        <button onclick="resetZoom(this)" title="Reset zoom">&#8634;</button>
+      </div>
+      <pre class="mermaid">
+flowchart TD
+    subgraph CH1["sessions_send — Direct Messaging"]
+        P1["Prowl 🚔"] -->|digest JSON| W1["Wheeljack 🛠️"]
+        O1["Optimus 🍠"] -->|task delegation| W1
+        O1 -->|status query| P1
+    end
+
+    subgraph CH2["Fizzy Cards — Task Tracking"]
+        FC["Fizzy Board"]
+        FP["fizzy-pop<br/>webhook daemon"]
+        FM["fizzy-md<br/>Markdown proxy"]
+        FP -->|real-time events| FC
+        FM -->|HTML rendering| FC
+    end
+
+    subgraph CH3["The Ark — Telegram Group"]
+        T1["Coding Topic"]
+        T2["Family Topic"]
+        T3["Life & Finance"]
+        T4["Business & Strategy"]
+        T5["General / Commands"]
+    end
+
+    CH1 -.- CH2
+    CH2 -.- CH3
+
+    classDef ch1 fill:#1e3a5f33,stroke:#2563eb,stroke-width:2px
+    classDef ch2 fill:#04785733,stroke:#059669,stroke-width:2px
+    classDef ch3 fill:#b4530933,stroke:#d97706,stroke-width:2px
+    classDef agent fill:#1e3a5f22,stroke:#60a5fa,stroke-width:1.5px
+    classDef tool fill:#04785722,stroke:#34d399,stroke-width:1px
+    classDef topic fill:#b4530922,stroke:#fbbf24,stroke-width:1px
+
+    class CH1 ch1
+    class CH2 ch2
+    class CH3 ch3
+    class P1,W1,O1 agent
+    class FC,FP,FM tool
+    class T1,T2,T3,T4,T5 topic
+      </pre>
+    </div>
+
+    <div style="margin-top: 24px;">
+      <div class="ve-card__label" style="margin-bottom: 12px;">Ark Group Chat — Default Listeners</div>
+      <div class="card-grid" style="--i:3;">
+        <div class="topic-card" style="--i:4; border-left: 3px solid var(--teal);">
+          <div class="topic-card__emoji">🛠️</div>
+          <div class="topic-card__info">
+            <div class="topic-card__name">Coding</div>
+            <div class="topic-card__listener">→ Wheeljack</div>
+          </div>
+        </div>
+        <div class="topic-card" style="--i:5; border-left: 3px solid var(--amber);">
+          <div class="topic-card__emoji">🐝</div>
+          <div class="topic-card__info">
+            <div class="topic-card__name">Family</div>
+            <div class="topic-card__listener">→ Bumblebee</div>
+          </div>
+        </div>
+        <div class="topic-card" style="--i:6; border-left: 3px solid var(--rose);">
+          <div class="topic-card__emoji">🚔</div>
+          <div class="topic-card__info">
+            <div class="topic-card__name">Life &amp; Finance</div>
+            <div class="topic-card__listener">→ Prowl</div>
+          </div>
+        </div>
+        <div class="topic-card" style="--i:7; border-left: 3px solid var(--sky);">
+          <div class="topic-card__emoji">🎯</div>
+          <div class="topic-card__info">
+            <div class="topic-card__name">Business &amp; Strategy</div>
+            <div class="topic-card__listener">→ Bluestreak</div>
+          </div>
+        </div>
+        <div class="topic-card" style="--i:8; border-left: 3px solid var(--accent-bright);">
+          <div class="topic-card__emoji">🍠</div>
+          <div class="topic-card__info">
+            <div class="topic-card__name">General / Commands</div>
+            <div class="topic-card__listener">→ Optimus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px;" class="card-grid-3">
+      <div class="ve-card" style="--i:9;">
+        <div class="ve-card__label" style="color: var(--accent-bright);">sessions_send</div>
+        <p style="font-size:13px; color:var(--text-dim);">Direct agent-to-agent messaging. Structured JSON payloads. Used for handoffs where data format matters — like Prowl passing digest JSON to Wheeljack.</p>
+      </div>
+      <div class="ve-card" style="--i:10;">
+        <div class="ve-card__label" style="color: var(--emerald);">Fizzy Cards</div>
+        <p style="font-size:13px; color:var(--text-dim);">Task board with tags: <span class="tag tag--bot">bot-actionable</span> <span class="tag tag--human">needs-human</span>. fizzy-pop delivers webhook events in real-time. fizzy-md converts Markdown descriptions to HTML.</p>
+      </div>
+      <div class="ve-card" style="--i:11;">
+        <div class="ve-card__label" style="color: var(--amber);">The Ark Group</div>
+        <p style="font-size:13px; color:var(--text-dim);">Telegram supergroup with forum topics. Each topic has a default listener agent. Agents can also listen cross-topic when mentioned.</p>
+      </div>
+    </div>
+
+
+    <!-- ═══ SECTION 2: KNOWLEDGE MANAGEMENT ═══ -->
+    <div id="s2" class="sec-head"><span class="sec-num">02</span> Knowledge Management</div>
+    <p class="sec-desc">Shared filesystem as the single source of truth. Access is scoped by domain — not everything sees everything.</p>
+
+    <div class="card-grid-2" style="margin-bottom: 24px;">
+      <div>
+        <div class="tree" style="--i:1; animation: fadeUp 0.4s ease-out both; animation-delay: 0.08s;">
+          <div class="tree-root">knowledge/</div>
+          <div style="padding-left:20px;">
+            <div><span class="tree-branch">├── </span><span class="tree-name">shared/</span> <span class="tree-access tree-access--all">all agents</span></div>
+            <div><span class="tree-branch">├── </span><span class="tree-name">personal/</span> <span class="tree-access tree-access--restricted">Optimus + Prowl</span></div>
+            <div><span class="tree-branch">├── </span><span class="tree-name">work/</span> <span class="tree-access tree-access--restricted">Optimus + Wheeljack</span></div>
+            <div><span class="tree-branch">└── </span><span class="tree-name">family/</span> <span class="tree-access tree-access--restricted">Optimus + Bumblebee</span></div>
+          </div>
+        </div>
+
+        <div class="callout-blueprint" style="margin-top: 16px; --i:2; animation: fadeUp 0.4s ease-out both; animation-delay: 0.16s;">
+          "Facts are never deleted, only superseded." — Each entry carries a timestamp. New information overwrites old context without destroying history.
+        </div>
+      </div>
+
+      <div>
+        <div class="ve-card__label" style="margin-bottom: 12px;">Memory Pipeline</div>
+        <div class="memory-flow" style="--i:3; animation: fadeUp 0.4s ease-out both; animation-delay: 0.24s;">
+          <div class="memory-flow__step" style="background: var(--accent-dim); border: 1px solid var(--accent-bright); border-radius: 6px;">Daily notes</div>
+          <div class="memory-flow__arrow">→</div>
+          <div class="memory-flow__step" style="background: var(--teal-dim); border: 1px solid var(--teal); border-radius: 6px;">MEMORY.md</div>
+          <div class="memory-flow__arrow">→</div>
+          <div class="memory-flow__step" style="background: var(--gold-dim); border: 1px solid var(--gold); border-radius: 6px;">Weekly extract</div>
+          <div class="memory-flow__arrow">→</div>
+          <div class="memory-flow__step" style="background: var(--emerald-dim); border: 1px solid var(--emerald); border-radius: 6px;">knowledge/</div>
+        </div>
+
+        <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div class="ve-card ve-card--recessed" style="--i:4; padding: 14px 18px;">
+            <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">Daily Notes</div>
+            <div style="font-size: 12px; color: var(--text-dim); font-family: var(--font-mono);">memory/YYYY-MM-DD.md — raw session logs, every agent writes</div>
+          </div>
+          <div class="ve-card ve-card--recessed" style="--i:5; padding: 14px 18px;">
+            <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">MEMORY.md</div>
+            <div style="font-size: 12px; color: var(--text-dim); font-family: var(--font-mono);">Curated long-term memory, Optimus maintains</div>
+          </div>
+          <div class="ve-card ve-card--recessed" style="--i:6; padding: 14px 18px;">
+            <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">Weekly Extraction</div>
+            <div style="font-size: 12px; color: var(--text-dim); font-family: var(--font-mono);">Structured facts promoted to knowledge/ files</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══ SECTION 3: COST OPTIMIZATION ═══ -->
+    <div id="s3" class="sec-head"><span class="sec-num">03</span> Cost Optimization Journey</div>
+    <p class="sec-desc">From 100% premium usage to ~85% cost reduction in two weeks through model tiering and free tool layering.</p>
+
+    <div class="cost-bar-group" style="margin-bottom: 32px;">
+      <div class="cost-bar" style="--i:1;">
+        <div class="cost-bar__header">
+          <span class="cost-bar__label">Week 1 — All premium, all the time</span>
+          <span class="cost-bar__value">100% baseline</span>
+        </div>
+        <div class="cost-bar__track">
+          <div class="cost-bar__fill" style="width: 100%; background: linear-gradient(90deg, var(--rose), #ef4444);">100%</div>
+        </div>
+      </div>
+      <div class="cost-bar" style="--i:2;">
+        <div class="cost-bar__header">
+          <span class="cost-bar__label">Week 2 — Model tiering + free fallbacks</span>
+          <span class="cost-bar__value">~14% of baseline</span>
+        </div>
+        <div class="cost-bar__track">
+          <div class="cost-bar__fill" style="width: 14%; background: linear-gradient(90deg, var(--teal), var(--emerald));">14%</div>
+        </div>
+      </div>
+      <div class="cost-bar" style="--i:3;">
+        <div class="cost-bar__header">
+          <span class="cost-bar__label">Week 3 — Stable optimization</span>
+          <span class="cost-bar__value">~15% of baseline</span>
+        </div>
+        <div class="cost-bar__track">
+          <div class="cost-bar__fill" style="width: 15%; background: linear-gradient(90deg, var(--teal), var(--emerald));">15%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-grid-2" style="margin-bottom: 24px;">
+      <div>
+        <div class="ve-card__label" style="margin-bottom: 12px;">Model Assignment Table</div>
+        <div class="table-wrap" style="--i:4; animation: fadeUp 0.4s ease-out both; animation-delay: 0.24s;">
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Task Type</th>
+                  <th>Model</th>
+                  <th>Tier</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Conversation</td>
+                  <td><code>Opus</code></td>
+                  <td>Premium</td>
+                </tr>
+                <tr>
+                  <td>Research / Analysis</td>
+                  <td><code>Sonnet</code></td>
+                  <td>Mid-tier</td>
+                </tr>
+                <tr>
+                  <td>Heartbeats / Monitoring</td>
+                  <td><code>Haiku</code></td>
+                  <td>Economy</td>
+                </tr>
+                <tr>
+                  <td>Coding (primary)</td>
+                  <td><code>Amp</code></td>
+                  <td><span class="tag tag--free">Free credits</span></td>
+                </tr>
+                <tr>
+                  <td>Coding (fallback 1)</td>
+                  <td><code>OpenCode</code></td>
+                  <td><span class="tag tag--free">Free models</span></td>
+                </tr>
+                <tr>
+                  <td>Coding (fallback 2)</td>
+                  <td><code>Codex CLI</code></td>
+                  <td>Paid fallback</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="ve-card__label" style="margin-bottom: 12px;">Free Tool Layering</div>
+        <div class="free-pipeline" style="--i:5; animation: fadeUp 0.4s ease-out both; animation-delay: 0.3s;">
+          <div class="free-pipeline__step">
+            <div class="free-pipeline__name" style="color: var(--teal);">Amp</div>
+            <div class="free-pipeline__desc">Free daily credits<br/>replenish hourly</div>
+          </div>
+          <div class="free-pipeline__step">
+            <div class="free-pipeline__name" style="color: var(--emerald);">OpenCode</div>
+            <div class="free-pipeline__desc">MiniMax, GLM, Kimi<br/>always free</div>
+          </div>
+          <div class="free-pipeline__step">
+            <div class="free-pipeline__name" style="color: var(--accent-bright);">Codex CLI</div>
+            <div class="free-pipeline__desc">Paid fallback<br/>when free exhausted</div>
+          </div>
+        </div>
+
+        <div class="callout-blueprint" style="margin-top: 16px; --i:6; animation: fadeUp 0.4s ease-out both; animation-delay: 0.36s;">
+          Deterministic tasks use <code style="font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); padding: 1px 5px; border-radius: 3px;">launchd</code> for zero tokens. Only tasks requiring judgment burn model credits.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══ SECTION 4: AGENT INTERACTION MAP ═══ -->
+    <div id="s4" class="sec-head"><span class="sec-num">04</span> Agent Interaction Map</div>
+    <p class="sec-desc">Optimus is the central coordinator. Some agents are fully connected; others are deliberately air-gapped.</p>
+
+    <div class="mermaid-wrap" style="--i:1; animation: fadeUp 0.5s ease-out both; animation-delay: 0.1s;">
+      <div class="zoom-controls">
+        <button onclick="zoomDiagram(this, 1.2)" title="Zoom in">+</button>
+        <button onclick="zoomDiagram(this, 0.8)" title="Zoom out">&minus;</button>
+        <button onclick="resetZoom(this)" title="Reset zoom">&#8634;</button>
+      </div>
+      <pre class="mermaid">
+flowchart TD
+    OP["Optimus 🍠<br/>Coordinator"] --> PR["Prowl 🚔<br/>Life Intel"]
+    OP --> WJ["Wheeljack 🛠️<br/>Engineering"]
+    OP --> BB["Bumblebee 🐝<br/>Family"]
+    OP --> BS["Bluestreak 🎯<br/>Strategy"]
+    OP --> RA["Red Alert 🔴<br/>Work Agent"]
+
+    PR -->|digest pipeline| WJ
+    WJ --> AMP["Amp"]
+    WJ --> CDX["Codex CLI"]
+    WJ --> OC["OpenCode"]
+
+    RT["Ratchet 🔧"] -.- AIR1["Air-gapped"]
+    AC["Arcee 💜"] -.- AIR2["Air-gapped"]
+
+    FIZZY[("Fizzy<br/>Task Board")]
+    ARK[("The Ark<br/>Group Chat")]
+
+    OP --- FIZZY
+    PR --- FIZZY
+    WJ --- FIZZY
+    BB --- FIZZY
+    BS --- FIZZY
+
+    OP --- ARK
+    PR --- ARK
+    WJ --- ARK
+    BB --- ARK
+    BS --- ARK
+
+    classDef coordinator fill:#1e3a5f44,stroke:#2563eb,stroke-width:2.5px
+    classDef agent fill:#13302e33,stroke:#14b8a6,stroke-width:1.5px
+    classDef tool fill:#27201a33,stroke:#d97706,stroke-width:1px
+    classDef airgap fill:#88133722,stroke:#fb7185,stroke-width:1px,stroke-dasharray:5
+    classDef hub fill:#04785733,stroke:#059669,stroke-width:2px
+
+    class OP coordinator
+    class PR,WJ,BB,BS,RA agent
+    class AMP,CDX,OC tool
+    class RT,AC,AIR1,AIR2 airgap
+    class FIZZY,ARK hub
+      </pre>
+    </div>
+
+    <div style="margin-top: 20px;" class="card-grid-3">
+      <div class="ve-card" style="--i:3; border-top: 3px solid var(--accent-bright);">
+        <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px;">Fully Connected</div>
+        <div style="font-size: 13px; color: var(--text-dim);">Optimus, Prowl, Wheeljack, Bumblebee, Bluestreak — access all 3 channels and can coordinate freely.</div>
+      </div>
+      <div class="ve-card" style="--i:4; border-top: 3px solid var(--amber);">
+        <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px;">Tool Layer</div>
+        <div style="font-size: 13px; color: var(--text-dim);">Amp, Codex CLI, OpenCode — external coding tools that Wheeljack orchestrates for implementation tasks.</div>
+      </div>
+      <div class="ve-card" style="--i:5; border-top: 3px solid var(--rose);">
+        <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px;">Air-Gapped</div>
+        <div style="font-size: 13px; color: var(--text-dim);">Ratchet and Arcee operate in isolation — no cross-agent communication. Security boundary by design.</div>
+      </div>
+    </div>
+
+
+    <!-- ═══ SECTION 5: DIGEST PIPELINE ═══ -->
+    <div id="s5" class="sec-head"><span class="sec-num">05</span> The Digest Pipeline</div>
+    <p class="sec-desc">A concrete example of multi-agent coordination: turning 194+ weekly WhatsApp messages into a published blog digest.</p>
+
+    <div class="flow-steps">
+      <div class="flow-step" style="--i:1;">
+        <div class="flow-step__num">1</div>
+        <div class="flow-step__content">
+          <span class="flow-step__agent agent-prowl">Prowl</span>
+          <h4>Scan WhatsApp Group</h4>
+          <p>Prowl ingests 194+ messages/week from the AI tools WhatsApp group, filtering signal from noise.</p>
+        </div>
+      </div>
+      <div class="flow-step" style="--i:2;">
+        <div class="flow-step__num">2</div>
+        <div class="flow-step__content">
+          <span class="flow-step__agent agent-prowl">Prowl</span>
+          <h4>Extract Highlights</h4>
+          <p>Preserves Indonesian slang and cultural context. Captures tool recommendations, hot takes, and community sentiment.</p>
+        </div>
+      </div>
+      <div class="flow-step" style="--i:3;">
+        <div class="flow-step__num">3</div>
+        <div class="flow-step__content">
+          <span class="flow-step__agent agent-prowl">Prowl</span>
+          <h4>Structure into Categories</h4>
+          <p>Organizes highlights into thematic sections: new tools, community debates, tutorials shared, notable quotes.</p>
+        </div>
+      </div>
+      <div class="flow-step" style="--i:4;">
+        <div class="flow-step__num">4</div>
+        <div class="flow-step__content">
+          <span class="flow-step__agent agent-prowl">Prowl</span>
+          <h4>Send to Wheeljack</h4>
+          <p>Structured JSON payload via <code style="font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); padding: 1px 5px; border-radius: 3px;">sessions_send</code>. Data format is pre-agreed — no ambiguity in the handoff.</p>
+        </div>
+      </div>
+      <div class="flow-step" style="--i:5;">
+        <div class="flow-step__num">5</div>
+        <div class="flow-step__content">
+          <span class="flow-step__agent agent-wheeljack">Wheeljack</span>
+          <h4>Format, Branch, PR</h4>
+          <p>Wheeljack formats the digest as MDX, creates a feature branch, and opens a Pull Request on the blog repository.</p>
+        </div>
+      </div>
+      <div class="flow-step" style="--i:6;">
+        <div class="flow-step__num">6</div>
+        <div class="flow-step__content">
+          <span class="flow-step__agent agent-optimus">Optimus</span>
+          <h4>Notify for Review</h4>
+          <p>Optimus pings Zain with the PR link. Human reviews, edits if needed, and merges. The digest goes live.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══ SECTION 6: HUMAN-IN-THE-LOOP ═══ -->
+    <div id="s6" class="sec-head"><span class="sec-num">06</span> Human-in-the-Loop Philosophy</div>
+    <p class="sec-desc">Not everything should be automated. The system explicitly tags what agents can handle autonomously vs. what needs Zain's judgment.</p>
+
+    <div class="two-col">
+      <div style="--i:1; animation: fadeUp 0.4s ease-out both; animation-delay: 0.06s;">
+        <div class="col-header col-header--auto">bot-actionable</div>
+        <div class="col-body col-body--auto">
+          <ul>
+            <li>Code formatting &amp; linting fixes</li>
+            <li>PR creation from structured data</li>
+            <li>Data extraction &amp; summarization</li>
+            <li>Calendar event creation</li>
+            <li>Routine card updates &amp; status changes</li>
+            <li>WhatsApp digest compilation</li>
+            <li>File organization &amp; knowledge updates</li>
+          </ul>
+        </div>
+      </div>
+      <div style="--i:2; animation: fadeUp 0.4s ease-out both; animation-delay: 0.12s;">
+        <div class="col-header col-header--human">needs-human</div>
+        <div class="col-body col-body--human">
+          <ul>
+            <li>Publishing blog posts or public content</li>
+            <li>Financial decisions &amp; transactions</li>
+            <li>Architecture &amp; design choices</li>
+            <li>External communications on Zain's behalf</li>
+            <li>Deleting or archiving important data</li>
+            <li>Approving agent access changes</li>
+            <li>Merging PRs to production</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout-blueprint" style="margin-top: 24px; --i:3; animation: fadeUp 0.4s ease-out both; animation-delay: 0.18s;">
+      The key insight: agents should maximize <em>preparation</em> and minimize decision burden. A PR is ready to merge with one click. A digest is formatted and proofread. The human makes the call, not the busywork.
+    </div>
+
+    <!-- ═══ Footer ═══ -->
+    <div style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+      <span>Project Transformers — Architecture Visualization</span>
+      <span>
+        <a href="https://www.zainfathoni.com/blog/project-transformers-building-personal-ai-army" style="color: var(--text-muted);">Blog Post</a>
+        &nbsp;·&nbsp;
+        <a href="https://ark.zainf.dev/" style="color: var(--text-muted);">The Ark</a>
+      </span>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /wrap -->
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    look: 'classic',
+    themeVariables: {
+      primaryColor: isDark ? '#1a2540' : '#e8eef4',
+      primaryBorderColor: isDark ? '#60a5fa' : '#2563eb',
+      primaryTextColor: isDark ? '#e2e8f0' : '#0f172a',
+      secondaryColor: isDark ? '#13302e' : '#ecfdf5',
+      secondaryBorderColor: isDark ? '#14b8a6' : '#059669',
+      secondaryTextColor: isDark ? '#e2e8f0' : '#0f172a',
+      tertiaryColor: isDark ? '#27201a' : '#fef3c7',
+      tertiaryBorderColor: isDark ? '#d97706' : '#b45309',
+      tertiaryTextColor: isDark ? '#e2e8f0' : '#0f172a',
+      lineColor: isDark ? '#475569' : '#94a3b8',
+      fontSize: '15px',
+      fontFamily: "'Bricolage Grotesque', system-ui, sans-serif",
+      noteBkgColor: isDark ? '#1a2540' : '#f0f4f8',
+      noteTextColor: isDark ? '#e2e8f0' : '#0f172a',
+      noteBorderColor: isDark ? '#60a5fa' : '#2563eb',
+    }
+  });
+</script>
+
+<script>
+  // Theme toggle
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+  }
+
+  // Mermaid zoom controls
+  var INITIAL_ZOOM = 1.3;
+
+  function zoomDiagram(btn, factor) {
+    var wrap = btn.closest('.mermaid-wrap');
+    var target = wrap.querySelector('.mermaid');
+    var current = parseFloat(target.dataset.zoom || INITIAL_ZOOM);
+    var next = Math.min(Math.max(current * factor, 0.4), 5);
+    target.dataset.zoom = next;
+    target.style.zoom = next;
+  }
+
+  function resetZoom(btn) {
+    var wrap = btn.closest('.mermaid-wrap');
+    var target = wrap.querySelector('.mermaid');
+    target.dataset.zoom = INITIAL_ZOOM;
+    target.style.zoom = INITIAL_ZOOM;
+  }
+
+  document.querySelectorAll('.mermaid-wrap').forEach(function(wrap) {
+    wrap.addEventListener('wheel', function(e) {
+      if (!e.ctrlKey && !e.metaKey) return;
+      e.preventDefault();
+      var target = wrap.querySelector('.mermaid');
+      var current = parseFloat(target.dataset.zoom || INITIAL_ZOOM);
+      var factor = e.deltaY < 0 ? 1.1 : 0.9;
+      var next = Math.min(Math.max(current * factor, 0.4), 5);
+      target.dataset.zoom = next;
+      target.style.zoom = next;
+    }, { passive: false });
+
+    var startX, startY, scrollL, scrollT;
+    wrap.addEventListener('mousedown', function(e) {
+      if (e.target.closest('.zoom-controls')) return;
+      wrap.classList.add('is-panning');
+      startX = e.clientX;
+      startY = e.clientY;
+      scrollL = wrap.scrollLeft;
+      scrollT = wrap.scrollTop;
+    });
+    window.addEventListener('mousemove', function(e) {
+      if (!wrap.classList.contains('is-panning')) return;
+      wrap.scrollLeft = scrollL - (e.clientX - startX);
+      wrap.scrollTop = scrollT - (e.clientY - startY);
+    });
+    window.addEventListener('mouseup', function() {
+      wrap.classList.remove('is-panning');
+    });
+  });
+
+  // Scroll spy for TOC
+  (function() {
+    const toc = document.getElementById('toc');
+    const links = toc.querySelectorAll('a[href^="#"]');
+    const sections = [];
+
+    links.forEach(link => {
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) sections.push({ id, el, link });
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const match = sections.find(s => s.el === entry.target);
+          if (match) {
+            match.link.classList.add('active');
+            if (window.innerWidth <= 1000) {
+              match.link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+          }
+        }
+      });
+    }, { rootMargin: '-10% 0px -80% 0px' });
+
+    sections.forEach(s => observer.observe(s.el));
+
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.replaceState(null, '', '#' + id);
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
