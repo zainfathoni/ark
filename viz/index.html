@@ -34,6 +34,12 @@
     td a:hover { text-decoration: underline; }
     .empty { color: var(--text-dim); padding: 3rem 0; text-align: center; }
     .count { color: var(--text-dim); font-size: 0.85rem; margin-top: 1.5rem; }
+    .cat-row td {
+      font-weight: 700; font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--accent); padding-top: 1.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .cat-row:first-child td { padding-top: 0; }
     @media (max-width: 600px) {
       td:nth-child(2), th:nth-child(2) { display: none; }
     }
@@ -45,16 +51,28 @@
   <table>
     <thead><tr><th>Title</th><th>Author</th><th>Date</th></tr></thead>
     <tbody>
+      <tr class="cat-row"><td colspan="3">System</td></tr>
       <tr>
         <td><a href="architecture.html">Project Transformers — System Architecture</a></td>
         <td>Optimus 🍠</td>
         <td>2026-03-30</td>
       </tr>
       <tr>
+        <td><a href="memory-management-method.html">AI Agent Memory Management — PARA + QMD + Decay</a></td>
+        <td>Optimus 🍠</td>
+        <td>2026-03-30</td>
+      </tr>
+      <tr>
         <td><a href="ops.html">Autobot Operations Dashboard</a></td>
         <td>Optimus 🍠</td>
-        <td>2026-03-29</td>
+        <td>2026-03-30</td>
       </tr>
+      <tr>
+        <td><a href="shared-conventions-map.html">Shared Conventions Map — Project Transformers</a></td>
+        <td>Optimus 🍠</td>
+        <td>2026-03-30</td>
+      </tr>
+      <tr class="cat-row"><td colspan="3">Other</td></tr>
       <tr>
         <td><a href="ups-recommendation.html">Rekomendasi UPS — Zain's Setup (Final)</a></td>
         <td>Prowl 🚔</td>
@@ -71,11 +89,6 @@
         <td>2026-03-20</td>
       </tr>
       <tr>
-        <td><a href="memory-management-method.html">AI Agent Memory Management — PARA + QMD + Decay</a></td>
-        <td>Optimus 🍠</td>
-        <td>2026-03-20</td>
-      </tr>
-      <tr>
         <td><a href="hilal-idul-fitri-1446h.html">Data Hilal Awal Syawal 1446 H — Penentuan Idul Fitri 2025</a></td>
         <td>Alpha Trion 📿</td>
         <td>2026-03-19</td>
@@ -89,11 +102,6 @@
         <td><a href="agent-orchestration.html">Agent Orchestration — Symphony · Paperclip · OpenClaw · Hybrid</a></td>
         <td>Optimus 🍠</td>
         <td>2026-03-12</td>
-      </tr>
-      <tr>
-        <td><a href="shared-conventions-map.html">Shared Conventions Map — Project Transformers</a></td>
-        <td>Optimus 🍠</td>
-        <td>2026-03-05</td>
       </tr>
       <tr>
         <td><a href="concert-fractions.html">Concert Fractions — Singapore Bar Method</a></td>

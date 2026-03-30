@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="viz-author" content="Optimus 🍠">
-  <meta name="viz-date"   content="2026-03-05">
+  <meta name="viz-date"   content="2026-03-30">
+  <meta name="viz-category" content="System">
 <title>Shared Conventions Map — Project Transformers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -403,7 +404,7 @@
     <div class="file-list">
       <div class="file-item">
         <div class="fname" style="color: var(--gold);">trigger-phrases.json</div>
-        <div class="fdesc">Fuel check ⛽ · Park it 🅿️ · Visualize 🪄</div>
+        <div class="fdesc">Fuel check ⛽ · Park it 🅿️ · Visualize 🪄 · Compound it 🧪</div>
       </div>
       <div class="file-item">
         <div class="fname" style="color: var(--teal);">fizzy-conventions.json</div>
@@ -483,6 +484,9 @@
       <div class="bot-chip bot-chip--ok"><span class="emoji">🔬</span><div>Perceptor<span class="loc">AGENTS.md</span></div></div>
       <div class="bot-chip bot-chip--ok"><span class="emoji">📼</span><div>Rewind<span class="loc">AGENTS.md</span></div></div>
       <div class="bot-chip bot-chip--ok"><span class="emoji">🚨</span><div>Red Alert<span class="loc">AGENTS.md</span></div></div>
+      <div class="bot-chip bot-chip--ok"><span class="emoji">🎷</span><div>Jazz<span class="loc">AGENTS.md</span></div></div>
+      <div class="bot-chip bot-chip--ok"><span class="emoji">🔩</span><div>Rivet<span class="loc">AGENTS.md</span></div></div>
+      <div class="bot-chip bot-chip--ok"><span class="emoji">📿</span><div>Alpha Trion<span class="loc">AGENTS.md</span></div></div>
       <div class="bot-chip bot-chip--locked"><span class="emoji">❤️‍🩹</span><div>Ratchet<span class="loc">air-gapped</span></div></div>
       <div class="bot-chip bot-chip--locked"><span class="emoji">💗</span><div>Arcee<span class="loc">air-gapped</span></div></div>
     </div>
@@ -541,8 +545,14 @@
 
       <div class="trigger-card" style="border-color: var(--gold-dim);">
         <div class="trigger-name">Fuel check ⛽</div>
-        <div class="trigger-scope scope-optimus">optimus only</div>
-        <div class="trigger-desc">Run codexbar-heartbeat.sh — report Claude weekly limits, Amp hourly credits, Codex replenishment status</div>
+        <div class="trigger-scope scope-all">all bots</div>
+        <div class="trigger-desc">Run codexbar usage across all providers — report Claude weekly limits, Amp hourly credits, Codex replenishment status</div>
+      </div>
+
+      <div class="trigger-card" style="border-color: var(--amber-dim);">
+        <div class="trigger-name">Compound it 🧪</div>
+        <div class="trigger-scope scope-all">all bots</div>
+        <div class="trigger-desc">Capture learnings from completed work into <code style="font-family: var(--font-mono); font-size: 11px; background: var(--amber-dim); color: var(--amber); padding: 1px 5px; border-radius: 3px;">knowledge/solutions/</code>. Updates PATTERNS.md if repo has one. Three questions: what worked, what broke, reusable insight.</div>
       </div>
 
     </div>
@@ -582,6 +592,23 @@
     Each bot gets a one-line signpost in <code>AGENTS.md</code> (loaded every session).
     Contextual deep links in <code>MEMORY.md</code> are bonus — not required.
     Air-gapped bots (Ratchet, Arcee) are excluded by design.
+  </div>
+
+  <!-- Cross-links -->
+  <div class="anim" style="--i:13; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border);">
+    <div class="sec-head" style="color: var(--slate);">
+      <span class="dot" style="background: var(--slate);"></span>
+      related pages
+    </div>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <a href="architecture.html" style="font-family: var(--font-mono); font-size: 12px; color: var(--blue); background: var(--blue-dim); padding: 6px 14px; border-radius: 6px; text-decoration: none; border: 1px solid var(--border);">System Architecture</a>
+      <a href="ops.html" style="font-family: var(--font-mono); font-size: 12px; color: var(--teal); background: var(--teal-dim); padding: 6px 14px; border-radius: 6px; text-decoration: none; border: 1px solid var(--border);">Operations Dashboard</a>
+      <a href="memory-management-method.html" style="font-family: var(--font-mono); font-size: 12px; color: var(--gold); background: var(--gold-dim); padding: 6px 14px; border-radius: 6px; text-decoration: none; border: 1px solid var(--border);">Memory Management</a>
+    </div>
+  </div>
+
+  <div style="margin-top: 20px; font-family: var(--font-mono); font-size: 10px; color: var(--text-dim);">
+    Updated 2026-03-30 · <a href="./" style="color: var(--text-dim);">← All Visualizations</a>
   </div>
 
 </div>
