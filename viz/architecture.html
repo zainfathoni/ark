@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="viz-author" content="Optimus 🍠">
-  <meta name="viz-date"   content="2026-03-29">
+  <meta name="viz-date"   content="2026-03-30">
   <title>Project Transformers — System Architecture</title>
   <meta name="description" content="How 17 AI agents coordinate through shared channels, task boards, and knowledge">
   <meta property="og:title" content="Project Transformers — System Architecture">
@@ -1049,6 +1049,45 @@ flowchart TD
     </div>
 
 
+    <!-- ── Parking Decision Tree ── -->
+    <div class="ve-card__label" style="margin-top: 32px; margin-bottom: 12px;">🅿️ Park It — Routing Decision Tree</div>
+    <p style="font-size: 13px; color: var(--text-dim); margin-bottom: 16px; max-width: 600px;">
+      When parking work, the destination depends on what kind of content you're storing. Multiple destinations can combine.
+    </p>
+
+    <div class="card-grid-2" style="margin-bottom: 24px;">
+      <div class="tree" style="--i:7; animation: fadeUp 0.4s ease-out both; animation-delay: 0.42s;">
+        <div class="tree-root">Park It 🅿️</div>
+        <div style="padding-left:20px;">
+          <div><span class="tree-branch">├── </span><span class="tree-name">Tracked task?</span> <span class="tree-desc">→ Fizzy card update</span> <span class="tree-access tree-access--all">steps + desc + column</span></div>
+          <div><span class="tree-branch">├── </span><span class="tree-name">Lesson / decision?</span> <span class="tree-desc">→ MEMORY.md</span> <span class="tree-access tree-access--restricted">curated, ≤4KB</span></div>
+          <div><span class="tree-branch">├── </span><span class="tree-name">Reference material?</span> <span class="tree-desc">→ knowledge/</span> <span class="tree-access tree-access--all">structured facts</span></div>
+          <div><span class="tree-branch">├── </span><span class="tree-name">WIP context?</span> <span class="tree-desc">→ memory/YYYY-MM-DD.md</span> <span class="tree-access tree-access--all">raw daily logs</span></div>
+          <div><span class="tree-branch">└── </span><span class="tree-name">Needs revisiting?</span> <span class="tree-desc">→ Cron reminder</span> <span class="tree-access tree-access--restricted">scheduled wake</span></div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="ve-card ve-card--recessed" style="--i:8; padding: 14px 18px; border-left: 3px solid var(--emerald);">
+          <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">🎯 Fizzy Card</div>
+          <div style="font-size: 12px; color: var(--text-dim);">Update existing card — check off steps, update description, move column. <strong>Never create new cards when parking.</strong></div>
+        </div>
+        <div class="ve-card ve-card--recessed" style="--i:9; padding: 14px 18px; border-left: 3px solid var(--teal);">
+          <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">🧠 MEMORY.md</div>
+          <div style="font-size: 12px; color: var(--text-dim);">Only for genuinely reusable insights, convention changes, or important decisions. Strict size budget.</div>
+        </div>
+        <div class="ve-card ve-card--recessed" style="--i:10; padding: 14px 18px; border-left: 3px solid var(--accent-bright);">
+          <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">📓 Daily Notes</div>
+          <div style="font-size: 12px; color: var(--text-dim);">Default destination for most parking. "Here's where I left off." Archived after ~7 days.</div>
+        </div>
+        <div class="ve-card ve-card--recessed" style="--i:11; padding: 14px 18px; border-left: 3px solid var(--amber);">
+          <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">⏰ Cron Reminder</div>
+          <div style="font-size: 12px; color: var(--text-dim);">Schedule a future wake event to revisit parked work at the right time.</div>
+        </div>
+      </div>
+    </div>
+
+
     <!-- ═══ SECTION 3: COST OPTIMIZATION ═══ -->
     <div id="s3" class="sec-head"><span class="sec-num">03</span> Cost Optimization Journey</div>
     <p class="sec-desc">Weekly usage relative to 4-week rolling average (= 100%). Bars show how each week compares to our normal operating cost.</p>
@@ -1409,7 +1448,7 @@ flowchart TD
 
     <!-- ═══ Footer ═══ -->
     <div style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-      <span>Project Transformers — Architecture · Updated 2026-03-29 21:25 WIB</span>
+      <span>Project Transformers — Architecture · Updated 2026-03-30 16:50 WIB</span>
       <span>
         <a href="https://www.zainfathoni.com/blog/project-transformers-building-personal-ai-army" style="color: var(--text-muted);">Blog Post</a>
         &nbsp;·&nbsp;
