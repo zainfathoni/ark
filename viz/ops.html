@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="viz-author" content="Optimus 🍠">
-  <meta name="viz-date"   content="2026-03-30">
+  <meta name="viz-date"   content="2026-04-12">
   <meta name="viz-category" content="System">
   <title>Autobot Operations Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -464,22 +464,22 @@
     <!-- Hero -->
     <div class="hero fade-up">
       <h1>Autobot Operations Center</h1>
-      <p class="subtitle">All automated jobs, heartbeats, and cron schedules — updated 2026-03-29 21:25 WIB</p>
+      <p class="subtitle">All automated jobs, heartbeats, and cron schedules — updated 2026-04-12 21:20 WIB</p>
       <div class="kpi-row">
         <div class="kpi">
-          <div class="kpi-num">12</div>
-          <div class="kpi-label">Active Jobs</div>
+          <div class="kpi-num">16</div>
+          <div class="kpi-label">Recurring Jobs</div>
         </div>
         <div class="kpi">
-          <div class="kpi-num amber">6</div>
+          <div class="kpi-num amber">7</div>
           <div class="kpi-label">Agents with Crons</div>
         </div>
         <div class="kpi">
-          <div class="kpi-num emerald">64%</div>
+          <div class="kpi-num emerald">168%</div>
           <div class="kpi-label">vs 4-Week Avg</div>
         </div>
         <div class="kpi">
-          <div class="kpi-num rose">1</div>
+          <div class="kpi-num rose">4</div>
           <div class="kpi-label">Jobs Erroring</div>
         </div>
       </div>
@@ -612,8 +612,17 @@
           <span class="job-agent agent-hound">🔍 Hound</span>
         </div>
         <div class="meta-row"><span class="meta-dot meta-dot--pending"></span><span class="status-badge status-pending">Pending</span></div>
-        <div class="job-desc">Remind Zain to file SPT Tahunan 2025. Auto-deletes after firing.</div>
-        <div class="job-schedule">2026-04-01 08:00 WIB</div>
+        <div class="job-desc">Tax filing follow-up after deadline extension. One-shot reminder queued by Hound.</div>
+        <div class="job-schedule">2026-04-13 09:00 WIB</div>
+      </div>
+      <div class="job-card job-card--oneshot fade-up" style="animation-delay:0.05s">
+        <div class="job-header">
+          <div class="job-name">WIGC 2026 Results Check</div>
+          <span class="job-agent agent-bumblebee">🐝 Bumblebee</span>
+        </div>
+        <div class="meta-row"><span class="meta-dot meta-dot--pending"></span><span class="status-badge status-pending">Pending</span></div>
+        <div class="job-desc">One-shot follow-up on WIGC 2026 results and next family action.</div>
+        <div class="job-schedule">2026-04-14 09:00 WIB</div>
       </div>
     </div>
 
@@ -655,12 +664,12 @@
 
     <!-- Dispatcher -->
     <div id="dispatcher" class="sec-head"><span class="sec-num">4</span> <span style="color:var(--accent-emerald)">NEW</span> Fizzy Dispatcher</div>
-    <p style="color:var(--text-dim);font-size:0.88rem;margin-bottom:0.75rem">Built today (2026-03-29). Runs inside Optimus heartbeat. Routes bot-actionable Fizzy cards to coding agents automatically.</p>
+    <p style="color:var(--text-dim);font-size:0.88rem;margin-bottom:0.75rem">Runs inside Optimus heartbeat. Current dispatcher snapshot: 0 running, 6 tracked cards, 5 awaiting judgment, 1 stopped after card state changed.</p>
 
     <div class="dispatch-flow">
       <div class="dispatch-step fade-up">
         <h4>Query Fizzy</h4>
-        <p>Get open bot-actionable cards, check daily limits (5/day, 2/run)</p>
+        <p>Scan open bot-actionable cards, recover prior state, enforce daily limits (5/day, 2/run)</p>
       </div>
       <div class="dispatch-arrow">→</div>
       <div class="dispatch-step fade-up" style="animation-delay:0.1s">
@@ -670,7 +679,7 @@
       <div class="dispatch-arrow">→</div>
       <div class="dispatch-step fade-up" style="animation-delay:0.2s">
         <h4>Dispatch</h4>
-        <p>Coding → Amp/Codex agent<br>Research → LLM heartbeat queue<br>BTA repos → excluded</p>
+        <p>Coding → Amp / Claude / Codex route<br>Research → heartbeat queue<br>BTA repos → excluded</p>
       </div>
     </div>
 
@@ -752,7 +761,7 @@
           <tr>
             <td>🍠 Optimus</td>
             <td>Morning Summary, Fuel Check (4×), Backup (4×), Ark Viz Refresh (weekly)</td>
-            <td>Fizzy + Dispatcher + Daily Health</td>
+            <td>Fizzy + Dispatcher + Fuel + Daily Health</td>
             <td>Coordinator</td>
           </tr>
           <tr>
@@ -763,7 +772,7 @@
           </tr>
           <tr>
             <td>🚔 Prowl</td>
-            <td>WA Scan (⚠️), AI Digest (weekly)</td>
+            <td>WA Scan (⚠️), AI Digest (weekly), Career board daily</td>
             <td>Career/finance</td>
             <td>Career, Social</td>
           </tr>
@@ -781,7 +790,7 @@
           </tr>
           <tr>
             <td>🔍 Hound</td>
-            <td>Tax Review (weekly), SPT Reminder</td>
+            <td>Tax Review (weekly), SPT reminder</td>
             <td>Tax compliance</td>
             <td>Tax</td>
           </tr>
@@ -821,22 +830,19 @@
 
       <div class="job-card job-card--healthy fade-up" style="animation-delay:0.05s">
         <div class="job-header">
-          <div class="job-name">✅ Dispatcher — Newly Deployed</div>
+          <div class="job-name">🧭 Dispatcher — Stable but Backlogged</div>
           <span class="status-badge status-ok">New</span>
         </div>
-        <div class="job-desc">575 lines, dry-run validated. 8 bot-actionable cards in queue. First live run on next heartbeat. Previously: 20 straight days of "too large, skipping" — now fixed.</div>
+        <div class="job-desc">No active run right now, but state file is healthy. 6 cards tracked, 5 waiting for human judgment after agent runs, latest card (#273) ended at runtime cap and is parked for follow-up.</div>
       </div>
 
       <div class="job-card fade-up" style="animation-delay:0.1s;border-left:3px solid var(--accent-teal)">
         <div class="job-header">
-          <div class="job-name">📊 Fuel Status (as of 21:25)</div>
+          <div class="job-name">📊 Fuel Status (as of 21:09)</div>
           <span class="status-badge status-ok">OK</span>
         </div>
         <div class="job-desc">
-          Claude (BTA): 5h 12% daily | 26% weekly (3% behind pace)<br>
-          Amp Free: 4.4% used, 95.6% remaining (resets hourly)<br>
-          Codex: Active, sessions running, no rate limit events<br>
-          Copilot Business: 8.7% primary | 0% secondary
+          Claude (Zain): 5h 0% | wk 0% | monthly budget 86% used<br>Claude (BTA): 5h 0% | wk 5% (14% behind pace) | monthly budget exhausted<br>Amp Free: 0.0% used, 100.0% remaining (resets hourly)<br>Codex: parser bug on new ProLite plan, but raw rate-limit payload says 14% primary | 11% weekly and Spark 22% primary | 58% weekly<br>Copilot: 1.2% primary | 20% secondary
         </div>
       </div>
     </div>
@@ -852,7 +858,7 @@
     </div>
 
     <div class="footer">
-      Autobot Operations Dashboard · Last updated: 2026-03-30 17:05 WIB · <a href="./" style="color: var(--text-dim); text-decoration: none;">All Visualizations</a>
+      Autobot Operations Dashboard · Last updated: 2026-04-12 21:20 WIB · <a href="./" style="color: var(--text-dim); text-decoration: none;">All Visualizations</a>
     </div>
 
   </div>
