@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenClaw × Linear Projection Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700;800&family=Red+Hat+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-body: 'Red Hat Display', system-ui, sans-serif;
+      --font-mono: 'Red Hat Mono', ui-monospace, monospace;
+      --bg: #f6f7fb;
+      --surface: rgba(255,255,255,0.9);
+      --surface-elevated: rgba(255,255,255,0.98);
+      --surface-soft: rgba(242,245,252,0.92);
+      --border: rgba(16,24,40,0.08);
+      --border-bright: rgba(16,24,40,0.18);
+      --text: #132033;
+      --text-dim: #5d6b82;
+      --accent: #0f766e;
+      --accent-dim: rgba(15,118,110,0.10);
+      --blue: #2563eb;
+      --blue-dim: rgba(37,99,235,0.10);
+      --amber: #d97706;
+      --amber-dim: rgba(217,119,6,0.12);
+      --rose: #be185d;
+      --rose-dim: rgba(190,24,93,0.10);
+      --violet: #6d28d9;
+      --violet-dim: rgba(109,40,217,0.10);
+      --green: #15803d;
+      --green-dim: rgba(21,128,61,0.10);
+      --shadow: 0 10px 30px rgba(15,23,42,0.08);
+    }
+
+    [data-theme="dark"] {
+      --bg: #091018;
+      --surface: rgba(15,23,35,0.88);
+      --surface-elevated: rgba(19,29,44,0.98);
+      --surface-soft: rgba(12,19,30,0.92);
+      --border: rgba(255,255,255,0.07);
+      --border-bright: rgba(255,255,255,0.16);
+      --text: #e6eefc;
+      --text-dim: #98a6bf;
+      --accent: #2dd4bf;
+      --accent-dim: rgba(45,212,191,0.11);
+      --blue: #60a5fa;
+      --blue-dim: rgba(96,165,250,0.12);
+      --amber: #fbbf24;
+      --amber-dim: rgba(251,191,36,0.12);
+      --rose: #f472b6;
+      --rose-dim: rgba(244,114,182,0.10);
+      --violet: #a78bfa;
+      --violet-dim: rgba(167,139,250,0.12);
+      --green: #4ade80;
+      --green-dim: rgba(74,222,128,0.12);
+      --shadow: 0 20px 50px rgba(0,0,0,0.30);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, var(--blue-dim), transparent 26%),
+        radial-gradient(circle at 85% 15%, var(--violet-dim), transparent 24%),
+        radial-gradient(circle at 70% 80%, var(--accent-dim), transparent 28%),
+        var(--bg);
+      line-height: 1.5;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 28px 22px 80px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr 0.9fr;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+
+    .hero-card, .panel, .rail-card, .metric, .card {
+      min-width: 0;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, var(--surface-elevated), var(--surface));
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -40% auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-dim), transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 11px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: currentColor;
+      box-shadow: 0 0 18px currentColor;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      max-width: 11ch;
+    }
+
+    .lede {
+      margin: 16px 0 18px;
+      color: var(--text-dim);
+      font-size: 18px;
+      max-width: 62ch;
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      align-content: start;
+    }
+
+    .metric {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric .label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .metric .value {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric .desc {
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-top: 18px;
+    }
+
+    .panel h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .panel-copy {
+      color: var(--text-dim);
+      margin: 0 0 18px;
+      max-width: 72ch;
+    }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: 0.95fr 1.2fr 0.95fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .lane {
+      display: grid;
+      gap: 14px;
+    }
+
+    .lane-title {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 11px;
+      color: var(--text-dim);
+      padding: 0 4px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--surface-elevated), var(--surface));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 16px 14px;
+      position: relative;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 18px;
+      bottom: 18px;
+      width: 3px;
+      border-radius: 999px;
+      background: var(--card-color, var(--accent));
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+      padding-left: 10px;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .badge {
+      flex-shrink: 0;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      background: var(--card-dim, var(--accent-dim));
+      color: var(--card-color, var(--accent));
+      border: 1px solid color-mix(in srgb, var(--card-color, var(--accent)) 28%, transparent);
+    }
+
+    .card-body {
+      padding-left: 10px;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+
+    .node-list {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .node-list li {
+      position: relative;
+      padding-left: 14px;
+      overflow-wrap: break-word;
+    }
+
+    .node-list li::before {
+      content: "›";
+      position: absolute;
+      left: 0;
+      color: var(--card-color, var(--accent));
+      font-weight: 700;
+    }
+
+    .code {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .center-stack {
+      display: grid;
+      gap: 14px;
+      position: relative;
+    }
+
+    .connector-column {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      padding: 8px 0;
+    }
+
+    .arrow-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+    }
+
+    .arrow-chip svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .three-up {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .rail {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .rail-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .table-wrap {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--surface-soft);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      background: color-mix(in srgb, var(--surface-elevated) 82%, transparent);
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .status--good { color: var(--green); background: var(--green-dim); }
+    .status--warn { color: var(--amber); background: var(--amber-dim); }
+    .status--info { color: var(--blue); background: var(--blue-dim); }
+    .status--pink { color: var(--rose); background: var(--rose-dim); }
+
+    .callout {
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, var(--surface-elevated), var(--surface));
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border-bright);
+      background: var(--swatch);
+    }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--surface);
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px 18px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▸"; color: var(--text-dim); }
+    details[open] summary::before { content: "▾"; }
+
+    .details-body {
+      padding: 0 18px 18px;
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+
+    @media (max-width: 1120px) {
+      .hero, .rail, .architecture, .three-up {
+        grid-template-columns: 1fr;
+      }
+      .metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page { padding: 16px 14px 56px; }
+      .hero-card, .panel, .rail-card { padding: 18px; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      h1 { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">Ark Viz · architecture sketch</div>
+        <h1>Linear as cockpit, OpenClaw as black box recorder</h1>
+        <p class="lede">
+          This is the hybrid model for a Ralph-style process on OpenClaw. Linear stays human-friendly and writable via MCP.
+          Internal workflow truth, retries, events, artifacts, and telemetry stay in OpenClaw’s own runtime store.
+        </p>
+        <div class="hero-pills">
+          <span class="pill">Linear = projection</span>
+          <span class="pill">OpenClaw DB = source of runtime truth</span>
+          <span class="pill">MCP = integration surface</span>
+          <span class="pill">GitHub = code execution substrate</span>
+        </div>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="label">Planning layer</div>
+          <div class="value">1</div>
+          <div class="desc">Linear owns intake, hierarchy, and human-visible workflow.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Runtime truth</div>
+          <div class="value">4</div>
+          <div class="desc">Tasks, runs, events, artifacts. This is the spine.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Projection rule</div>
+          <div class="value">→</div>
+          <div class="desc">Internal state is summarized outward, never inferred back from comments alone.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Main win</div>
+          <div class="value">Audit</div>
+          <div class="desc">You can reconstruct exactly what happened on every task run.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>High-level architecture</h2>
+      <p class="panel-copy">
+        The key move is to avoid making Linear do double duty as both PM surface and execution ledger.
+        OpenClaw runs a reconciler loop, records every significant transition, then publishes a coarse summary back into Linear.
+      </p>
+      <div class="architecture">
+        <div class="lane">
+          <div class="lane-title">Human and planning surface</div>
+          <article class="card" style="--card-color: var(--blue); --card-dim: var(--blue-dim);">
+            <div class="card-header">
+              <div class="card-title">Linear workspace</div>
+              <span class="badge">MCP-facing</span>
+            </div>
+            <div class="card-body">
+              Teams, projects, issues, cycles, and human comments live here.
+              <ul class="node-list">
+                <li>Parent task and subtask hierarchy</li>
+                <li>Priority, owner, milestone, labels</li>
+                <li>Human approvals and escalations</li>
+                <li>Readable progress summaries</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card" style="--card-color: var(--violet); --card-dim: var(--violet-dim);">
+            <div class="card-header">
+              <div class="card-title">Linear MCP adapter</div>
+              <span class="badge">Bridge</span>
+            </div>
+            <div class="card-body">
+              Read and write only the fields humans care about.
+              <ul class="node-list">
+                <li>Sync issue status and assignee changes</li>
+                <li>Create comments for milestones only</li>
+                <li>Listen for operator inputs as signals</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <div class="center-stack">
+          <div class="lane-title">OpenClaw orchestration core</div>
+          <article class="card" style="--card-color: var(--accent); --card-dim: var(--accent-dim);">
+            <div class="card-header">
+              <div class="card-title">Reconciler + policy engine</div>
+              <span class="badge">Brain</span>
+            </div>
+            <div class="card-body">
+              Periodically or event-driven, computes the next truth from all observed inputs.
+              <ul class="node-list">
+                <li>Build normalized task graph from Linear</li>
+                <li>Compute <span class="code">ready</span>, <span class="code">blocked</span>, <span class="code">awaiting_human</span></li>
+                <li>Apply concurrency, retry, and confidence policies</li>
+              </ul>
+            </div>
+          </article>
+
+          <div class="connector-column">
+            <div class="arrow-chip"><svg viewBox="0 0 20 20"><path d="M10 3v14M5 12l5 5 5-5"/></svg> dispatches</div>
+          </div>
+
+          <article class="card" style="--card-color: var(--amber); --card-dim: var(--amber-dim);">
+            <div class="card-header">
+              <div class="card-title">Worker runtime</div>
+              <span class="badge">Sessions</span>
+            </div>
+            <div class="card-body">
+              OpenClaw agents or ACP sessions do the actual work.
+              <ul class="node-list">
+                <li>Scoper, coder, reviewer, repairer</li>
+                <li>One isolated worktree per active coding attempt</li>
+                <li>Can target GitHub, CI, and local repo tools</li>
+              </ul>
+            </div>
+          </article>
+
+          <div class="connector-column">
+            <div class="arrow-chip"><svg viewBox="0 0 20 20"><path d="M10 3v14M5 12l5 5 5-5"/></svg> emits events</div>
+          </div>
+
+          <article class="card" style="--card-color: var(--green); --card-dim: var(--green-dim);">
+            <div class="card-header">
+              <div class="card-title">Runtime state store</div>
+              <span class="badge">Source of truth</span>
+            </div>
+            <div class="card-body">
+              This is the part Linear should not replace.
+              <ul class="node-list">
+                <li><span class="code">tasks</span> normalized from planning tools</li>
+                <li><span class="code">task_runs</span> attempt-by-attempt execution ledger</li>
+                <li><span class="code">task_events</span> append-only timeline</li>
+                <li><span class="code">artifacts</span> prompts, PRs, CI, logs, diffs</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <div class="lane">
+          <div class="lane-title">Execution and observability edges</div>
+          <article class="card" style="--card-color: var(--rose); --card-dim: var(--rose-dim);">
+            <div class="card-header">
+              <div class="card-title">GitHub + CI substrate</div>
+              <span class="badge">External</span>
+            </div>
+            <div class="card-body">
+              Repo state, PRs, checks, and review comments are ingested as facts.
+              <ul class="node-list">
+                <li>PR open, review changes requested, CI failed</li>
+                <li>These become internal events, not just comments</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card" style="--card-color: var(--blue); --card-dim: var(--blue-dim);">
+            <div class="card-header">
+              <div class="card-title">Ark Viz / dashboard</div>
+              <span class="badge">Observability</span>
+            </div>
+            <div class="card-body">
+              Human-friendly window into the event model.
+              <ul class="node-list">
+                <li>Parent issue board</li>
+                <li>Task timeline and replay</li>
+                <li>Fleet metrics and stuck-task queue</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><span class="swatch" style="--swatch: var(--blue-dim);"></span> Human planning and projection</div>
+        <div class="legend-item"><span class="swatch" style="--swatch: var(--accent-dim);"></span> Orchestration policy</div>
+        <div class="legend-item"><span class="swatch" style="--swatch: var(--amber-dim);"></span> Active worker execution</div>
+        <div class="legend-item"><span class="swatch" style="--swatch: var(--green-dim);"></span> Durable internal truth</div>
+        <div class="legend-item"><span class="swatch" style="--swatch: var(--rose-dim);"></span> External execution systems</div>
+      </div>
+    </section>
+
+    <section class="rail">
+      <div class="rail-card">
+        <h2>Projection model, what goes to Linear vs what stays internal</h2>
+        <p class="panel-copy">
+          Keep Linear coarse and intentional. Keep OpenClaw detailed and forensic.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Concern</th>
+                <th>Linear</th>
+                <th>OpenClaw internal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Human-visible task status</td>
+                <td><span class="status status--good">yes</span></td>
+                <td>Projected from current internal state</td>
+              </tr>
+              <tr>
+                <td>Run attempts and retries</td>
+                <td><span class="status status--warn">summary only</span></td>
+                <td>Full attempt ledger with start, stop, exit reason</td>
+              </tr>
+              <tr>
+                <td>Prompt bundles and worker config</td>
+                <td><span class="status status--pink">no</span></td>
+                <td>Artifact records linked to each run</td>
+              </tr>
+              <tr>
+                <td>PR and CI milestones</td>
+                <td><span class="status status--info">milestone comments</span></td>
+                <td>Structured event entries with URLs and classification</td>
+              </tr>
+              <tr>
+                <td>Failure taxonomy</td>
+                <td><span class="status status--warn">human summary</span></td>
+                <td><span class="code">tests_failed</span>, <span class="code">spec_ambiguous</span>, <span class="code">review_rejected</span>, etc.</td>
+              </tr>
+              <tr>
+                <td>Exact timeline replay</td>
+                <td><span class="status status--pink">no</span></td>
+                <td>Append-only event stream</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="rail-card">
+        <h2>Recommended internal entities</h2>
+        <div class="three-up">
+          <article class="card" style="--card-color: var(--green); --card-dim: var(--green-dim);">
+            <div class="card-header">
+              <div class="card-title">Task</div>
+              <span class="badge">logical</span>
+            </div>
+            <div class="card-body">
+              One normalized work item derived from Linear issue data.
+            </div>
+          </article>
+          <article class="card" style="--card-color: var(--amber); --card-dim: var(--amber-dim);">
+            <div class="card-header">
+              <div class="card-title">Task run</div>
+              <span class="badge">attempt</span>
+            </div>
+            <div class="card-body">
+              One worker attempt against one task, with session and model metadata.
+            </div>
+          </article>
+          <article class="card" style="--card-color: var(--blue); --card-dim: var(--blue-dim);">
+            <div class="card-header">
+              <div class="card-title">Artifact</div>
+              <span class="badge">evidence</span>
+            </div>
+            <div class="card-body">
+              Prompt, diff summary, PR URL, CI run, review digest, or final resolution.
+            </div>
+          </article>
+        </div>
+
+        <div class="callout" style="margin-top: 16px;">
+          <strong>Design rule:</strong> Linear comments should be narrative summaries, not storage for raw execution data.
+          If a run cannot be replayed without reading a comment thread, the architecture is under-instrumented.
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Control loop</h2>
+      <p class="panel-copy">This is the operational heartbeat of the system.</p>
+      <div class="three-up">
+        <article class="card" style="--card-color: var(--blue); --card-dim: var(--blue-dim);">
+          <div class="card-header">
+            <div class="card-title">1. Ingest</div>
+            <span class="badge">pull + webhook</span>
+          </div>
+          <div class="card-body">
+            Read Linear changes, GitHub facts, and worker completions. Convert everything into canonical internal events.
+          </div>
+        </article>
+        <article class="card" style="--card-color: var(--accent); --card-dim: var(--accent-dim);">
+          <div class="card-header">
+            <div class="card-title">2. Reconcile</div>
+            <span class="badge">deterministic</span>
+          </div>
+          <div class="card-body">
+            Compute next state for every task. Decide whether to dispatch, retry, block, escalate, or complete.
+          </div>
+        </article>
+        <article class="card" style="--card-color: var(--green); --card-dim: var(--green-dim);">
+          <div class="card-header">
+            <div class="card-title">3. Project</div>
+            <span class="badge">human-facing</span>
+          </div>
+          <div class="card-body">
+            Update Linear status, add a compact summary comment, and refresh Ark Viz/dashboard views.
+          </div>
+        </article>
+      </div>
+
+      <details>
+        <summary>Suggested coarse Linear statuses mapped from richer internal state</summary>
+        <div class="details-body">
+          <ul class="node-list" style="--card-color: var(--accent); margin-top: 0;">
+            <li><span class="code">todo</span> ← discovered, blocked-but-unstarted</li>
+            <li><span class="code">in_progress</span> ← queued, coding, revising, awaiting_ci</li>
+            <li><span class="code">blocked</span> ← blocked, awaiting_human, auth_or_permissions</li>
+            <li><span class="code">in_review</span> ← awaiting_review, pr_open, awaiting_decision</li>
+            <li><span class="code">done</span> ← completed</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+  </main>
+</body>
+</html>
