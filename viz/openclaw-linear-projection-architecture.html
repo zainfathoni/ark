@@ -872,29 +872,29 @@
     <section class="hero">
       <div class="hero-card">
         <div class="eyebrow">Ark Viz · architecture sketch</div>
-        <h1>Linear as cockpit, OpenClaw as black box recorder</h1>
+        <h1>Deterministic control plane, agent judgment plane</h1>
         <p class="lede">
-          This is the hybrid model for a Ralph-style process on OpenClaw. Linear stays human-friendly and writable via MCP.
-          Internal workflow truth, retries, events, artifacts, and telemetry stay in OpenClaw’s own runtime store.
+          This is the hybrid model for a Ralph-style process on OpenClaw. The orchestration core should be deterministic code.
+          Linear stays human-friendly via MCP, OpenClaw acts as the operator shell, and LLM workers are only invoked where judgment is actually needed.
         </p>
         <div class="hero-pills">
-          <span class="pill">Linear = projection</span>
-          <span class="pill">OpenClaw DB = source of runtime truth</span>
-          <span class="pill">MCP = integration surface</span>
-          <span class="pill">GitHub = code execution substrate</span>
-          <span class="pill">Ark Viz/dashboard = observability surface</span>
+          <span class="pill">Deterministic script = orchestrator</span>
+          <span class="pill">Linear = projection cockpit</span>
+          <span class="pill">OpenClaw = operator shell</span>
+          <span class="pill">LLMs = scoped worker judgment</span>
+          <span class="pill">GitHub/CI = execution substrate</span>
         </div>
       </div>
       <div class="metrics-grid">
         <div class="metric">
-          <div class="label">Planning layer</div>
-          <div class="value">1</div>
-          <div class="desc">Linear owns intake, hierarchy, and human-visible workflow.</div>
+          <div class="label">Control plane</div>
+          <div class="value">Code</div>
+          <div class="desc">Dependency resolution, retries, projections, and state transitions stay deterministic.</div>
         </div>
         <div class="metric">
-          <div class="label">Runtime truth</div>
-          <div class="value">4</div>
-          <div class="desc">Tasks, runs, events, artifacts. This is the spine.</div>
+          <div class="label">Judgment plane</div>
+          <div class="value">LLM</div>
+          <div class="desc">Only used for scoping, coding, reviewing, repairing, and summarizing ambiguity.</div>
         </div>
         <div class="metric">
           <div class="label">Projection rule</div>
@@ -912,8 +912,8 @@
     <section class="panel">
       <h2>High-level architecture</h2>
       <p class="panel-copy">
-        The key move is to avoid making Linear do double duty as both PM surface and execution ledger.
-        OpenClaw runs a reconciler loop, records every significant transition, then publishes a coarse summary back into Linear.
+        The key move is to avoid making either Linear or prompt-driven skills do the job of a workflow engine.
+        A deterministic orchestrator script owns reconciliation and state. OpenClaw wraps that control plane with visibility, messaging, session spawning, and intervention.
       </p>
       <div class="architecture">
         <div class="lane">
@@ -951,18 +951,19 @@
         </div>
 
         <div class="center-stack">
-          <div class="lane-title">OpenClaw orchestration core</div>
+          <div class="lane-title">Deterministic control plane</div>
           <article class="card" style="--card-color: var(--accent); --card-dim: var(--accent-dim);">
             <div class="card-header">
-              <div class="card-title">Reconciler + policy engine</div>
-              <span class="badge">Brain</span>
+              <div class="card-title">Scripted reconciler + policy engine</div>
+              <span class="badge">Deterministic</span>
             </div>
             <div class="card-body">
               Periodically or event-driven, computes the next truth from all observed inputs.
               <ul class="node-list">
                 <li>Build normalized task graph from Linear</li>
                 <li>Compute <span class="code">ready</span>, <span class="code">blocked</span>, <span class="code">awaiting_human</span></li>
-                <li>Apply concurrency, retry, and confidence policies</li>
+                <li>Apply concurrency, retry, stale-task, and projection rules</li>
+                <li>No LLM required for the same-input same-output path</li>
               </ul>
             </div>
           </article>
@@ -973,15 +974,16 @@
 
           <article class="card" style="--card-color: var(--amber); --card-dim: var(--amber-dim);">
             <div class="card-header">
-              <div class="card-title">Worker runtime</div>
-              <span class="badge">Sessions</span>
+              <div class="card-title">Worker adapters + runtime</div>
+              <span class="badge">Judgment plane</span>
             </div>
             <div class="card-body">
-              OpenClaw agents or ACP sessions do the actual work.
+              Deterministic wrappers launch OpenClaw agents or ACP sessions only when judgment is needed.
               <ul class="node-list">
                 <li>Scoper, coder, reviewer, repairer</li>
                 <li>One isolated worktree per active coding attempt</li>
                 <li>Can target GitHub, CI, and local repo tools</li>
+                <li>Invoked explicitly, not used to decide routine orchestration</li>
               </ul>
             </div>
           </article>
@@ -1008,7 +1010,7 @@
         </div>
 
         <div class="lane">
-          <div class="lane-title">Execution and observability edges</div>
+          <div class="lane-title">Operator shell and observability edges</div>
           <article class="card" style="--card-color: var(--rose); --card-dim: var(--rose-dim);">
             <div class="card-header">
               <div class="card-title">GitHub + CI substrate</div>
@@ -1025,15 +1027,16 @@
 
           <article class="card" style="--card-color: var(--blue); --card-dim: var(--blue-dim);">
             <div class="card-header">
-              <div class="card-title">Ark Viz / dashboard</div>
-              <span class="badge">Observability</span>
+              <div class="card-title">OpenClaw shell + Ark Viz</div>
+              <span class="badge">Operator UX</span>
             </div>
             <div class="card-body">
-              Human-friendly window into the event model.
+              Human-friendly shell around the deterministic core.
               <ul class="node-list">
                 <li>Parent issue board</li>
                 <li>Task timeline and replay</li>
                 <li>Fleet metrics and stuck-task queue</li>
+                <li>Chat approvals, nudges, interventions, and debug views</li>
               </ul>
             </div>
           </article>
@@ -1042,8 +1045,8 @@
 
       <div class="legend">
         <div class="legend-item"><span class="swatch" style="--swatch: var(--blue-dim);"></span> Human planning and projection</div>
-        <div class="legend-item"><span class="swatch" style="--swatch: var(--accent-dim);"></span> Orchestration policy</div>
-        <div class="legend-item"><span class="swatch" style="--swatch: var(--amber-dim);"></span> Active worker execution</div>
+        <div class="legend-item"><span class="swatch" style="--swatch: var(--accent-dim);"></span> Deterministic control plane</div>
+        <div class="legend-item"><span class="swatch" style="--swatch: var(--amber-dim);"></span> Agent judgment plane</div>
         <div class="legend-item"><span class="swatch" style="--swatch: var(--green-dim);"></span> Durable internal truth</div>
         <div class="legend-item"><span class="swatch" style="--swatch: var(--rose-dim);"></span> External execution systems</div>
       </div>
@@ -1483,8 +1486,8 @@
     </section>
 
     <section class="panel">
-      <h2>Control loop</h2>
-      <p class="panel-copy">This is the operational heartbeat of the system.</p>
+      <h2>Deterministic control loop</h2>
+      <p class="panel-copy">This is the operational heartbeat of the system, and it should be code, not vibes.</p>
       <div class="three-up">
         <article class="card" style="--card-color: var(--blue); --card-dim: var(--blue-dim);">
           <div class="card-header">
@@ -1501,7 +1504,7 @@
             <span class="badge">deterministic</span>
           </div>
           <div class="card-body">
-            Compute next state for every task. Decide whether to dispatch, retry, block, escalate, or complete.
+            Compute next state for every task. Decide whether to dispatch, retry, block, escalate, or complete using deterministic policy.
           </div>
         </article>
         <article class="card" style="--card-color: var(--green); --card-dim: var(--green-dim);">
@@ -1510,7 +1513,7 @@
             <span class="badge">human-facing</span>
           </div>
           <div class="card-body">
-            Update Linear status, add a compact summary comment, and refresh Ark Viz/dashboard views.
+            Update Linear status, add a compact summary comment, and refresh Ark Viz/dashboard views without asking an LLM to manage routine state.
           </div>
         </article>
       </div>
