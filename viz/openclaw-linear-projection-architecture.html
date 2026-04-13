@@ -31,6 +31,8 @@
       --violet-dim: rgba(109,40,217,0.10);
       --green: #15803d;
       --green-dim: rgba(21,128,61,0.10);
+      --cyan: #0891b2;
+      --cyan-dim: rgba(8,145,178,0.11);
       --shadow: 0 10px 30px rgba(15,23,42,0.08);
     }
 
@@ -55,6 +57,8 @@
       --violet-dim: rgba(167,139,250,0.12);
       --green: #4ade80;
       --green-dim: rgba(74,222,128,0.12);
+      --cyan: #67e8f9;
+      --cyan-dim: rgba(103,232,249,0.12);
       --shadow: 0 20px 50px rgba(0,0,0,0.30);
     }
 
@@ -74,9 +78,10 @@
 
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
+    code { font-family: var(--font-mono); }
 
     .page {
-      max-width: 1380px;
+      max-width: 1420px;
       margin: 0 auto;
       padding: 28px 22px 80px;
     }
@@ -88,7 +93,7 @@
       margin-bottom: 22px;
     }
 
-    .hero-card, .panel, .rail-card, .metric, .card {
+    .hero-card, .panel, .rail-card, .metric, .card, .dashboard-card {
       min-width: 0;
     }
 
@@ -220,7 +225,7 @@
     .panel-copy {
       color: var(--text-dim);
       margin: 0 0 18px;
-      max-width: 72ch;
+      max-width: 74ch;
     }
 
     .architecture {
@@ -435,6 +440,7 @@
     .status--warn { color: var(--amber); background: var(--amber-dim); }
     .status--info { color: var(--blue); background: var(--blue-dim); }
     .status--pink { color: var(--rose); background: var(--rose-dim); }
+    .status--violet { color: var(--violet); background: var(--violet-dim); }
 
     .callout {
       border-radius: 18px;
@@ -470,6 +476,284 @@
       background: var(--swatch);
     }
 
+    .state-grid {
+      display: grid;
+      grid-template-columns: 1fr 84px 1fr 84px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .state-col {
+      display: grid;
+      gap: 10px;
+    }
+
+    .state-card {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--surface-elevated), var(--surface));
+      border-radius: 16px;
+      padding: 14px;
+      position: relative;
+      min-height: 88px;
+    }
+
+    .state-card .state-name {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+      color: var(--state-color, var(--accent));
+    }
+
+    .state-card .state-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .state-arrow-stack {
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+      align-content: center;
+    }
+
+    .state-arrow {
+      width: 70px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      color: var(--text-dim);
+      font-size: 11px;
+      text-align: center;
+      padding: 0 8px;
+    }
+
+    .mini-note {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .schema-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .schema-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, var(--surface-elevated), var(--surface));
+      overflow: hidden;
+    }
+
+    .schema-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .schema-title {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .schema-body {
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .field-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .field-list li {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .field-list li:last-child { border-bottom: none; }
+
+    .field-name {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .field-note {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-align: right;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 0.95fr 1.45fr 0.9fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .dashboard-card {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: linear-gradient(180deg, var(--surface-elevated), var(--surface));
+      padding: 16px;
+      min-height: 100%;
+    }
+
+    .dashboard-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .kpi-box {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      background: var(--surface-soft);
+    }
+
+    .kpi-box .k {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+
+    .kpi-box .v {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .issue-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .issue-row {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface-soft);
+      padding: 12px;
+    }
+
+    .issue-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+
+    .issue-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .issue-meta {
+      font-size: 12px;
+      color: var(--text-dim);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 90px 12px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .timeline-time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      padding-top: 2px;
+    }
+
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--dot-color, var(--accent));
+      margin-top: 4px;
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--dot-color, var(--accent)) 18%, transparent);
+    }
+
+    .timeline-body {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface-soft);
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .timeline-body strong { color: var(--text); }
+
+    .heat-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .heat-item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      background: var(--surface-soft);
+    }
+
+    .bar {
+      margin-top: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--surface-soft) 60%, var(--border));
+      overflow: hidden;
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      width: var(--w, 50%);
+      border-radius: inherit;
+      background: var(--bar-color, var(--accent));
+    }
+
     details {
       border: 1px solid var(--border);
       border-radius: 18px;
@@ -500,20 +784,23 @@
       font-size: 14px;
     }
 
-    @media (max-width: 1120px) {
-      .hero, .rail, .architecture, .three-up {
+    @media (max-width: 1220px) {
+      .hero, .rail, .architecture, .dashboard, .state-grid, .three-up, .schema-grid {
         grid-template-columns: 1fr;
       }
-      .metrics-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .state-arrow-stack {
+        display: none;
       }
+      .kpi-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 720px) {
       .page { padding: 16px 14px 56px; }
-      .hero-card, .panel, .rail-card { padding: 18px; }
-      .metrics-grid { grid-template-columns: 1fr; }
+      .hero-card, .panel, .rail-card, .dashboard-card { padding: 18px; }
+      .metrics-grid, .kpi-strip { grid-template-columns: 1fr; }
       h1 { max-width: none; }
+      .timeline-item { grid-template-columns: 1fr; }
+      .timeline-dot { display: none; }
     }
   </style>
 </head>
@@ -532,6 +819,7 @@
           <span class="pill">OpenClaw DB = source of runtime truth</span>
           <span class="pill">MCP = integration surface</span>
           <span class="pill">GitHub = code execution substrate</span>
+          <span class="pill">Ark Viz/dashboard = observability surface</span>
         </div>
       </div>
       <div class="metrics-grid">
@@ -789,6 +1077,281 @@
     </section>
 
     <section class="panel">
+      <h2>Task state machine</h2>
+      <p class="panel-copy">
+        This is the richer internal lifecycle that gets projected into a much simpler Linear workflow.
+        It separates execution truth from PM-facing status.
+      </p>
+      <div class="state-grid">
+        <div class="state-col">
+          <div class="state-card" style="--state-color: var(--blue);">
+            <div class="state-name">Discovered</div>
+            <div class="state-desc">Imported from Linear, normalized, not yet reconciled against dependencies or policy.</div>
+          </div>
+          <div class="state-card" style="--state-color: var(--violet);">
+            <div class="state-name">Blocked</div>
+            <div class="state-desc">Cannot proceed because dependencies, permissions, or missing inputs are unresolved.</div>
+          </div>
+          <div class="state-card" style="--state-color: var(--cyan);">
+            <div class="state-name">Ready</div>
+            <div class="state-desc">Dependencies satisfied and eligible for dispatch under concurrency and budget rules.</div>
+          </div>
+        </div>
+
+        <div class="state-arrow-stack">
+          <div class="state-arrow">reconcile</div>
+          <div class="state-arrow">deps clear</div>
+          <div class="state-arrow">policy ok</div>
+        </div>
+
+        <div class="state-col">
+          <div class="state-card" style="--state-color: var(--amber);">
+            <div class="state-name">Queued</div>
+            <div class="state-desc">Selected for execution, waiting for worker capacity or worktree allocation.</div>
+          </div>
+          <div class="state-card" style="--state-color: var(--accent);">
+            <div class="state-name">Coding</div>
+            <div class="state-desc">Active scoper or coder run is executing against the task.</div>
+          </div>
+          <div class="state-card" style="--state-color: var(--rose);">
+            <div class="state-name">Awaiting review / CI</div>
+            <div class="state-desc">PR exists, tests and review outcomes are being collected and classified.</div>
+          </div>
+        </div>
+
+        <div class="state-arrow-stack">
+          <div class="state-arrow">spawn</div>
+          <div class="state-arrow">PR / checks</div>
+          <div class="state-arrow">human gate</div>
+        </div>
+
+        <div class="state-col">
+          <div class="state-card" style="--state-color: var(--green);">
+            <div class="state-name">Completed</div>
+            <div class="state-desc">Success criteria met, artifacts captured, projection updated back to Linear.</div>
+          </div>
+          <div class="state-card" style="--state-color: var(--amber);">
+            <div class="state-name">Revising</div>
+            <div class="state-desc">A follow-up repair run is fixing review or CI failures.</div>
+          </div>
+          <div class="state-card" style="--state-color: var(--rose);">
+            <div class="state-name">Awaiting human / Failed</div>
+            <div class="state-desc">Confidence too low, retry budget exhausted, or explicit operator decision required.</div>
+          </div>
+        </div>
+      </div>
+      <p class="mini-note">
+        Important nuance: <span class="code">task state</span> is different from <span class="code">run state</span>. One task can have multiple task runs over time.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Internal schema, visually</h2>
+      <p class="panel-copy">
+        This is the minimum shape I’d want for implementation. It’s enough for replay, debugging, and dashboards without becoming over-designed too early.
+      </p>
+      <div class="schema-grid">
+        <div class="schema-card">
+          <div class="schema-head">
+            <div class="schema-title">tasks</div>
+            <span class="badge" style="--card-color: var(--green); --card-dim: var(--green-dim);">logical item</span>
+          </div>
+          <div class="schema-body">
+            <ul class="field-list">
+              <li><span class="field-name">id</span><span class="field-note">stable task key</span></li>
+              <li><span class="field-name">external_source</span><span class="field-note">linear issue reference</span></li>
+              <li><span class="field-name">parent_id</span><span class="field-note">hierarchy</span></li>
+              <li><span class="field-name">orchestration_state</span><span class="field-note">runtime status</span></li>
+              <li><span class="field-name">priority / owner / labels</span><span class="field-note">normalized planning fields</span></li>
+              <li><span class="field-name">last_projected_at</span><span class="field-note">projection hygiene</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="schema-card">
+          <div class="schema-head">
+            <div class="schema-title">task_dependencies</div>
+            <span class="badge" style="--card-color: var(--violet); --card-dim: var(--violet-dim);">graph edge</span>
+          </div>
+          <div class="schema-body">
+            <ul class="field-list">
+              <li><span class="field-name">task_id</span><span class="field-note">dependent task</span></li>
+              <li><span class="field-name">depends_on_task_id</span><span class="field-note">blocking task</span></li>
+              <li><span class="field-name">kind</span><span class="field-note">hard, soft, review gate</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="schema-card">
+          <div class="schema-head">
+            <div class="schema-title">task_runs</div>
+            <span class="badge" style="--card-color: var(--amber); --card-dim: var(--amber-dim);">attempt ledger</span>
+          </div>
+          <div class="schema-body">
+            <ul class="field-list">
+              <li><span class="field-name">id / task_id / attempt</span><span class="field-note">identity</span></li>
+              <li><span class="field-name">worker_type</span><span class="field-note">scoper, coder, reviewer, repairer</span></li>
+              <li><span class="field-name">agent_id / session_key / model</span><span class="field-note">execution metadata</span></li>
+              <li><span class="field-name">status</span><span class="field-note">active, succeeded, failed, timed_out</span></li>
+              <li><span class="field-name">started_at / finished_at</span><span class="field-note">timing</span></li>
+              <li><span class="field-name">exit_reason</span><span class="field-note">classified failure or completion</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="schema-card">
+          <div class="schema-head">
+            <div class="schema-title">task_events</div>
+            <span class="badge" style="--card-color: var(--blue); --card-dim: var(--blue-dim);">append-only</span></n          </div>
+          <div class="schema-body">
+            <ul class="field-list">
+              <li><span class="field-name">id / task_id / run_id</span><span class="field-note">linkage</span></li>
+              <li><span class="field-name">ts</span><span class="field-note">ordered timeline</span></li>
+              <li><span class="field-name">kind</span><span class="field-note">state_transition, pr_opened, ci_failed</span></li>
+              <li><span class="field-name">actor_type / actor_id</span><span class="field-note">human, agent, system</span></li>
+              <li><span class="field-name">data_json</span><span class="field-note">structured evidence payload</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="schema-card">
+          <div class="schema-head">
+            <div class="schema-title">artifacts</div>
+            <span class="badge" style="--card-color: var(--rose); --card-dim: var(--rose-dim);">evidence store</span></div>
+          <div class="schema-body">
+            <ul class="field-list">
+              <li><span class="field-name">id / task_id / run_id</span><span class="field-note">linkage</span></li>
+              <li><span class="field-name">kind</span><span class="field-note">prompt, diff, PR, CI, summary</span></li>
+              <li><span class="field-name">uri</span><span class="field-note">durable pointer</span></li>
+              <li><span class="field-name">metadata_json</span><span class="field-note">shape varies by artifact type</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="schema-card">
+          <div class="schema-head">
+            <div class="schema-title">projection cache</div>
+            <span class="badge" style="--card-color: var(--cyan); --card-dim: var(--cyan-dim);">optional</span>
+          </div>
+          <div class="schema-body">
+            <ul class="field-list">
+              <li><span class="field-name">task_id</span><span class="field-note">projection target</span></li>
+              <li><span class="field-name">linear_status</span><span class="field-note">last pushed state</span></li>
+              <li><span class="field-name">last_comment_hash</span><span class="field-note">avoid noisy duplicate comments</span></li>
+              <li><span class="field-name">projected_at</span><span class="field-note">sync timestamp</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Dashboard wireframe, parent task / subtask observability</h2>
+      <p class="panel-copy">
+        This is the view I’d want while running a parent initiative. Left for the frontier, center for exact task history, right for rescue and heat signals.
+      </p>
+      <div class="dashboard">
+        <div class="dashboard-card">
+          <div class="dashboard-title">Initiative overview</div>
+          <div class="kpi-strip">
+            <div class="kpi-box"><div class="k">Children</div><div class="v">12</div></div>
+            <div class="kpi-box"><div class="k">Active</div><div class="v">3</div></div>
+            <div class="kpi-box"><div class="k">Blocked</div><div class="v">2</div></div>
+            <div class="kpi-box"><div class="k">Done</div><div class="v">7</div></div>
+          </div>
+          <div class="issue-list">
+            <div class="issue-row">
+              <div class="issue-top"><div class="issue-name">#12 Fix local setup</div><span class="status status--good">done</span></div>
+              <div class="issue-meta"><span>PR #88 merged</span><span>1 attempt</span><span>43 min</span></div>
+            </div>
+            <div class="issue-row">
+              <div class="issue-top"><div class="issue-name">#13 Add payments scaffold</div><span class="status status--info">coding</span></div>
+              <div class="issue-meta"><span>codex worker active</span><span>attempt 2</span><span>21 min in state</span></div>
+            </div>
+            <div class="issue-row">
+              <div class="issue-top"><div class="issue-name">#14 Deploy preview auth</div><span class="status status--warn">blocked</span></div>
+              <div class="issue-meta"><span>waiting on #13</span><span>human input not needed</span></div>
+            </div>
+            <div class="issue-row">
+              <div class="issue-top"><div class="issue-name">#15 Admin analytics card</div><span class="status status--violet">awaiting review</span></div>
+              <div class="issue-meta"><span>PR #91</span><span>CI green</span><span>review requested</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="dashboard-title">Selected task timeline, #13 Add payments scaffold</div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-time">18:12</div>
+              <div class="timeline-dot" style="--dot-color: var(--blue);"></div>
+              <div class="timeline-body"><strong>state_transition</strong> discovered → ready, dependencies resolved after #12 completion.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">18:14</div>
+              <div class="timeline-dot" style="--dot-color: var(--amber);"></div>
+              <div class="timeline-body"><strong>run_spawned</strong> coder attempt 1 launched with worktree <span class="code">wt-13-a1</span>.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">18:29</div>
+              <div class="timeline-dot" style="--dot-color: var(--rose);"></div>
+              <div class="timeline-body"><strong>ci_failed</strong> lint + typecheck broke, classified as <span class="code">tests_failed</span>.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">18:32</div>
+              <div class="timeline-dot" style="--dot-color: var(--accent);"></div>
+              <div class="timeline-body"><strong>run_spawned</strong> repairer attempt 2 launched with failure context and diff summary attached.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">18:48</div>
+              <div class="timeline-dot" style="--dot-color: var(--green);"></div>
+              <div class="timeline-body"><strong>pr_opened</strong> PR #93 created, checks pending, Linear projected to <span class="code">In Progress</span>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="dashboard-title">Rescue and heat signals</div>
+          <div class="heat-list">
+            <div class="heat-item">
+              <strong>Longest in state</strong>
+              <div class="mini-note">#14 Deploy preview auth, blocked 5h 22m</div>
+              <div class="bar"><span style="--w: 82%; --bar-color: var(--amber);"></span></div>
+            </div>
+            <div class="heat-item">
+              <strong>Retry pressure</strong>
+              <div class="mini-note">#13 Add payments scaffold, 2 runs, still healthy</div>
+              <div class="bar"><span style="--w: 48%; --bar-color: var(--blue);"></span></div>
+            </div>
+            <div class="heat-item">
+              <strong>Human gate queue</strong>
+              <div class="mini-note">1 task needs a merge decision, no spec clarifications pending</div>
+              <div class="bar"><span style="--w: 26%; --bar-color: var(--violet);"></span></div>
+            </div>
+            <div class="heat-item">
+              <strong>Failure mix</strong>
+              <div class="mini-note">Mostly CI and review churn, no auth/systemic failures detected</div>
+              <div class="bar"><span style="--w: 38%; --bar-color: var(--rose);"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <details>
+        <summary>What this dashboard should answer instantly</summary>
+        <div class="details-body">
+          <ul class="node-list" style="margin-top: 0;">
+            <li>Which subtasks are actually runnable right now?</li>
+            <li>Why is a blocked task blocked?</li>
+            <li>What happened in the last failed run, exactly?</li>
+            <li>Which tasks are consuming retries or human attention?</li>
+            <li>What should the operator look at next?</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="panel">
       <h2>Control loop</h2>
       <p class="panel-copy">This is the operational heartbeat of the system.</p>
       <div class="three-up">
@@ -824,7 +1387,7 @@
       <details>
         <summary>Suggested coarse Linear statuses mapped from richer internal state</summary>
         <div class="details-body">
-          <ul class="node-list" style="--card-color: var(--accent); margin-top: 0;">
+          <ul class="node-list" style="margin-top: 0;">
             <li><span class="code">todo</span> ← discovered, blocked-but-unstarted</li>
             <li><span class="code">in_progress</span> ← queued, coding, revising, awaiting_ci</li>
             <li><span class="code">blocked</span> ← blocked, awaiting_human, auth_or_permissions</li>
