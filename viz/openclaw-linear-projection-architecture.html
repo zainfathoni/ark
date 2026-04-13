@@ -611,6 +611,69 @@
       align-items: start;
     }
 
+    .packaging-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .packaging-lanes {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .pack-lane {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, var(--surface-elevated), var(--surface));
+      padding: 14px;
+      min-height: 100%;
+    }
+
+    .pack-lane-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+      color: var(--lane-color, var(--accent));
+    }
+
+    .pack-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface-soft);
+      padding: 10px 11px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .pack-card:last-child { margin-bottom: 0; }
+
+    .pack-card strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .risk-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .risk-row {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      background: var(--surface-soft);
+    }
+
+    .risk-row strong { display: block; margin-bottom: 6px; }
+
     .dashboard-card {
       border: 1px solid var(--border);
       border-radius: 20px;
@@ -1346,6 +1409,74 @@
             <li>What happened in the last failed run, exactly?</li>
             <li>Which tasks are consuming retries or human attention?</li>
             <li>What should the operator look at next?</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="panel">
+      <h2>Budget-aware packaging plan</h2>
+      <p class="panel-copy">
+        To keep the OpenClaw workspace healthy, large architecture and orchestration material should live in artifacts, not in always-loaded prompt files.
+        The goal is to keep root prompt context tiny and move operational complexity into skills, docs, and implementation repos.
+      </p>
+      <div class="packaging-grid">
+        <div>
+          <div class="packaging-lanes">
+            <div class="pack-lane" style="--lane-color: var(--blue);">
+              <div class="pack-lane-title">Prompt root</div>
+              <div class="pack-card"><strong>Keep tiny</strong> pointers, rules, defaults, one-line reminders</div>
+              <div class="pack-card"><strong>Examples</strong> <span class="code">MEMORY.md</span>, <span class="code">AGENTS.md</span>, <span class="code">SOUL.md</span></div>
+              <div class="pack-card"><strong>Never store</strong> full architecture docs, schemas, or long SOPs</div>
+            </div>
+            <div class="pack-lane" style="--lane-color: var(--green);">
+              <div class="pack-lane-title">knowledge/</div>
+              <div class="pack-card"><strong>Best for</strong> durable design docs and distilled decisions</div>
+              <div class="pack-card"><strong>Examples</strong> solution writeups, conventions, architecture notes</div>
+              <div class="pack-card"><strong>Rule</strong> reference from root, don’t inline into root</div>
+            </div>
+            <div class="pack-lane" style="--lane-color: var(--amber);">
+              <div class="pack-lane-title">skills/</div>
+              <div class="pack-card"><strong>Best for</strong> reusable workflows, SOPs, scripts, operational logic</div>
+              <div class="pack-card"><strong>Examples</strong> dispatcher flows, Linear sync routines, review loops</div>
+              <div class="pack-card"><strong>Rule</strong> if it’s procedural and repeatable, it probably belongs here</div>
+            </div>
+            <div class="pack-lane" style="--lane-color: var(--violet);">
+              <div class="pack-lane-title">Implementation repo</div>
+              <div class="pack-card"><strong>Best for</strong> real specs, schema migrations, code, tests, docs</div>
+              <div class="pack-card"><strong>Examples</strong> <span class="code">docs/</span>, <span class="code">db/</span>, <span class="code">src/</span></div>
+              <div class="pack-card"><strong>Rule</strong> buildable systems should eventually leave the workspace</div>
+            </div>
+          </div>
+        </div>
+        <div class="risk-list">
+          <div class="risk-row">
+            <strong>Low risk, current viz approach</strong>
+            Large HTML in <span class="code">viz/</span> is fine. It is not part of the always-loaded root prompt files.
+          </div>
+          <div class="risk-row">
+            <strong>Medium risk</strong>
+            Letting architecture decisions sprawl across chat, scratch notes, and root memory without consolidation.
+          </div>
+          <div class="risk-row">
+            <strong>High risk</strong>
+            Copying long specs into <span class="code">MEMORY.md</span> or bloating <span class="code">AGENTS.md</span> with implementation detail.
+          </div>
+          <div class="risk-row">
+            <strong>Recommended path</strong>
+            Keep this viz as the visual explainer, add one distilled solution doc in <span class="code">knowledge/solutions/</span>, and move real implementation work into the target repo or a dedicated skill.
+          </div>
+        </div>
+      </div>
+
+      <details>
+        <summary>Practical rule of thumb</summary>
+        <div class="details-body">
+          <ul class="node-list" style="margin-top: 0;">
+            <li>If humans need to read it once, publish or document it.</li>
+            <li>If agents need to repeatedly follow it, make it a skill.</li>
+            <li>If the runtime depends on it, put it in the implementation repo.</li>
+            <li>If it must live in root prompt context, compress it to a pointer and one sentence.</li>
           </ul>
         </div>
       </details>
