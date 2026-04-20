@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="viz-author" content="Optimus 🍠">
-  <meta name="viz-date"   content="2026-04-12">
+  <meta name="viz-date"   content="2026-04-20">
   <meta name="viz-category" content="System">
   <title>Project Transformers — System Architecture</title>
   <meta name="description" content="How the current Autobot roster coordinates through shared channels, task boards, and knowledge">
@@ -873,11 +873,13 @@
     <header class="page-header" style="--i:0; animation: fadeUp 0.5s ease-out both;">
       <div class="page-header__badge">System Architecture</div>
       <h1>Project Transformers</h1>
-      <p class="page-header__sub">How the current Autobot roster coordinates through shared channels, task boards, and knowledge — a personal infrastructure for augmented living.</p>
+      <p class="page-header__sub">How the current Autobot roster coordinates through shared channels, task boards, and knowledge, with current roster, dispatcher, and cost posture reflected.</p>
       <div style="margin-top:12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">
         <a href="https://www.zainfathoni.com/blog/project-transformers-building-personal-ai-army">Read the blog post</a>
         &nbsp;·&nbsp;
         <a href="https://ark.zainf.dev/">The Ark directory</a>
+        &nbsp;·&nbsp;
+        <a href="https://ark.zainf.dev/viz/ops.html">Operations dashboard</a>
       </div>
     </header>
 
@@ -898,6 +900,7 @@ flowchart TD
         P1["Prowl 🚔"] -->|digest JSON| W1["Wheeljack 🛠️"]
         O1["Optimus 🍠"] -->|task delegation| W1
         O1 -->|status query| P1
+        O1 -->|dispatch + viz sync| J1["Jazz 🎷"]
     end
 
     subgraph CH2["Fizzy Cards — Task Tracking"]
@@ -929,7 +932,7 @@ flowchart TD
     class CH1 ch1
     class CH2 ch2
     class CH3 ch3
-    class P1,W1,O1 agent
+    class P1,W1,O1,J1 agent
     class FC,FP,FM tool
     class T1,T2,T3,T4,T5 topic
       </pre>
@@ -977,7 +980,7 @@ flowchart TD
           <div class="topic-card__emoji">📊</div>
           <div class="topic-card__info">
             <div class="topic-card__name">Reports</div>
-            <div class="topic-card__listener">→ Fuel checks, usage reports</div>
+            <div class="topic-card__listener">→ Fuel checks, usage reports, viz refresh</div>
           </div>
         </div>
       </div>
@@ -1091,157 +1094,88 @@ flowchart TD
 
     <!-- ═══ SECTION 3: COST OPTIMIZATION ═══ -->
     <div id="s3" class="sec-head"><span class="sec-num">03</span> Cost Optimization Journey</div>
-    <p class="sec-desc">Weekly usage relative to 4-week rolling average (= 100%). Bars show how each week compares to our normal operating cost.</p>
+    <p class="sec-desc">Weekly usage relative to the current 4-week rolling average (= 100%). Public view stays percentage-only, with no absolute dollar amounts.</p>
 
     <div class="cost-bar-group" style="margin-bottom: 32px;">
       <div class="cost-bar" style="--i:1;">
         <div class="cost-bar__header">
           <span class="cost-bar__label">Feb 22 — Model tiering + free fallbacks</span>
-          <span class="cost-bar__value">79%</span>
+          <span class="cost-bar__value">64%</span>
         </div>
         <div class="cost-bar__track">
-          <div class="cost-bar__fill" style="width: 79%; background: linear-gradient(90deg, var(--teal), var(--emerald));">79%</div>
+          <div class="cost-bar__fill" style="width: min(64%, 100%); background: linear-gradient(90deg, var(--teal), var(--emerald));">64%</div>
         </div>
       </div>
       <div class="cost-bar" style="--i:2;">
         <div class="cost-bar__header">
           <span class="cost-bar__label">Mar 1 — Claude Max plan stabilized</span>
-          <span class="cost-bar__value">42%</span>
+          <span class="cost-bar__value">34%</span>
         </div>
         <div class="cost-bar__track">
-          <div class="cost-bar__fill" style="width: 42%; background: linear-gradient(90deg, var(--teal), var(--emerald));">42%</div>
+          <div class="cost-bar__fill" style="width: min(34%, 100%); background: linear-gradient(90deg, var(--teal), var(--emerald));">34%</div>
         </div>
       </div>
       <div class="cost-bar" style="--i:3;">
         <div class="cost-bar__header">
           <span class="cost-bar__label">Mar 8 — Heavy agent work — new bots onboarding</span>
-          <span class="cost-bar__value">199%</span>
+          <span class="cost-bar__value">162%</span>
         </div>
         <div class="cost-bar__track">
-          <div class="cost-bar__fill" style="width: 100%; background: linear-gradient(90deg, var(--rose), #ef4444);">199%</div>
+          <div class="cost-bar__fill" style="width: min(162%, 100%); background: linear-gradient(90deg, var(--amber), var(--gold));">162%</div>
         </div>
       </div>
       <div class="cost-bar" style="--i:4;">
         <div class="cost-bar__header">
           <span class="cost-bar__label">Mar 15 — Normalized</span>
-          <span class="cost-bar__value">61%</span>
+          <span class="cost-bar__value">49%</span>
         </div>
         <div class="cost-bar__track">
-          <div class="cost-bar__fill" style="width: 61%; background: linear-gradient(90deg, var(--teal), var(--emerald));">61%</div>
+          <div class="cost-bar__fill" style="width: min(49%, 100%); background: linear-gradient(90deg, var(--teal), var(--emerald));">49%</div>
         </div>
       </div>
       <div class="cost-bar" style="--i:5;">
         <div class="cost-bar__header">
           <span class="cost-bar__label">Mar 22 — Low activity (Lebaran)</span>
-          <span class="cost-bar__value">7%</span>
+          <span class="cost-bar__value">6%</span>
         </div>
         <div class="cost-bar__track">
-          <div class="cost-bar__fill" style="width: 7%; background: linear-gradient(90deg, var(--slate-dim), var(--slate));">7%</div>
+          <div class="cost-bar__fill" style="width: min(6%, 100%); background: linear-gradient(90deg, var(--rose), var(--amber));">6%</div>
         </div>
       </div>
       <div class="cost-bar" style="--i:6;">
         <div class="cost-bar__header">
           <span class="cost-bar__label">Mar 29 — Dispatcher built, viz pages created</span>
-          <span class="cost-bar__value">51%</span>
+          <span class="cost-bar__value">42%</span>
         </div>
         <div class="cost-bar__track">
-          <div class="cost-bar__fill" style="width: 51%; background: linear-gradient(90deg, var(--teal), var(--emerald));">51%</div>
+          <div class="cost-bar__fill" style="width: min(42%, 100%); background: linear-gradient(90deg, var(--teal), var(--emerald));">42%</div>
         </div>
       </div>
       <div class="cost-bar" style="--i:7;">
         <div class="cost-bar__header">
           <span class="cost-bar__label">Apr 5 — High activity — Rewind content + heavy Opus usage</span>
-          <span class="cost-bar__value">174%</span>
+          <span class="cost-bar__value">141%</span>
         </div>
         <div class="cost-bar__track">
-          <div class="cost-bar__fill" style="width: 100%; background: linear-gradient(90deg, var(--rose), #ef4444);">174%</div>
+          <div class="cost-bar__fill" style="width: min(141%, 100%); background: linear-gradient(90deg, var(--amber), var(--gold));">141%</div>
         </div>
       </div>
       <div class="cost-bar" style="--i:8;">
         <div class="cost-bar__header">
           <span class="cost-bar__label">Apr 12 — OpenAI ProLite + Opus-heavy coordination</span>
-          <span class="cost-bar__value">168%</span>
+          <span class="cost-bar__value">136%</span>
         </div>
         <div class="cost-bar__track">
-          <div class="cost-bar__fill" style="width: 100%; background: linear-gradient(90deg, var(--rose), #ef4444);">168%</div>
+          <div class="cost-bar__fill" style="width: min(136%, 100%); background: linear-gradient(90deg, var(--amber), var(--gold));">136%</div>
         </div>
       </div>
-    </div>
-
-    <div class="card-grid-2" style="margin-bottom: 24px;">
-      <div>
-        <div class="ve-card__label" style="margin-bottom: 12px;">Model Assignment Table</div>
-        <div class="table-wrap" style="--i:4; animation: fadeUp 0.4s ease-out both; animation-delay: 0.24s;">
-          <div class="table-scroll">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Agent</th>
-                  <th>Primary Model</th>
-                  <th>Weekly Cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>🍠 Optimus</td>
-                  <td><code>Opus 4.6 + GPT-5.4</code></td>
-                  <td>59%</td>
-                </tr>
-                <tr>
-                  <td>🛠️ Wheeljack</td>
-                  <td><code>GPT-5.4 + Opus</code></td>
-                  <td>12%</td>
-                </tr>
-                <tr>
-                  <td>🚔 Prowl</td>
-                  <td><code>Opus 4.6 + Sonnet</code></td>
-                  <td>12%</td>
-                </tr>
-                <tr>
-                  <td>📼 Rewind</td>
-                  <td><code>GPT-5.4 + Sonnet</code></td>
-                  <td>5%</td>
-                </tr>
-                <tr>
-                  <td>🎷 Jazz</td>
-                  <td><code>Opus 4.6 + Sonnet</code></td>
-                  <td>4%</td>
-                </tr>
-                <tr>
-                  <td>🐝 Bumblebee</td>
-                  <td><code>Mixed Claude / GPT</code></td>
-                  <td>3%</td>
-                </tr>
-                <tr>
-                  <td>Others (9)</td>
-                  <td><code>Sonnet / Codex / GPT-5.4</code></td>
-                  <td>5%</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <div class="cost-bar" style="--i:9;">
+        <div class="cost-bar__header">
+          <span class="cost-bar__label">Apr 19 — Balanced ops week, lower than recent peak</span>
+          <span class="cost-bar__value">81%</span>
         </div>
-      </div>
-
-      <div>
-        <div class="ve-card__label" style="margin-bottom: 12px;">Free Tool Layering</div>
-        <div class="free-pipeline" style="--i:5; animation: fadeUp 0.4s ease-out both; animation-delay: 0.3s;">
-          <div class="free-pipeline__step">
-            <div class="free-pipeline__name" style="color: var(--teal);">Amp</div>
-            <div class="free-pipeline__desc">Free daily credits<br/>replenish hourly</div>
-          </div>
-          <div class="free-pipeline__step">
-            <div class="free-pipeline__name" style="color: var(--emerald);">OpenCode</div>
-            <div class="free-pipeline__desc">MiniMax, GLM, Kimi<br/>always free</div>
-          </div>
-          <div class="free-pipeline__step">
-            <div class="free-pipeline__name" style="color: var(--accent-bright);">Codex CLI</div>
-            <div class="free-pipeline__desc">Paid fallback<br/>when free exhausted</div>
-          </div>
-        </div>
-
-        <div class="callout-blueprint" style="margin-top: 16px; --i:6; animation: fadeUp 0.4s ease-out both; animation-delay: 0.36s;">
-          Deterministic tasks use <code style="font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); padding: 1px 5px; border-radius: 3px;">launchd</code> for zero tokens. Only tasks requiring judgment burn model credits.
+        <div class="cost-bar__track">
+          <div class="cost-bar__fill" style="width: min(81%, 100%); background: linear-gradient(90deg, var(--teal), var(--emerald));">81%</div>
         </div>
       </div>
     </div>
