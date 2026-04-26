@@ -940,6 +940,51 @@ html { scroll-behavior: smooth; }
 }
 @media (max-width: 640px) { .viz-toc { margin-left: -24px; margin-right: -24px; } }
 
+
+/* === Standard System footer === */
+.sys-footer {
+  margin-top: 48px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border, rgba(148,163,184,.18));
+  color: var(--text-dim, var(--dim, #94a3b8));
+  font-family: var(--font-mono, 'Fragment Mono', ui-monospace, monospace);
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+.sys-footer__label {
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--text-dim, var(--dim, #94a3b8));
+  margin-bottom: 10px;
+}
+.sys-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.sys-footer a,
+.sys-footer__current {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border, rgba(148,163,184,.18));
+  text-decoration: none;
+}
+.sys-footer a {
+  color: var(--blue, var(--gold, var(--accent, #60a5fa)));
+  background: var(--surface2, rgba(255,255,255,.04));
+}
+.sys-footer a:hover { border-color: currentColor; }
+.sys-footer__current {
+  color: var(--text, #e2e8f0);
+  background: var(--gold-dim, rgba(245,158,11,.12));
+}
+
 </style>
 </head>
 <body><nav class="viz-toc" id="viz-toc" aria-label="Page sections"><div class="viz-toc__title">Contents</div><a href="#high-level-architecture">High-level architecture</a><a href="#projection-model-what-goes-to-linear-vs-what-stays-internal">Projection model, what goes to Linear vs what stays internal</a><a href="#recommended-internal-entities">Recommended internal entities</a><a href="#task-state-machine">Task state machine</a><a href="#internal-schema-visually">Internal schema, visually</a><a href="#dashboard-wireframe-parent-task-subtask-observability">Dashboard wireframe, parent task / subtask observability</a><a href="#budget-aware-packaging-plan">Budget-aware packaging plan</a><a href="#deterministic-control-loop">Deterministic control loop</a></nav>
@@ -1606,6 +1651,7 @@ html { scroll-behavior: smooth; }
         </div>
       </details>
     </section>
+    <footer class="sys-footer"><div class="sys-footer__label">System visualizations</div><div class="sys-footer__links"><a href="architecture.html">System Architecture</a><a href="ops.html">Operations Dashboard</a><a href="memory-management-method.html">Memory Management</a><a href="shared-conventions-map.html">Shared Conventions</a><span class="sys-footer__current">Linear Projection</span><a href="./">All visualizations</a></div><div>Built with <a href="https://openclaw.ai" target="_blank" rel="noopener">OpenClaw</a> · Published on <a href="./">The Ark Viz</a></div></footer>
   </main>
 </body>
 </html>

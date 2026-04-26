@@ -454,6 +454,51 @@ html { scroll-behavior: smooth; }
 }
 @media (max-width: 640px) { .viz-toc { margin-left: -24px; margin-right: -24px; } }
 
+
+/* === Standard System footer === */
+.sys-footer {
+  margin-top: 48px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border, rgba(148,163,184,.18));
+  color: var(--text-dim, var(--dim, #94a3b8));
+  font-family: var(--font-mono, 'Fragment Mono', ui-monospace, monospace);
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+.sys-footer__label {
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--text-dim, var(--dim, #94a3b8));
+  margin-bottom: 10px;
+}
+.sys-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.sys-footer a,
+.sys-footer__current {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border, rgba(148,163,184,.18));
+  text-decoration: none;
+}
+.sys-footer a {
+  color: var(--blue, var(--gold, var(--accent, #60a5fa)));
+  background: var(--surface2, rgba(255,255,255,.04));
+}
+.sys-footer a:hover { border-color: currentColor; }
+.sys-footer__current {
+  color: var(--text, #e2e8f0);
+  background: var(--gold-dim, rgba(245,158,11,.12));
+}
+
 </style>
 </head>
 <body><nav class="viz-toc" id="viz-toc" aria-label="Page sections"><div class="viz-toc__title">Contents</div><a href="#source-of-truth">source of truth</a><a href="#how-bots-find-conventions">how bots find conventions</a><a href="#signpost-in-agents-md">signpost in agents.md</a><a href="#universal-commands">universal commands</a><a href="#memory-md-deep-links">memory.md deep links</a><a href="#related-pages">related pages</a></nav>
@@ -678,10 +723,7 @@ html { scroll-behavior: smooth; }
       <a href="memory-management-method.html" style="font-family: var(--font-mono); font-size: 12px; color: var(--gold); background: var(--gold-dim); padding: 6px 14px; border-radius: 6px; text-decoration: none; border: 1px solid var(--border);">Memory Management</a>
     </div>
   </div>
-
-  <div style="margin-top: 20px; font-family: var(--font-mono); font-size: 10px; color: var(--text-dim);">
-    Updated 2026-03-30 · <a href="./" style="color: var(--text-dim);">← All Visualizations</a>
-  </div>
+  <footer class="sys-footer"><div class="sys-footer__label">System visualizations</div><div class="sys-footer__links"><a href="architecture.html">System Architecture</a><a href="ops.html">Operations Dashboard</a><a href="memory-management-method.html">Memory Management</a><span class="sys-footer__current">Shared Conventions</span><a href="openclaw-linear-projection-architecture.html">Linear Projection</a><a href="./">All visualizations</a></div><div>Built with <a href="https://openclaw.ai" target="_blank" rel="noopener">OpenClaw</a> · Published on <a href="./">The Ark Viz</a></div></footer>
 
 </div>
 

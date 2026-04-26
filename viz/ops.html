@@ -75,6 +75,51 @@ html { scroll-behavior: smooth; }
 }
 @media (max-width: 640px) { .viz-toc { margin-left: -24px; margin-right: -24px; } }
 
+
+/* === Standard System footer === */
+.sys-footer {
+  margin-top: 48px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border, rgba(148,163,184,.18));
+  color: var(--text-dim, var(--dim, #94a3b8));
+  font-family: var(--font-mono, 'Fragment Mono', ui-monospace, monospace);
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+.sys-footer__label {
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--text-dim, var(--dim, #94a3b8));
+  margin-bottom: 10px;
+}
+.sys-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.sys-footer a,
+.sys-footer__current {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border, rgba(148,163,184,.18));
+  text-decoration: none;
+}
+.sys-footer a {
+  color: var(--blue, var(--gold, var(--accent, #60a5fa)));
+  background: var(--surface2, rgba(255,255,255,.04));
+}
+.sys-footer a:hover { border-color: currentColor; }
+.sys-footer__current {
+  color: var(--text, #e2e8f0);
+  background: var(--gold-dim, rgba(245,158,11,.12));
+}
+
 </style></head><body><nav class="viz-toc" id="viz-toc" aria-label="Page sections"><div class="viz-toc__title">Contents</div><a href="#recurring-and-queued-jobs">Recurring and queued jobs</a><a href="#fuel-status">Fuel status</a><a href="#dispatcher-state">Dispatcher state</a><a href="#weekly-cost-trend">Weekly cost trend</a></nav><main class="wrap"><header><h1>Autobot Operations Center</h1><p class="sub">Cron jobs, fuel status, dispatcher state, and operational health. Updated 2026-04-26 21:06 WIB.</p><div class="kpis"><div class="kpi"><div class="num">18</div><div class="label">Tracked Jobs</div></div><div class="kpi"><div class="num">9</div><div class="label">Need Attention</div></div><div class="kpi"><div class="num">152%</div><div class="label">Cost vs 4wk Avg</div></div><div class="kpi"><div class="num">0</div><div class="label">Dispatcher Running</div></div></div></header><section><h2 id="recurring-and-queued-jobs" class="viz-anchor">Recurring and queued jobs</h2><div class="grid"><article class="job ok"><div><strong>BTA Daily Progress &amp; Priority Review</strong><span>🚨 Red Alert</span></div><p>Workday review for BookThatApp stories.</p><code>0 8 * * 1-5</code><em>ok</em></article>
 <article class="job error"><div><strong>Morning Progress Summary</strong><span>🍠 Optimus</span></div><p>Morning brief currently needs delivery/runtime attention.</p><code>0 7 * * *</code><em>error</em></article>
 <article class="job error"><div><strong>Fuel Check ⛽</strong><span>🍠 Optimus</span></div><p>Quota monitor is useful, but the cron status is currently erroring.</p><code>0 8,12,16,20 * * *</code><em>error</em></article>
@@ -92,4 +137,4 @@ html { scroll-behavior: smooth; }
 <article class="job error"><div><strong>Spend Limit Monitor</strong><span>🍠 Optimus</span></div><p>Spend guardrail exists but latest cron status needs repair.</p><code>0 20 * * *</code><em>error</em></article>
 <article class="job ok"><div><strong>Vercel Bandwidth Monthly</strong><span>🛠️ Wheeljack</span></div><p>Monthly bandwidth check.</p><code>0 9 28 * *</code><em>ok</em></article>
 <article class="job idle"><div><strong>VFC Jogja Reminder</strong><span>🚔 Prowl</span></div><p>One-shot event reminder queued.</p><code>2026-04-29 18:45 WIB</code><em>idle</em></article>
-<article class="job ok"><div><strong>Hound Weekly Tax Review</strong><span>🔍 Hound</span></div><p>Weekly tax compliance sweep.</p><code>0 18 * * 0</code><em>ok</em></article></div></section><section><h2 id="fuel-status" class="viz-anchor">Fuel status</h2><div class="grid"><div class="card"><b>Claude</b><p>Zain account is at 0% for short and weekly quota windows; BTA weekly quota is 70% and slightly behind pace. BTA monthly cap is effectively full.</p></div><div class="card"><b>Amp</b><p>Free tier shows 0% used and 100% remaining, with hourly reset behavior intact.</p></div><div class="card"><b>Codex + Copilot</b><p>Codex daily quota is 3% used and weekly quota is 65%. Copilot primary quota is about 3%; secondary quota is 22%.</p></div></div></section><section><h2 id="dispatcher-state" class="viz-anchor">Dispatcher state</h2><div class="flow"><div class="card"><b>Query Fizzy</b><p>Track dispatchable cards and restore state.</p></div><div class="card"><b>Check fuel</b><p>Prefer free or healthy routes before spawning agents.</p></div><div class="card"><b>Dispatch or hold</b><p>Current snapshot: 0 running, 7 tracked cards, 6 awaiting judgment, and 1 stopped because card state changed.</p></div></div></section><section><h2 id="weekly-cost-trend" class="viz-anchor">Weekly cost trend</h2><p class="sub">Public view uses relative percentages only.</p><div class="grid"><div class="card"><b>2026-02-22</b><p>Model tiering + free fallbacks</p><div class="bar"><div class="fill" style="--w:100%"></div></div><p>100% of rolling baseline</p></div><div class="card"><b>2026-03-01</b><p>Claude Max plan stabilized</p><div class="bar"><div class="fill" style="--w:69%"></div></div><p>69% of rolling baseline</p></div><div class="card"><b>2026-03-08</b><p>Heavy agent work — new bots onboarding</p><div class="bar"><div class="fill" style="--w:187%"></div></div><p>187% of rolling baseline</p></div><div class="card"><b>2026-03-15</b><p>Normalized</p><div class="bar"><div class="fill" style="--w:64%"></div></div><p>64% of rolling baseline</p></div><div class="card"><b>2026-03-22</b><p>Low activity (Lebaran)</p><div class="bar"><div class="fill" style="--w:9%"></div></div><p>9% of rolling baseline</p></div><div class="card"><b>2026-03-29</b><p>Dispatcher built, viz pages created</p><div class="bar"><div class="fill" style="--w:64%"></div></div><p>64% of rolling baseline</p></div><div class="card"><b>2026-04-05</b><p>High activity — Rewind content + heavy Opus usage</p><div class="bar"><div class="fill" style="--w:237%"></div></div><p>237% of rolling baseline</p></div><div class="card"><b>2026-04-12</b><p>OpenAI ProLite + Opus-heavy coordination</p><div class="bar"><div class="fill" style="--w:168%"></div></div><p>168% of rolling baseline</p></div><div class="card"><b>2026-04-19</b><p>Balanced ops week, lower than recent peak</p><div class="bar"><div class="fill" style="--w:81%"></div></div><p>81% of rolling baseline</p></div><div class="card"><b>2026-04-26</b><p>High activity — automation, viz refresh, and agent coordination</p><div class="bar"><div class="fill" style="--w:152%"></div></div><p>152% of rolling baseline</p></div></div></section><footer>Autobot Operations Dashboard · <a href="architecture.html">Architecture</a> · <a href="./">All visualizations</a></footer></main></body></html>
+<article class="job ok"><div><strong>Hound Weekly Tax Review</strong><span>🔍 Hound</span></div><p>Weekly tax compliance sweep.</p><code>0 18 * * 0</code><em>ok</em></article></div></section><section><h2 id="fuel-status" class="viz-anchor">Fuel status</h2><div class="grid"><div class="card"><b>Claude</b><p>Zain account is at 0% for short and weekly quota windows; BTA weekly quota is 70% and slightly behind pace. BTA monthly cap is effectively full.</p></div><div class="card"><b>Amp</b><p>Free tier shows 0% used and 100% remaining, with hourly reset behavior intact.</p></div><div class="card"><b>Codex + Copilot</b><p>Codex daily quota is 3% used and weekly quota is 65%. Copilot primary quota is about 3%; secondary quota is 22%.</p></div></div></section><section><h2 id="dispatcher-state" class="viz-anchor">Dispatcher state</h2><div class="flow"><div class="card"><b>Query Fizzy</b><p>Track dispatchable cards and restore state.</p></div><div class="card"><b>Check fuel</b><p>Prefer free or healthy routes before spawning agents.</p></div><div class="card"><b>Dispatch or hold</b><p>Current snapshot: 0 running, 7 tracked cards, 6 awaiting judgment, and 1 stopped because card state changed.</p></div></div></section><section><h2 id="weekly-cost-trend" class="viz-anchor">Weekly cost trend</h2><p class="sub">Public view uses relative percentages only.</p><div class="grid"><div class="card"><b>2026-02-22</b><p>Model tiering + free fallbacks</p><div class="bar"><div class="fill" style="--w:100%"></div></div><p>100% of rolling baseline</p></div><div class="card"><b>2026-03-01</b><p>Claude Max plan stabilized</p><div class="bar"><div class="fill" style="--w:69%"></div></div><p>69% of rolling baseline</p></div><div class="card"><b>2026-03-08</b><p>Heavy agent work — new bots onboarding</p><div class="bar"><div class="fill" style="--w:187%"></div></div><p>187% of rolling baseline</p></div><div class="card"><b>2026-03-15</b><p>Normalized</p><div class="bar"><div class="fill" style="--w:64%"></div></div><p>64% of rolling baseline</p></div><div class="card"><b>2026-03-22</b><p>Low activity (Lebaran)</p><div class="bar"><div class="fill" style="--w:9%"></div></div><p>9% of rolling baseline</p></div><div class="card"><b>2026-03-29</b><p>Dispatcher built, viz pages created</p><div class="bar"><div class="fill" style="--w:64%"></div></div><p>64% of rolling baseline</p></div><div class="card"><b>2026-04-05</b><p>High activity — Rewind content + heavy Opus usage</p><div class="bar"><div class="fill" style="--w:237%"></div></div><p>237% of rolling baseline</p></div><div class="card"><b>2026-04-12</b><p>OpenAI ProLite + Opus-heavy coordination</p><div class="bar"><div class="fill" style="--w:168%"></div></div><p>168% of rolling baseline</p></div><div class="card"><b>2026-04-19</b><p>Balanced ops week, lower than recent peak</p><div class="bar"><div class="fill" style="--w:81%"></div></div><p>81% of rolling baseline</p></div><div class="card"><b>2026-04-26</b><p>High activity — automation, viz refresh, and agent coordination</p><div class="bar"><div class="fill" style="--w:152%"></div></div><p>152% of rolling baseline</p></div></div></section><footer class="sys-footer"><div class="sys-footer__label">System visualizations</div><div class="sys-footer__links"><a href="architecture.html">System Architecture</a><span class="sys-footer__current">Operations Dashboard</span><a href="memory-management-method.html">Memory Management</a><a href="shared-conventions-map.html">Shared Conventions</a><a href="openclaw-linear-projection-architecture.html">Linear Projection</a><a href="./">All visualizations</a></div><div>Built with <a href="https://openclaw.ai" target="_blank" rel="noopener">OpenClaw</a> · Published on <a href="./">The Ark Viz</a></div></footer></main></body></html>
