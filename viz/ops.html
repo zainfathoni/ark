@@ -1,5 +1,80 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viz-author" content="Optimus 🍠"><meta name="viz-date" content="2026-04-26"><meta name="viz-category" content="System"><title>Autobot Operations Dashboard</title><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viz-author" content="Optimus 🍠">
+<meta name="viz-date" content="2026-04-26">
+<meta name="viz-category" content="System"><title>Autobot Operations Dashboard</title><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
 :root{--bg:#faf8f5;--surface:#fff;--alt:#f5f1ec;--text:#1c1917;--dim:#78716c;--border:rgba(0,0,0,.09);--teal:#0d9488;--amber:#b45309;--rose:#be123c;--emerald:#047857;--blue:#2563eb}@media(prefers-color-scheme:dark){:root{--bg:#0c0a09;--surface:#1c1917;--alt:#292524;--text:#fafaf9;--dim:#a8a29e;--border:rgba(255,255,255,.09);--teal:#2dd4bf;--amber:#fbbf24;--rose:#fb7185;--emerald:#34d399;--blue:#60a5fa}}*{box-sizing:border-box}body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;background-image:radial-gradient(circle,var(--border) 1px,transparent 1px);background-size:32px 32px}.wrap{max-width:1180px;margin:auto;padding:32px 20px}header{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;position:relative;overflow:hidden}header:before{content:'';position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,var(--teal),var(--amber),var(--emerald))}h1{margin:0;font-size:clamp(28px,4vw,44px);letter-spacing:-.03em}.sub{color:var(--dim)}.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:24px}.kpi{background:var(--alt);border-radius:12px;padding:18px;text-align:center}.num{font:700 34px 'IBM Plex Mono',monospace;color:var(--teal)}.kpi:nth-child(2) .num{color:var(--rose)}.kpi:nth-child(3) .num{color:var(--amber)}.kpi:nth-child(4) .num{color:var(--emerald)}.label{font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;color:var(--dim);letter-spacing:.08em}section{margin-top:34px}h2{font-size:20px;border-bottom:1px solid var(--border);padding-bottom:10px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}.job{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--dim);border-radius:12px;padding:16px;position:relative}.job.ok{border-left-color:var(--emerald)}.job.error{border-left-color:var(--rose)}.job.running{border-left-color:var(--amber)}.job.idle{border-left-color:var(--blue)}.job div{display:flex;justify-content:space-between;gap:12px}.job span,.job p{color:var(--dim)}code{font-family:'IBM Plex Mono',monospace;background:var(--alt);padding:3px 6px;border-radius:5px;font-size:12px}em{position:absolute;right:14px;bottom:12px;font:600 10px 'IBM Plex Mono';text-transform:uppercase;color:var(--dim)}.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}.bar{height:10px;background:var(--alt);border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--amber));width:min(var(--w),100%)}footer{margin-top:40px;color:var(--dim);font-size:13px;text-align:center}a{color:var(--blue)}
+
+/* === Viz hash navigation === */
+html { scroll-behavior: smooth; }
+.viz-toc {
+  position: fixed;
+  top: 24px;
+  left: max(16px, calc((100vw - 1320px) / 2));
+  z-index: 100;
+  width: 172px;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  padding: 12px 0;
+  color: var(--text-dim, #8b949e);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+}
+.viz-toc__title {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 0 0 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border, rgba(255,255,255,.12));
+}
+.viz-toc a {
+  display: block;
+  color: var(--text-dim, #8b949e);
+  text-decoration: none;
+  font-size: 11px;
+  line-height: 1.35;
+  padding: 5px 8px;
+  margin-bottom: 2px;
+  border-left: 2px solid transparent;
+  border-radius: 6px;
+  transition: all .15s ease;
+}
+.viz-toc a:hover { color: var(--text, #e6edf3); background: var(--surface2, rgba(255,255,255,.06)); }
+.viz-toc a.active { color: var(--text, #e6edf3); border-left-color: var(--gold, var(--accent, #f59e0b)); background: var(--gold-dim, rgba(245,158,11,.12)); }
+.viz-anchor { scroll-margin-top: 28px; }
+@media (max-width: 1180px) {
+  .viz-toc {
+    position: sticky;
+    top: 0;
+    width: auto;
+    max-height: none;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: color-mix(in srgb, var(--bg, #0b0b0f) 92%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border, rgba(255,255,255,.12));
+    padding: 10px 16px;
+    margin: -40px -40px 24px;
+  }
+  .viz-toc::-webkit-scrollbar { display: none; }
+  .viz-toc__title { display: none; }
+  .viz-toc a {
+    white-space: nowrap;
+    flex-shrink: 0;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 6px 6px 0 0;
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+  .viz-toc a.active { border-left: none; border-bottom-color: var(--gold, var(--accent, #f59e0b)); }
+  .viz-anchor { scroll-margin-top: 58px; }
+}
+@media (max-width: 640px) { .viz-toc { margin-left: -24px; margin-right: -24px; } }
+
 </style></head><body><main class="wrap"><header><h1>Autobot Operations Center</h1><p class="sub">Cron jobs, fuel status, dispatcher state, and operational health. Updated 2026-04-26 21:06 WIB.</p><div class="kpis"><div class="kpi"><div class="num">18</div><div class="label">Tracked Jobs</div></div><div class="kpi"><div class="num">9</div><div class="label">Need Attention</div></div><div class="kpi"><div class="num">152%</div><div class="label">Cost vs 4wk Avg</div></div><div class="kpi"><div class="num">0</div><div class="label">Dispatcher Running</div></div></div></header><section><h2>Recurring and queued jobs</h2><div class="grid"><article class="job ok"><div><strong>BTA Daily Progress &amp; Priority Review</strong><span>🚨 Red Alert</span></div><p>Workday review for BookThatApp stories.</p><code>0 8 * * 1-5</code><em>ok</em></article>
 <article class="job error"><div><strong>Morning Progress Summary</strong><span>🍠 Optimus</span></div><p>Morning brief currently needs delivery/runtime attention.</p><code>0 7 * * *</code><em>error</em></article>
 <article class="job error"><div><strong>Fuel Check ⛽</strong><span>🍠 Optimus</span></div><p>Quota monitor is useful, but the cron status is currently erroring.</p><code>0 8,12,16,20 * * *</code><em>error</em></article>
@@ -17,4 +92,81 @@
 <article class="job error"><div><strong>Spend Limit Monitor</strong><span>🍠 Optimus</span></div><p>Spend guardrail exists but latest cron status needs repair.</p><code>0 20 * * *</code><em>error</em></article>
 <article class="job ok"><div><strong>Vercel Bandwidth Monthly</strong><span>🛠️ Wheeljack</span></div><p>Monthly bandwidth check.</p><code>0 9 28 * *</code><em>ok</em></article>
 <article class="job idle"><div><strong>VFC Jogja Reminder</strong><span>🚔 Prowl</span></div><p>One-shot event reminder queued.</p><code>2026-04-29 18:45 WIB</code><em>idle</em></article>
-<article class="job ok"><div><strong>Hound Weekly Tax Review</strong><span>🔍 Hound</span></div><p>Weekly tax compliance sweep.</p><code>0 18 * * 0</code><em>ok</em></article></div></section><section><h2>Fuel status</h2><div class="grid"><div class="card"><b>Claude</b><p>Zain account is at 0% for short and weekly quota windows; BTA weekly quota is 70% and slightly behind pace. BTA monthly cap is effectively full.</p></div><div class="card"><b>Amp</b><p>Free tier shows 0% used and 100% remaining, with hourly reset behavior intact.</p></div><div class="card"><b>Codex + Copilot</b><p>Codex daily quota is 3% used and weekly quota is 65%. Copilot primary quota is about 3%; secondary quota is 22%.</p></div></div></section><section><h2>Dispatcher state</h2><div class="flow"><div class="card"><b>Query Fizzy</b><p>Track dispatchable cards and restore state.</p></div><div class="card"><b>Check fuel</b><p>Prefer free or healthy routes before spawning agents.</p></div><div class="card"><b>Dispatch or hold</b><p>Current snapshot: 0 running, 7 tracked cards, 6 awaiting judgment, and 1 stopped because card state changed.</p></div></div></section><section><h2>Weekly cost trend</h2><p class="sub">Public view uses relative percentages only.</p><div class="grid"><div class="card"><b>2026-02-22</b><p>Model tiering + free fallbacks</p><div class="bar"><div class="fill" style="--w:100%"></div></div><p>100% of rolling baseline</p></div><div class="card"><b>2026-03-01</b><p>Claude Max plan stabilized</p><div class="bar"><div class="fill" style="--w:69%"></div></div><p>69% of rolling baseline</p></div><div class="card"><b>2026-03-08</b><p>Heavy agent work — new bots onboarding</p><div class="bar"><div class="fill" style="--w:187%"></div></div><p>187% of rolling baseline</p></div><div class="card"><b>2026-03-15</b><p>Normalized</p><div class="bar"><div class="fill" style="--w:64%"></div></div><p>64% of rolling baseline</p></div><div class="card"><b>2026-03-22</b><p>Low activity (Lebaran)</p><div class="bar"><div class="fill" style="--w:9%"></div></div><p>9% of rolling baseline</p></div><div class="card"><b>2026-03-29</b><p>Dispatcher built, viz pages created</p><div class="bar"><div class="fill" style="--w:64%"></div></div><p>64% of rolling baseline</p></div><div class="card"><b>2026-04-05</b><p>High activity — Rewind content + heavy Opus usage</p><div class="bar"><div class="fill" style="--w:237%"></div></div><p>237% of rolling baseline</p></div><div class="card"><b>2026-04-12</b><p>OpenAI ProLite + Opus-heavy coordination</p><div class="bar"><div class="fill" style="--w:168%"></div></div><p>168% of rolling baseline</p></div><div class="card"><b>2026-04-19</b><p>Balanced ops week, lower than recent peak</p><div class="bar"><div class="fill" style="--w:81%"></div></div><p>81% of rolling baseline</p></div><div class="card"><b>2026-04-26</b><p>High activity — automation, viz refresh, and agent coordination</p><div class="bar"><div class="fill" style="--w:152%"></div></div><p>152% of rolling baseline</p></div></div></section><footer>Autobot Operations Dashboard · <a href="architecture.html">Architecture</a> · <a href="./">All visualizations</a></footer></main></body></html>
+<article class="job ok"><div><strong>Hound Weekly Tax Review</strong><span>🔍 Hound</span></div><p>Weekly tax compliance sweep.</p><code>0 18 * * 0</code><em>ok</em></article></div></section><section><h2>Fuel status</h2><div class="grid"><div class="card"><b>Claude</b><p>Zain account is at 0% for short and weekly quota windows; BTA weekly quota is 70% and slightly behind pace. BTA monthly cap is effectively full.</p></div><div class="card"><b>Amp</b><p>Free tier shows 0% used and 100% remaining, with hourly reset behavior intact.</p></div><div class="card"><b>Codex + Copilot</b><p>Codex daily quota is 3% used and weekly quota is 65%. Copilot primary quota is about 3%; secondary quota is 22%.</p></div></div></section><section><h2>Dispatcher state</h2><div class="flow"><div class="card"><b>Query Fizzy</b><p>Track dispatchable cards and restore state.</p></div><div class="card"><b>Check fuel</b><p>Prefer free or healthy routes before spawning agents.</p></div><div class="card"><b>Dispatch or hold</b><p>Current snapshot: 0 running, 7 tracked cards, 6 awaiting judgment, and 1 stopped because card state changed.</p></div></div></section><section><h2>Weekly cost trend</h2><p class="sub">Public view uses relative percentages only.</p><div class="grid"><div class="card"><b>2026-02-22</b><p>Model tiering + free fallbacks</p><div class="bar"><div class="fill" style="--w:100%"></div></div><p>100% of rolling baseline</p></div><div class="card"><b>2026-03-01</b><p>Claude Max plan stabilized</p><div class="bar"><div class="fill" style="--w:69%"></div></div><p>69% of rolling baseline</p></div><div class="card"><b>2026-03-08</b><p>Heavy agent work — new bots onboarding</p><div class="bar"><div class="fill" style="--w:187%"></div></div><p>187% of rolling baseline</p></div><div class="card"><b>2026-03-15</b><p>Normalized</p><div class="bar"><div class="fill" style="--w:64%"></div></div><p>64% of rolling baseline</p></div><div class="card"><b>2026-03-22</b><p>Low activity (Lebaran)</p><div class="bar"><div class="fill" style="--w:9%"></div></div><p>9% of rolling baseline</p></div><div class="card"><b>2026-03-29</b><p>Dispatcher built, viz pages created</p><div class="bar"><div class="fill" style="--w:64%"></div></div><p>64% of rolling baseline</p></div><div class="card"><b>2026-04-05</b><p>High activity — Rewind content + heavy Opus usage</p><div class="bar"><div class="fill" style="--w:237%"></div></div><p>237% of rolling baseline</p></div><div class="card"><b>2026-04-12</b><p>OpenAI ProLite + Opus-heavy coordination</p><div class="bar"><div class="fill" style="--w:168%"></div></div><p>168% of rolling baseline</p></div><div class="card"><b>2026-04-19</b><p>Balanced ops week, lower than recent peak</p><div class="bar"><div class="fill" style="--w:81%"></div></div><p>81% of rolling baseline</p></div><div class="card"><b>2026-04-26</b><p>High activity — automation, viz refresh, and agent coordination</p><div class="bar"><div class="fill" style="--w:152%"></div></div><p>152% of rolling baseline</p></div></div></section><footer>Autobot Operations Dashboard · <a href="architecture.html">Architecture</a> · <a href="./">All visualizations</a></footer></main>
+<script>
+(function() {
+  if (document.getElementById('viz-toc')) return;
+  const slugify = value => value.toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 64) || 'section';
+
+  const candidates = Array.from(document.querySelectorAll('h2, .sec-head'));
+  const seen = new Map();
+  const sections = candidates
+    .map(el => {
+      const label = el.textContent.replace(/\s+/g, ' ').trim();
+      if (!label || label.length < 3) return null;
+      let id = el.id || slugify(label);
+      const n = seen.get(id) || 0;
+      seen.set(id, n + 1);
+      if (n) id = `${id}-${n + 1}`;
+      el.id = id;
+      el.classList.add('viz-anchor');
+      return { id, label, el };
+    })
+    .filter(Boolean);
+
+  if (sections.length < 3) return;
+
+  const nav = document.createElement('nav');
+  nav.id = 'viz-toc';
+  nav.className = 'viz-toc';
+  nav.setAttribute('aria-label', 'Page sections');
+  nav.innerHTML = '<div class="viz-toc__title">Contents</div>' + sections
+    .map(s => `<a href="#${s.id}">${s.label}</a>`)
+    .join('');
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  const links = Array.from(nav.querySelectorAll('a'));
+  const activate = link => {
+    links.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    if (window.innerWidth <= 1180) {
+      link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  };
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const id = entry.target.id;
+      const link = nav.querySelector(`a[href="#${CSS.escape(id)}"]`);
+      if (link) activate(link);
+    });
+  }, { rootMargin: '-12% 0px -76% 0px' });
+  sections.forEach(s => observer.observe(s.el));
+
+  links.forEach(link => {
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', '#' + id);
+      activate(link);
+    });
+  });
+
+  const initial = window.location.hash && nav.querySelector(`a[href="${CSS.escape(window.location.hash)}"]`);
+  activate(initial || links[0]);
+  if (window.location.hash) {
+    const target = document.getElementById(window.location.hash.slice(1));
+    if (target) setTimeout(() => target.scrollIntoView({ block: 'start' }), 0);
+  }
+})();
+</script>
+
+</body></html>

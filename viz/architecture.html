@@ -1,3 +1,155 @@
-<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viz-author" content="Optimus 🍠"><meta name="viz-date" content="2026-04-26"><meta name="viz-category" content="System"><title>Project Transformers — System Architecture</title><meta name="description" content="How the Autobot roster coordinates through OpenClaw, Fizzy, memory, crons, and shared knowledge."><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Fragment+Mono&display=swap" rel="stylesheet"><style>
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viz-author" content="Optimus 🍠">
+<meta name="viz-date" content="2026-04-26">
+<meta name="viz-category" content="System"><title>Project Transformers — System Architecture</title><meta name="description" content="How the Autobot roster coordinates through OpenClaw, Fizzy, memory, crons, and shared knowledge."><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Fragment+Mono&display=swap" rel="stylesheet"><style>
 :root{--bg:#0b1120;--grid:rgba(148,163,184,.055);--surface:#131c2e;--elev:#1a2540;--border:rgba(148,163,184,.13);--text:#e2e8f0;--dim:#94a3b8;--muted:#64748b;--blue:#60a5fa;--gold:#fbbf24;--teal:#2dd4bf;--emerald:#34d399;--rose:#fb7185}*{box-sizing:border-box}body{margin:0;padding:32px;font-family:'Bricolage Grotesque',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px}.wrap{max-width:1280px;margin:auto}header{border-bottom:2px solid var(--border);padding-bottom:28px;margin-bottom:32px}.badge,.mono{font-family:'Fragment Mono',monospace;text-transform:uppercase;letter-spacing:.18em;color:var(--blue);font-size:11px}h1{font-size:clamp(32px,5vw,58px);line-height:1;margin:10px 0}.sub{color:var(--dim);max-width:760px}h2{margin-top:44px;font-size:26px}.diagram{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.node,.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative}.node:before,.panel:before{content:'';position:absolute;inset:0 auto auto 0;width:44px;height:2px;background:var(--blue)}.node b{display:block;font-size:18px}.node span{font-family:'Fragment Mono';font-size:11px;color:var(--gold);text-transform:uppercase}.node p,.panel p{color:var(--dim)}.pipeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;counter-reset:s}.step{background:var(--elev);border:1px dashed var(--border);padding:18px;border-radius:10px}.step:before{counter-increment:s;content:'0' counter(s);font-family:'Fragment Mono';color:var(--teal)}.barrow{display:grid;grid-template-columns:90px 1fr 58px;gap:10px;align-items:center;margin:12px 0}.barrow span,.barrow strong,.barrow small{font-family:'Fragment Mono';font-size:12px}.barrow small{grid-column:2/4;color:var(--muted)}.track{height:12px;background:#0a0f1a;border:1px solid var(--border);border-radius:99px;overflow:hidden}.track i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--gold),var(--rose));max-width:100%}.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}footer{margin-top:50px;color:var(--muted);font-family:'Fragment Mono';font-size:12px;text-align:center}a{color:var(--blue)}
-</style></head><body><main class="wrap"><header><div class="badge">Blueprint · Updated 2026-04-26 21:06 WIB</div><h1>Project Transformers Architecture</h1><p class="sub">A living map of the Autobot system: humans, agents, OpenClaw runtime, Fizzy task state, memory, private reporting, public visualizations, and fuel-aware dispatch.</p></header><section><h2>Bot roster</h2><div class="diagram"><div class="node"><b>🍠 Optimus</b><span>Coordinator</span><p>Main session, crons, dispatcher, memory, reporting</p></div><div class="node"><b>🛠️ Wheeljack</b><span>Engineering</span><p>Coding work, build lanes, Vercel checks</p></div><div class="node"><b>🚔 Prowl</b><span>Career / finance / social</span><p>Digests, WhatsApp scan, career boards</p></div><div class="node"><b>🐝 Bumblebee</b><span>Family</span><p>Family and homeschooling boards</p></div><div class="node"><b>🚨 Red Alert</b><span>Workplace</span><p>BTA progress and priority reviews</p></div><div class="node"><b>🔍 Hound</b><span>Tax</span><p>Weekly tax compliance</p></div><div class="node"><b>🎷 Jazz</b><span>Studio / public bot</span><p>Studio board and public-facing bot lane</p></div><div class="node"><b>📼 Rewind</b><span>Knowledge</span><p>Memory and historical recall</p></div><div class="node"><b>🧪 Perceptor</b><span>Research</span><p>Analysis-heavy tasks</p></div></div></section><section><h2>Core mechanisms</h2><div class="pipeline"><div class="step"><h3>Messaging surfaces</h3><p>Telegram, Discord, WhatsApp, and browser workflows enter through OpenClaw sessions.</p></div><div class="step"><h3>Memory layers</h3><p>Daily notes, curated memory, knowledge docs, Obsidian reports, and Fizzy cards preserve continuity.</p></div><div class="step"><h3>Dispatcher</h3><p>Fizzy cards are routed only when state, judgment, and fuel allow it.</p></div><div class="step"><h3>Specialized agents</h3><p>ACP sessions, coding agents, skills, and cron jobs handle bounded domains.</p></div><div class="step"><h3>Publishing</h3><p>Private details stay in Obsidian; Ark receives sanitized architecture and ops pages.</p></div></div></section><section><h2>Cost pressure, relative only</h2><p class="sub">Bars show each week as a percentage of its rolling baseline. Raw amounts are intentionally omitted on public pages.</p><div class="panel"><div class="barrow"><span>2026-02-22</span><div class="track"><i style="width:min(100%,160%)"></i></div><strong>100%</strong><small>Model tiering + free fallbacks</small></div><div class="barrow"><span>2026-03-01</span><div class="track"><i style="width:min(69%,160%)"></i></div><strong>69%</strong><small>Claude Max plan stabilized</small></div><div class="barrow"><span>2026-03-08</span><div class="track"><i style="width:min(187%,160%)"></i></div><strong>187%</strong><small>Heavy agent work — new bots onboarding</small></div><div class="barrow"><span>2026-03-15</span><div class="track"><i style="width:min(64%,160%)"></i></div><strong>64%</strong><small>Normalized</small></div><div class="barrow"><span>2026-03-22</span><div class="track"><i style="width:min(9%,160%)"></i></div><strong>9%</strong><small>Low activity (Lebaran)</small></div><div class="barrow"><span>2026-03-29</span><div class="track"><i style="width:min(64%,160%)"></i></div><strong>64%</strong><small>Dispatcher built, viz pages created</small></div><div class="barrow"><span>2026-04-05</span><div class="track"><i style="width:min(237%,160%)"></i></div><strong>237%</strong><small>High activity — Rewind content + heavy Opus usage</small></div><div class="barrow"><span>2026-04-12</span><div class="track"><i style="width:min(168%,160%)"></i></div><strong>168%</strong><small>OpenAI ProLite + Opus-heavy coordination</small></div><div class="barrow"><span>2026-04-19</span><div class="track"><i style="width:min(81%,160%)"></i></div><strong>81%</strong><small>Balanced ops week, lower than recent peak</small></div><div class="barrow"><span>2026-04-26</span><div class="track"><i style="width:min(152%,160%)"></i></div><strong>152%</strong><small>High activity — automation, viz refresh, and agent coordination</small></div></div></section><section><h2>System posture</h2><div class="cols"><div class="panel"><h3>Healthy</h3><p>Backup, BTA review, memory dreaming, tax review, strict-agentic monitor, Vercel monthly check, and free Amp fuel are available.</p></div><div class="panel"><h3>Needs cleanup</h3><p>Several board digests and scan jobs are still failing around delivery route resolution. Fuel-check cron status also needs attention even though direct fuel data is readable.</p></div><div class="panel"><h3>Dispatcher</h3><p>Current state is quiet: no running workers, seven tracked cards, six awaiting judgment, and one stopped because card state changed.</p></div></div></section><footer>Project Transformers Architecture · <a href="ops.html">Operations Dashboard</a> · <a href="./">All visualizations</a></footer></main></body></html>
+
+/* === Viz hash navigation === */
+html { scroll-behavior: smooth; }
+.viz-toc {
+  position: fixed;
+  top: 24px;
+  left: max(16px, calc((100vw - 1320px) / 2));
+  z-index: 100;
+  width: 172px;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  padding: 12px 0;
+  color: var(--text-dim, #8b949e);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+}
+.viz-toc__title {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 0 0 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border, rgba(255,255,255,.12));
+}
+.viz-toc a {
+  display: block;
+  color: var(--text-dim, #8b949e);
+  text-decoration: none;
+  font-size: 11px;
+  line-height: 1.35;
+  padding: 5px 8px;
+  margin-bottom: 2px;
+  border-left: 2px solid transparent;
+  border-radius: 6px;
+  transition: all .15s ease;
+}
+.viz-toc a:hover { color: var(--text, #e6edf3); background: var(--surface2, rgba(255,255,255,.06)); }
+.viz-toc a.active { color: var(--text, #e6edf3); border-left-color: var(--gold, var(--accent, #f59e0b)); background: var(--gold-dim, rgba(245,158,11,.12)); }
+.viz-anchor { scroll-margin-top: 28px; }
+@media (max-width: 1180px) {
+  .viz-toc {
+    position: sticky;
+    top: 0;
+    width: auto;
+    max-height: none;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: color-mix(in srgb, var(--bg, #0b0b0f) 92%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border, rgba(255,255,255,.12));
+    padding: 10px 16px;
+    margin: -40px -40px 24px;
+  }
+  .viz-toc::-webkit-scrollbar { display: none; }
+  .viz-toc__title { display: none; }
+  .viz-toc a {
+    white-space: nowrap;
+    flex-shrink: 0;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 6px 6px 0 0;
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+  .viz-toc a.active { border-left: none; border-bottom-color: var(--gold, var(--accent, #f59e0b)); }
+  .viz-anchor { scroll-margin-top: 58px; }
+}
+@media (max-width: 640px) { .viz-toc { margin-left: -24px; margin-right: -24px; } }
+
+</style></head><body><main class="wrap"><header><div class="badge">Blueprint · Updated 2026-04-26 21:06 WIB</div><h1>Project Transformers Architecture</h1><p class="sub">A living map of the Autobot system: humans, agents, OpenClaw runtime, Fizzy task state, memory, private reporting, public visualizations, and fuel-aware dispatch.</p></header><section><h2>Bot roster</h2><div class="diagram"><div class="node"><b>🍠 Optimus</b><span>Coordinator</span><p>Main session, crons, dispatcher, memory, reporting</p></div><div class="node"><b>🛠️ Wheeljack</b><span>Engineering</span><p>Coding work, build lanes, Vercel checks</p></div><div class="node"><b>🚔 Prowl</b><span>Career / finance / social</span><p>Digests, WhatsApp scan, career boards</p></div><div class="node"><b>🐝 Bumblebee</b><span>Family</span><p>Family and homeschooling boards</p></div><div class="node"><b>🚨 Red Alert</b><span>Workplace</span><p>BTA progress and priority reviews</p></div><div class="node"><b>🔍 Hound</b><span>Tax</span><p>Weekly tax compliance</p></div><div class="node"><b>🎷 Jazz</b><span>Studio / public bot</span><p>Studio board and public-facing bot lane</p></div><div class="node"><b>📼 Rewind</b><span>Knowledge</span><p>Memory and historical recall</p></div><div class="node"><b>🧪 Perceptor</b><span>Research</span><p>Analysis-heavy tasks</p></div></div></section><section><h2>Core mechanisms</h2><div class="pipeline"><div class="step"><h3>Messaging surfaces</h3><p>Telegram, Discord, WhatsApp, and browser workflows enter through OpenClaw sessions.</p></div><div class="step"><h3>Memory layers</h3><p>Daily notes, curated memory, knowledge docs, Obsidian reports, and Fizzy cards preserve continuity.</p></div><div class="step"><h3>Dispatcher</h3><p>Fizzy cards are routed only when state, judgment, and fuel allow it.</p></div><div class="step"><h3>Specialized agents</h3><p>ACP sessions, coding agents, skills, and cron jobs handle bounded domains.</p></div><div class="step"><h3>Publishing</h3><p>Private details stay in Obsidian; Ark receives sanitized architecture and ops pages.</p></div></div></section><section><h2>Cost pressure, relative only</h2><p class="sub">Bars show each week as a percentage of its rolling baseline. Raw amounts are intentionally omitted on public pages.</p><div class="panel"><div class="barrow"><span>2026-02-22</span><div class="track"><i style="width:min(100%,160%)"></i></div><strong>100%</strong><small>Model tiering + free fallbacks</small></div><div class="barrow"><span>2026-03-01</span><div class="track"><i style="width:min(69%,160%)"></i></div><strong>69%</strong><small>Claude Max plan stabilized</small></div><div class="barrow"><span>2026-03-08</span><div class="track"><i style="width:min(187%,160%)"></i></div><strong>187%</strong><small>Heavy agent work — new bots onboarding</small></div><div class="barrow"><span>2026-03-15</span><div class="track"><i style="width:min(64%,160%)"></i></div><strong>64%</strong><small>Normalized</small></div><div class="barrow"><span>2026-03-22</span><div class="track"><i style="width:min(9%,160%)"></i></div><strong>9%</strong><small>Low activity (Lebaran)</small></div><div class="barrow"><span>2026-03-29</span><div class="track"><i style="width:min(64%,160%)"></i></div><strong>64%</strong><small>Dispatcher built, viz pages created</small></div><div class="barrow"><span>2026-04-05</span><div class="track"><i style="width:min(237%,160%)"></i></div><strong>237%</strong><small>High activity — Rewind content + heavy Opus usage</small></div><div class="barrow"><span>2026-04-12</span><div class="track"><i style="width:min(168%,160%)"></i></div><strong>168%</strong><small>OpenAI ProLite + Opus-heavy coordination</small></div><div class="barrow"><span>2026-04-19</span><div class="track"><i style="width:min(81%,160%)"></i></div><strong>81%</strong><small>Balanced ops week, lower than recent peak</small></div><div class="barrow"><span>2026-04-26</span><div class="track"><i style="width:min(152%,160%)"></i></div><strong>152%</strong><small>High activity — automation, viz refresh, and agent coordination</small></div></div></section><section><h2>System posture</h2><div class="cols"><div class="panel"><h3>Healthy</h3><p>Backup, BTA review, memory dreaming, tax review, strict-agentic monitor, Vercel monthly check, and free Amp fuel are available.</p></div><div class="panel"><h3>Needs cleanup</h3><p>Several board digests and scan jobs are still failing around delivery route resolution. Fuel-check cron status also needs attention even though direct fuel data is readable.</p></div><div class="panel"><h3>Dispatcher</h3><p>Current state is quiet: no running workers, seven tracked cards, six awaiting judgment, and one stopped because card state changed.</p></div></div></section><footer>Project Transformers Architecture · <a href="ops.html">Operations Dashboard</a> · <a href="./">All visualizations</a></footer></main>
+<script>
+(function() {
+  if (document.getElementById('viz-toc')) return;
+  const slugify = value => value.toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 64) || 'section';
+
+  const candidates = Array.from(document.querySelectorAll('h2, .sec-head'));
+  const seen = new Map();
+  const sections = candidates
+    .map(el => {
+      const label = el.textContent.replace(/\s+/g, ' ').trim();
+      if (!label || label.length < 3) return null;
+      let id = el.id || slugify(label);
+      const n = seen.get(id) || 0;
+      seen.set(id, n + 1);
+      if (n) id = `${id}-${n + 1}`;
+      el.id = id;
+      el.classList.add('viz-anchor');
+      return { id, label, el };
+    })
+    .filter(Boolean);
+
+  if (sections.length < 3) return;
+
+  const nav = document.createElement('nav');
+  nav.id = 'viz-toc';
+  nav.className = 'viz-toc';
+  nav.setAttribute('aria-label', 'Page sections');
+  nav.innerHTML = '<div class="viz-toc__title">Contents</div>' + sections
+    .map(s => `<a href="#${s.id}">${s.label}</a>`)
+    .join('');
+  document.body.insertBefore(nav, document.body.firstChild);
+
+  const links = Array.from(nav.querySelectorAll('a'));
+  const activate = link => {
+    links.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    if (window.innerWidth <= 1180) {
+      link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  };
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const id = entry.target.id;
+      const link = nav.querySelector(`a[href="#${CSS.escape(id)}"]`);
+      if (link) activate(link);
+    });
+  }, { rootMargin: '-12% 0px -76% 0px' });
+  sections.forEach(s => observer.observe(s.el));
+
+  links.forEach(link => {
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', '#' + id);
+      activate(link);
+    });
+  });
+
+  const initial = window.location.hash && nav.querySelector(`a[href="${CSS.escape(window.location.hash)}"]`);
+  activate(initial || links[0]);
+  if (window.location.hash) {
+    const target = document.getElementById(window.location.hash.slice(1));
+    if (target) setTimeout(() => target.scrollIntoView({ block: 'start' }), 0);
+  }
+})();
+</script>
+
+</body></html>
