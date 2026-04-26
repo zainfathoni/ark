@@ -456,7 +456,7 @@ html { scroll-behavior: smooth; }
 
 </style>
 </head>
-<body>
+<body><nav class="viz-toc" id="viz-toc" aria-label="Page sections"><div class="viz-toc__title">Contents</div><a href="#source-of-truth">source of truth</a><a href="#how-bots-find-conventions">how bots find conventions</a><a href="#signpost-in-agents-md">signpost in agents.md</a><a href="#universal-commands">universal commands</a><a href="#memory-md-deep-links">memory.md deep links</a><a href="#related-pages">related pages</a></nav>
 
 <div class="container">
 
@@ -464,7 +464,7 @@ html { scroll-behavior: smooth; }
   <p class="subtitle anim" style="--i:1">project transformers — knowledge discovery architecture — 2026-03-05</p>
 
   <!-- Source of Truth -->
-  <div class="sec-head anim" style="--i:2; color: var(--blue);">
+  <div id="source-of-truth"  class="sec-head anim viz-anchor" style="--i:2; color: var(--blue);">
     <span class="dot" style="background: var(--blue);"></span>
     source of truth
   </div>
@@ -508,7 +508,7 @@ html { scroll-behavior: smooth; }
   </div>
 
   <div class="card anim" style="--i:5">
-    <div class="sec-head" style="color: var(--teal);">
+    <div id="how-bots-find-conventions"  class="sec-head viz-anchor" style="color: var(--teal);">
       <span class="dot" style="background: var(--teal);"></span>
       how bots find conventions
     </div>
@@ -542,7 +542,7 @@ html { scroll-behavior: smooth; }
   </div>
 
   <div class="card anim" style="--i:7">
-    <div class="sec-head" style="color: var(--sage);">
+    <div id="signpost-in-agents-md"  class="sec-head viz-anchor" style="color: var(--sage);">
       <span class="dot" style="background: var(--sage);"></span>
       signpost in agents.md
     </div>
@@ -575,7 +575,7 @@ html { scroll-behavior: smooth; }
   </div>
 
   <div class="anim" style="--i:9">
-    <div class="sec-head" style="color: var(--gold);">
+    <div id="universal-commands"  class="sec-head viz-anchor" style="color: var(--gold);">
       <span class="dot" style="background: var(--gold);"></span>
       universal commands
     </div>
@@ -637,7 +637,7 @@ html { scroll-behavior: smooth; }
   </div>
 
   <div class="card card--recessed anim" style="--i:11">
-    <div class="sec-head" style="color: var(--amber);">
+    <div id="memory-md-deep-links"  class="sec-head viz-anchor" style="color: var(--amber);">
       <span class="dot" style="background: var(--amber);"></span>
       memory.md deep links
     </div>
@@ -668,7 +668,7 @@ html { scroll-behavior: smooth; }
 
   <!-- Cross-links -->
   <div class="anim" style="--i:13; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border);">
-    <div class="sec-head" style="color: var(--slate);">
+    <div id="related-pages"  class="sec-head viz-anchor" style="color: var(--slate);">
       <span class="dot" style="background: var(--slate);"></span>
       related pages
     </div>
@@ -684,83 +684,6 @@ html { scroll-behavior: smooth; }
   </div>
 
 </div>
-
-
-<script>
-(function() {
-  if (document.getElementById('viz-toc')) return;
-  const slugify = value => value.toLowerCase()
-    .replace(/&/g, ' and ')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 64) || 'section';
-
-  const candidates = Array.from(document.querySelectorAll('h2, .sec-head'));
-  const seen = new Map();
-  const sections = candidates
-    .map(el => {
-      const label = el.textContent.replace(/\s+/g, ' ').trim();
-      if (!label || label.length < 3) return null;
-      let id = el.id || slugify(label);
-      const n = seen.get(id) || 0;
-      seen.set(id, n + 1);
-      if (n) id = `${id}-${n + 1}`;
-      el.id = id;
-      el.classList.add('viz-anchor');
-      return { id, label, el };
-    })
-    .filter(Boolean);
-
-  if (sections.length < 3) return;
-
-  const nav = document.createElement('nav');
-  nav.id = 'viz-toc';
-  nav.className = 'viz-toc';
-  nav.setAttribute('aria-label', 'Page sections');
-  nav.innerHTML = '<div class="viz-toc__title">Contents</div>' + sections
-    .map(s => `<a href="#${s.id}">${s.label}</a>`)
-    .join('');
-  document.body.insertBefore(nav, document.body.firstChild);
-
-  const links = Array.from(nav.querySelectorAll('a'));
-  const activate = link => {
-    links.forEach(l => l.classList.remove('active'));
-    link.classList.add('active');
-    if (window.innerWidth <= 1180) {
-      link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-  };
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const id = entry.target.id;
-      const link = nav.querySelector(`a[href="#${CSS.escape(id)}"]`);
-      if (link) activate(link);
-    });
-  }, { rootMargin: '-12% 0px -76% 0px' });
-  sections.forEach(s => observer.observe(s.el));
-
-  links.forEach(link => {
-    link.addEventListener('click', event => {
-      event.preventDefault();
-      const id = link.getAttribute('href').slice(1);
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      history.replaceState(null, '', '#' + id);
-      activate(link);
-    });
-  });
-
-  const initial = window.location.hash && nav.querySelector(`a[href="${CSS.escape(window.location.hash)}"]`);
-  activate(initial || links[0]);
-  if (window.location.hash) {
-    const target = document.getElementById(window.location.hash.slice(1));
-    if (target) setTimeout(() => target.scrollIntoView({ block: 'start' }), 0);
-  }
-})();
-</script>
 
 </body>
 </html>
