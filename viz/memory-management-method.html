@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="viz-author" content="Optimus 🍠">
-  <meta name="viz-date"   content="2026-03-30">
-  <meta name="viz-category" content="System">
 <title>AI Agent Memory Management — PARA + QMD + Decay</title>
 
   <!-- Open Graph -->
@@ -509,6 +506,133 @@
     display: block;
   }
 
+  /* ===== WORKSPACE BOUNDARIES ===== */
+  .workspace-map {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-elevated) 100%);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+  }
+
+  .workspace-answer {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .workspace-subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+    line-height: 1.65;
+    max-width: 680px;
+    margin: 0 auto 22px;
+    text-align: center;
+  }
+
+  .workspace-lanes {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .workspace-lane {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+
+  .workspace-lane--private { border-top: 3px solid var(--navy); }
+  .workspace-lane--shared { border-top: 3px solid var(--sage); }
+
+  .workspace-lane__kicker {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .workspace-lane__title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--text-bright);
+    margin-bottom: 10px;
+  }
+
+  .workspace-lane__body {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  .workspace-paths {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .workspace-path {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 10px;
+    overflow-wrap: anywhere;
+  }
+
+  .workspace-bridge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--sage);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .workspace-bridge__line {
+    width: 44px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--navy), var(--sage));
+    border-radius: 999px;
+  }
+
+  .workspace-boundaries {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .workspace-boundary {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-dim);
+  }
+
+  .workspace-boundary strong {
+    color: var(--text-bright);
+    display: block;
+    margin-bottom: 3px;
+  }
+
   /* ===== HOW IT WORKS (CALLOUT) ===== */
   .how-it-works {
     background: var(--surface-elevated);
@@ -611,6 +735,9 @@
     .decay-tiers { grid-template-columns: 1fr; }
     .qmd-flow { flex-direction: column; gap: 8px; }
     .qmd-arrow { transform: rotate(90deg); padding: 2px 0; }
+    .workspace-lanes { grid-template-columns: 1fr; }
+    .workspace-bridge { flex-direction: row; }
+    .workspace-boundaries { grid-template-columns: 1fr; }
     .agent-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
@@ -819,6 +946,59 @@
     </div>
   </section>
 
+
+  <!-- WORKSPACE BOUNDARIES -->
+  <div class="flow-arrow anim" style="--i:21">
+    <svg viewBox="0 0 20 20"><path d="M10 4 L10 16 M6 12 L10 16 L14 12"/></svg>
+    where files live
+  </div>
+
+  <section class="section">
+    <div class="section__label anim" style="--i:22">
+      <span class="dot" style="background: var(--sage)"></span>
+      <span style="color: var(--sage)">Workspace Boundaries</span>
+    </div>
+
+    <div class="workspace-map anim" style="--i:23">
+      <div class="workspace-answer">Separate rooms, shared library</div>
+      <p class="workspace-subtitle">Agents do not all edit one giant workspace. Each named bot gets its own working directory and memory files. What they intentionally share is the curated knowledge graph and conventions.</p>
+
+      <div class="workspace-lanes">
+        <div class="workspace-lane workspace-lane--private">
+          <div class="workspace-lane__kicker">Private by default</div>
+          <div class="workspace-lane__title">Per-agent workspace</div>
+          <p class="workspace-lane__body">Identity, daily notes, long-term memory, scratch files, and local tools live under that agent's own root. Optimus uses the main workspace; other bots use their agent folder.</p>
+          <div class="workspace-paths">
+            <div class="workspace-path">~/.openclaw/workspace/ <span style="color: var(--text-dim)">← Optimus</span></div>
+            <div class="workspace-path">~/.openclaw/agents/&lt;bot&gt;/workspace/</div>
+          </div>
+        </div>
+
+        <div class="workspace-bridge" aria-label="shared through curated knowledge">
+          <div class="workspace-bridge__line"></div>
+          curated
+          <div class="workspace-bridge__line"></div>
+        </div>
+
+        <div class="workspace-lane workspace-lane--shared">
+          <div class="workspace-lane__kicker">Shared on purpose</div>
+          <div class="workspace-lane__title">Shared knowledge graph</div>
+          <p class="workspace-lane__body">Cross-agent facts, conventions, rosters, and reusable docs are promoted into shared knowledge so other bots can search and reuse them without reading every private notebook.</p>
+          <div class="workspace-paths">
+            <div class="workspace-path">~/.openclaw/workspace/knowledge/shared/</div>
+            <div class="workspace-path">agents/&lt;bot&gt;/workspace/knowledge/shared → symlink</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="workspace-boundaries">
+        <div class="workspace-boundary"><strong>Memory</strong>Own <code>MEMORY.md</code> + daily notes; shared facts are promoted intentionally.</div>
+        <div class="workspace-boundary"><strong>Tools</strong>File tools start inside that agent's workspace root; shell access may see more when allowed.</div>
+        <div class="workspace-boundary"><strong>Privacy</strong>Air-gapped agents are not part of normal cross-agent extraction or shared reads.</div>
+      </div>
+    </div>
+  </section>
+
   <!-- MULTI-AGENT -->
   <div class="flow-arrow anim" style="--i:21">
     <svg viewBox="0 0 20 20"><path d="M10 4 L10 16 M6 12 L10 16 L14 12"/></svg>
@@ -910,19 +1090,9 @@
     </ol>
   </div>
 
-  <!-- Related Pages -->
-  <div class="anim" style="--i:39; margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06);">
-    <div style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #8b949e; margin-bottom: 10px;">Related Pages</div>
-    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-      <a href="architecture.html" style="font-family: monospace; font-size: 12px; color: #60a5fa; background: rgba(96,165,250,0.08); padding: 6px 14px; border-radius: 6px; text-decoration: none; border: 1px solid rgba(255,255,255,0.06);">System Architecture</a>
-      <a href="shared-conventions-map.html" style="font-family: monospace; font-size: 12px; color: #2dd4bf; background: rgba(45,212,191,0.08); padding: 6px 14px; border-radius: 6px; text-decoration: none; border: 1px solid rgba(255,255,255,0.06);">Shared Conventions</a>
-      <a href="ops.html" style="font-family: monospace; font-size: 12px; color: #fbbf24; background: rgba(251,191,36,0.08); padding: 6px 14px; border-radius: 6px; text-decoration: none; border: 1px solid rgba(255,255,255,0.06);">Operations Dashboard</a>
-    </div>
-  </div>
-
   <!-- FOOTER -->
-  <div class="footer anim" style="--i:40">
-    <p class="footer__text">Built with <a class="footer__link" href="https://openclaw.ai" target="_blank" rel="noopener">OpenClaw</a> · Inspired by Tiago Forte's PARA method · <a class="footer__link" href="./">All Visualizations</a></p>
+  <div class="footer anim" style="--i:39">
+    <p class="footer__text">Built with <a class="footer__link" href="https://openclaw.ai" target="_blank" rel="noopener">OpenClaw</a> · Inspired by Tiago Forte's PARA method</p>
   </div>
 
 </div>
