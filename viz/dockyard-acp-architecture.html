@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viz-author" content="Optimus 🍠">
+  <meta name="viz-date" content="2026-04-27">
+  <meta name="viz-category" content="System">
+  <title>The Dockyard ACP Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --surface: #fffaf1;
+      --surface-2: #fff5e2;
+      --ink: #1f1710;
+      --muted: #6f5b46;
+      --line: rgba(53, 37, 20, .13);
+      --line-strong: rgba(53, 37, 20, .24);
+      --dock: #0b1720;
+      --dock-2: #102635;
+      --amber: #d97706;
+      --amber-2: #f59e0b;
+      --blue: #0284c7;
+      --green: #059669;
+      --red: #dc2626;
+      --shadow: rgba(53, 37, 20, .14);
+      --code-bg: #101820;
+      --code: #fff7ed;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #071017;
+        --surface: #0d1720;
+        --surface-2: #111f2b;
+        --ink: #fff7ed;
+        --muted: #c9aa89;
+        --line: rgba(251, 191, 36, .12);
+        --line-strong: rgba(251, 191, 36, .26);
+        --dock: #050b10;
+        --dock-2: #102635;
+        --amber: #f59e0b;
+        --amber-2: #fbbf24;
+        --blue: #38bdf8;
+        --green: #34d399;
+        --red: #f87171;
+        --shadow: rgba(0,0,0,.42);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(245, 158, 11, .22), transparent 32%),
+        radial-gradient(circle at 85% 12%, rgba(56, 189, 248, .15), transparent 28%),
+        linear-gradient(135deg, var(--bg), color-mix(in srgb, var(--bg), var(--dock) 10%));
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(245,158,11,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,.045) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+    }
+
+    a { color: var(--amber); }
+    code, .mono { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 56px; position: relative; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      gap: 22px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+    .card {
+      background: color-mix(in srgb, var(--surface) 90%, transparent);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: 0 22px 70px var(--shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .hero-copy { padding: 34px; }
+    .eyebrow { margin: 0 0 14px; color: var(--amber); font: 700 12px/1 "JetBrains Mono"; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(40px, 7vw, 82px); line-height: .92; letter-spacing: -.07em; }
+    .subtitle { color: var(--muted); font-size: 19px; line-height: 1.55; max-width: 760px; margin: 22px 0 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .chip { border: 1px solid var(--line-strong); background: var(--surface-2); border-radius: 999px; padding: 8px 11px; color: var(--muted); font: 600 12px/1 "JetBrains Mono"; }
+
+    .map { padding: 24px; display: grid; gap: 14px; }
+    .map-title { display: flex; justify-content: space-between; gap: 10px; align-items: center; color: var(--muted); font-size: 13px; }
+    .flow { display: grid; grid-template-columns: 1fr 42px 1fr 42px 1fr; gap: 10px; align-items: center; }
+    .box { min-height: 96px; padding: 16px; border-radius: 20px; background: var(--surface-2); border: 1px solid var(--line); }
+    .box strong { display: block; font-size: 16px; margin-bottom: 6px; }
+    .box span { color: var(--muted); font-size: 13px; line-height: 1.42; }
+    .arrow { text-align: center; color: var(--amber); font-size: 28px; font-weight: 800; }
+    .dock-panel { margin-top: 6px; padding: 18px; border-radius: 22px; background: linear-gradient(135deg, var(--dock), var(--dock-2)); color: #fff7ed; border: 1px solid rgba(251,191,36,.22); }
+    .dock-panel h3 { color: #fbbf24; margin: 0 0 10px; }
+    .dock-panel p { color: #e8c9a4; margin: 0; line-height: 1.5; }
+
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+    .section { padding: 24px; }
+    .span-12 { grid-column: span 12; }
+    .span-7 { grid-column: span 7; }
+    .span-6 { grid-column: span 6; }
+    .span-5 { grid-column: span 5; }
+    .span-4 { grid-column: span 4; }
+    .span-3 { grid-column: span 3; }
+    h2 { margin: 0 0 16px; font-size: 25px; letter-spacing: -.035em; }
+    h3 { margin: 0 0 8px; font-size: 17px; }
+    p { color: var(--muted); line-height: 1.6; }
+    .list { display: grid; gap: 11px; margin: 0; padding: 0; list-style: none; }
+    .list li { display: grid; grid-template-columns: 30px 1fr; gap: 12px; color: var(--muted); line-height: 1.5; }
+    .num { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; background: rgba(245,158,11,.14); color: var(--amber); font-weight: 800; }
+
+    .topic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .topic { padding: 18px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface-2); }
+    .topic .state { display: inline-flex; margin-bottom: 10px; border-radius: 999px; padding: 5px 8px; font: 700 11px/1 "JetBrains Mono"; background: rgba(5,150,105,.14); color: var(--green); }
+    .topic.pending .state { background: rgba(217,119,6,.16); color: var(--amber); }
+    .topic.locked .state { background: rgba(220,38,38,.12); color: var(--red); }
+    .topic h3 { margin-bottom: 8px; }
+    .topic p { margin: 0; font-size: 14px; }
+
+    .stack { display: grid; gap: 10px; }
+    .layer { display: grid; grid-template-columns: 160px 1fr; gap: 12px; align-items: start; padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface-2); }
+    .layer strong { color: var(--ink); }
+    .layer span { color: var(--muted); line-height: 1.45; }
+
+    .codeblock { background: var(--code-bg); color: var(--code); border-radius: 22px; padding: 18px; overflow: auto; border: 1px solid rgba(251,191,36,.24); font: 13px/1.62 "JetBrains Mono"; white-space: pre-wrap; }
+    .callout { border-left: 4px solid var(--amber); padding: 14px 16px; background: rgba(245,158,11,.10); border-radius: 16px; color: var(--muted); }
+    .callout strong { color: var(--ink); }
+
+
+/* === Standard System footer === */
+.sys-footer {
+  margin-top: 48px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line, rgba(148,163,184,.18));
+  color: var(--muted, #94a3b8);
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+.sys-footer__label {
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--muted, #94a3b8);
+  margin-bottom: 10px;
+}
+.sys-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.sys-footer a,
+.sys-footer__current {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line, rgba(148,163,184,.18));
+  text-decoration: none;
+}
+.sys-footer a {
+  color: var(--blue, var(--amber, #60a5fa));
+  background: var(--surface-2, rgba(255,255,255,.04));
+}
+.sys-footer a:hover { border-color: currentColor; }
+.sys-footer__current {
+  color: var(--ink, #e2e8f0);
+  background: rgba(245,158,11,.12);
+}
+
+    @media (max-width: 940px) {
+      .hero { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); }
+      .grid { grid-template-columns: 1fr; }
+      .span-12, .span-7, .span-6, .span-5, .span-4, .span-3 { grid-column: auto; }
+      .topic-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .hero-copy, .section, .map { padding: 20px; }
+      .layer { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="card hero-copy">
+        <p class="eyebrow">OpenClaw ACP Architecture</p>
+        <h1>The Dockyard</h1>
+        <p class="subtitle">The Dockyard is the dedicated Telegram control surface for project-specific ACP harnesses. It separates coding-agent operations from The Ark’s general coordination space, so every topic maps cleanly to one repository, one runtime, and one durable session.</p>
+        <div class="chips">
+          <span class="chip">Telegram forum topics</span>
+          <span class="chip">OpenClaw routing</span>
+          <span class="chip">ACPX backend</span>
+          <span class="chip">Harness inferred from binding</span>
+        </div>
+      </div>
+
+      <div class="card map">
+        <div class="map-title"><strong>Core request path</strong><span class="mono">group → topic → binding → harness</span></div>
+        <div class="flow" aria-label="Dockyard ACP routing flow">
+          <div class="box"><strong>Telegram Topic</strong><span>Human asks inside a simple project topic, e.g. Cafein.</span></div>
+          <div class="arrow">→</div>
+          <div class="box"><strong>OpenClaw Binding</strong><span>Peer id + account route to an internal ACP agent id.</span></div>
+          <div class="arrow">→</div>
+          <div class="box"><strong>ACP Harness</strong><span>Persistent coding runtime starts in the configured repository cwd.</span></div>
+        </div>
+        <div class="dock-panel">
+          <h3>What The Dockyard does</h3>
+          <p>It is a port for work: each topic docks one project/harness combination, keeping context, cwd, and routing predictable.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card section span-7">
+        <h2>Why this exists</h2>
+        <ul class="list">
+          <li><span class="num">1</span><span><strong>Reduce cross-talk.</strong> The Ark remains the shared coordination/home base. The Dockyard is for operational ACP control, where messages should usually become coding-agent work.</span></li>
+          <li><span class="num">2</span><span><strong>Keep topic names simple.</strong> A topic name should identify the project. The harness is inferred from the OpenClaw binding/runtime, not encoded in the public topic name.</span></li>
+          <li><span class="num">3</span><span><strong>Preserve ongoing work.</strong> Existing BTA/zainf sessions are left untouched unless explicitly migrated. The Dockyard starts clean with Cafein.</span></li>
+          <li><span class="num">4</span><span><strong>Keep the system self-describing.</strong> The architecture should be clear enough that any agent or human can understand the boundary without relying on chat history.</span></li>
+        </ul>
+      </div>
+
+      <div class="card section span-5">
+        <h2>Current live state</h2>
+        <p>Public version: Telegram numeric IDs and private repository details are intentionally redacted. Internal config retains the exact peer IDs, repository cwd, and remote URL.</p>
+        <div class="stack">
+          <div class="layer"><strong>Group</strong><span><span class="mono">The Dockyard</span><br>Telegram group id <span class="mono">[redacted]</span></span></div>
+          <div class="layer"><strong>General</strong><span>Topic <span class="mono">1</span>, allowlisted with <span class="mono">requireMention: true</span>.</span></div>
+          <div class="layer"><strong>Cafein</strong><span>Topic <span class="mono">7</span>, allowlisted with <span class="mono">requireMention: false</span>.</span></div>
+          <div class="layer"><strong>Peer</strong><span><span class="mono">[redacted]:topic:7</span></span></div>
+        </div>
+      </div>
+
+      <div class="card section span-12">
+        <h2>Topic model</h2>
+        <div class="topic-grid">
+          <div class="topic">
+            <span class="state">ACTIVE</span>
+            <h3>Cafein</h3>
+            <p>Bound to <span class="mono">pi-cafein</span>. The configured runtime runs OpenCode through ACPX in the Cafein project repository.</p>
+          </div>
+          <div class="topic pending">
+            <span class="state">PLANNED</span>
+            <h3>zainf</h3>
+            <p>Intended Codex ACP route. Existing topic/session should not be disturbed until explicitly migrated.</p>
+          </div>
+          <div class="topic locked">
+            <span class="state">LEAVE AS-IS</span>
+            <h3>BTA</h3>
+            <p>BTA still uses Claude because Zain has Claude Teams. Do not move or reset ongoing work casually.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card section span-6">
+        <h2>Cafein binding details</h2>
+        <div class="codeblock">{
+  "type": "acp",
+  "agentId": "pi-cafein",
+  "match": {
+    "channel": "telegram",
+    "accountId": "optimus",
+    "peer": {
+      "kind": "group",
+      "id": "[redacted]:topic:7"
+    }
+  },
+  "acp": {
+    "label": "cafein-opencode"
+  }
+}</div>
+      </div>
+
+      <div class="card section span-6">
+        <h2>Cafein runtime details</h2>
+        <div class="codeblock">agent id: pi-cafein
+runtime: acp
+backend: acpx
+harness: opencode
+mode: persistent
+cwd: [redacted local repository path]
+remote: [redacted repository remote]</div>
+      </div>
+
+      <div class="card section span-7">
+        <h2>Operational rules for agents</h2>
+        <ul class="list">
+          <li><span class="num">A</span><span><strong>One topic = one workstream.</strong> Do not reuse Cafein’s topic for BTA, zainf, or generic bot chatter.</span></li>
+          <li><span class="num">B</span><span><strong>Respect persistent sessions.</strong> If cwd/runtime changes, old ACP sessions may need reset before the harness sees the new config.</span></li>
+          <li><span class="num">C</span><span><strong>Do not rename internal IDs just for aesthetics.</strong> IDs like <span class="mono">pi-cafein</span> may preserve bindings even if display/runtime changed.</span></li>
+          <li><span class="num">D</span><span><strong>Verify with a smoke prompt.</strong> Ask the topic to report cwd and repo root before assigning real work.</span></li>
+        </ul>
+      </div>
+
+      <div class="card section span-5">
+        <h2>Smoke test</h2>
+        <p>After creating or changing an ACP binding, send this in the target Dockyard topic:</p>
+        <div class="codeblock">Report your current working directory and list the repository root. Do not modify files.</div>
+        <p>The Cafein topic should report:</p>
+        <div class="codeblock">[redacted local repository path]</div>
+      </div>
+
+      <div class="card section span-12">
+        <h2>Future expansion model</h2>
+        <div class="stack">
+          <div class="layer"><strong>Topic naming</strong><span>Future docks should use simple project names, e.g. <span class="mono">Cafein</span> or <span class="mono">zainf</span>. The harness remains an implementation detail inferred from the binding/runtime.</span></div>
+          <div class="layer"><strong>Access boundary</strong><span>General remains a low-noise, mention-required coordination topic. Project topics are expected to be direct control surfaces and can be non-mention-required when intentionally bound.</span></div>
+          <div class="layer"><strong>Runtime boundary</strong><span>Each dock should resolve to one configured ACP runtime with one repository cwd. That keeps persistent sessions predictable and reduces accidental cross-project context.</span></div>
+          <div class="layer"><strong>Migration policy</strong><span>Existing BTA and zainf ACP work should be migrated deliberately, not implicitly. The Dockyard can host those docks later, but current workstreams remain stable until moved on purpose.</span></div>
+          <div class="layer"><strong>Verification pattern</strong><span>Any newly created or changed dock should first prove its current working directory and repository root before it receives implementation work.</span></div>
+        </div>
+      </div>
+
+      <div class="card section span-6">
+        <h2>Known caveats</h2>
+        <ul class="list">
+          <li><span class="num">!</span><span><strong>Auth can be separate from routing.</strong> A topic may route correctly while a model/harness auth is expired.</span></li>
+          <li><span class="num">!</span><span><strong>SSH remotes may fail on this host.</strong> Cafein is currently bound over an HTTPS remote in internal config, which is intentional after SSH permission failure.</span></li>
+          <li><span class="num">!</span><span><strong>Persistent ACP state can outlive config changes.</strong> Reset sessions if a topic keeps reporting an old cwd.</span></li>
+        </ul>
+      </div>
+
+      <div class="card section span-12">
+        <h2>Short summary</h2>
+        <div class="callout"><strong>The Dockyard is an ACP operations port.</strong> Its job is to give each project a clearly named Telegram topic that routes to exactly one configured repository, one coding harness, and one durable working context. The first live dock is <span class="mono">Cafein</span>; repository and harness details are represented at the architecture level, with private repository details redacted in this public version.</div>
+      </div>
+    </section>
+
+    <footer class="sys-footer"><div class="sys-footer__label">System visualizations</div><div class="sys-footer__links"><a href="architecture.html">System Architecture</a><a href="ops.html">Operations Dashboard</a><a href="memory-management-method.html">Memory Management</a><a href="shared-conventions-map.html">Shared Conventions</a><a href="openclaw-linear-projection-architecture.html">Linear Projection</a><span class="sys-footer__current">Dockyard ACP</span><a href="./">All visualizations</a></div><div>Built with <a href="https://openclaw.ai" target="_blank" rel="noopener">OpenClaw</a> · Published on <a href="./">The Ark Viz</a></div></footer>
+  </main>
+</body>
+</html>
