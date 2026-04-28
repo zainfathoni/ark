@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="viz-author" content="Optimus 🍠">
-<meta name="viz-date" content="2026-03-30">
+<meta name="viz-date" content="2026-04-28">
 <meta name="viz-category" content="System">
 <title>Shared Conventions Map — Project Transformers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -501,12 +501,12 @@ html { scroll-behavior: smooth; }
 
 </style>
 </head>
-<body><nav class="viz-toc" id="viz-toc" aria-label="Page sections"><div class="viz-toc__title">Contents</div><a href="#source-of-truth">source of truth</a><a href="#how-bots-find-conventions">how bots find conventions</a><a href="#signpost-in-agents-md">signpost in agents.md</a><a href="#universal-commands">universal commands</a><a href="#memory-md-deep-links">memory.md deep links</a><a href="#related-pages">related pages</a></nav>
+<body><nav class="viz-toc" id="viz-toc" aria-label="Page sections"><div class="viz-toc__title">Contents</div><a href="#source-of-truth">source of truth</a><a href="#how-bots-find-conventions">how bots find conventions</a><a href="#signpost-in-agents-md">signpost in agents.md</a><a href="#universal-commands">universal commands</a><a href="#publishing-image-triggers">publishing image triggers</a><a href="#memory-md-deep-links">memory.md deep links</a><a href="#related-pages">related pages</a></nav>
 
 <div class="container">
 
   <h1 class="anim" style="--i:0">Shared Conventions Map</h1>
-  <p class="subtitle anim" style="--i:1">project transformers — knowledge discovery architecture — 2026-03-05</p>
+  <p class="subtitle anim" style="--i:1">project transformers — knowledge discovery architecture — 2026-04-28</p>
 
   <!-- Source of Truth -->
   <div id="source-of-truth"  class="sec-head anim viz-anchor" style="--i:2; color: var(--blue);">
@@ -521,7 +521,7 @@ html { scroll-behavior: smooth; }
     <div class="file-list">
       <div class="file-item">
         <div class="fname" style="color: var(--gold);">trigger-phrases.json</div>
-        <div class="fdesc">Fuel check ⛽ · Park it 🅿️ · Visualize 🪄 · Compound it 🧪</div>
+        <div class="fdesc">Fuel check ⛽ · Park it 🅿️ · Visualize 🪄 · Compound it 🧪 · OG Image 🏞️</div>
       </div>
       <div class="file-item">
         <div class="fname" style="color: var(--teal);">fizzy-conventions.json</div>
@@ -529,7 +529,7 @@ html { scroll-behavior: smooth; }
       </div>
       <div class="file-item">
         <div class="fname" style="color: var(--sage);">coding-tools.json</div>
-        <div class="fdesc">Amp CLI, OpenCode, free model tiers</div>
+        <div class="fdesc">Amp CLI, OpenCode, free model tiers, Wheeljack tool signposts</div>
       </div>
       <div class="file-item">
         <div class="fname" style="color: var(--amber);">git-conventions.json</div>
@@ -672,16 +672,61 @@ html { scroll-behavior: smooth; }
         <div class="trigger-desc">Capture learnings from completed work into <code style="font-family: var(--font-mono); font-size: 11px; background: var(--amber-dim); color: var(--amber); padding: 1px 5px; border-radius: 3px;">knowledge/solutions/</code>. Updates PATTERNS.md if repo has one. Three questions: what worked, what broke, reusable insight.</div>
       </div>
 
+      <div class="trigger-card" style="border-color: var(--blue-dim);">
+        <div class="trigger-name">OG Image 🏞️</div>
+        <div class="trigger-scope scope-all">all bots</div>
+        <div class="trigger-desc">Universal publishing-image trigger for 1200×630 OpenGraph images. Prefer this for blog/article posts, site pages, launch cards, and other higher-frequency preview-image work.</div>
+      </div>
+
+      <div class="trigger-card" style="border-color: var(--rose-dim);">
+        <div class="trigger-name">Usage check 💸</div>
+        <div class="trigger-scope scope-all">all bots</div>
+        <div class="trigger-desc">Use the openclaw-usage skill and shared usage script for token, cost, model, and session analysis. Prefer the skill over ad-hoc log parsing.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Publishing image policy -->
+  <div class="flow-arrow anim" style="--i:10">
+    <svg viewBox="0 0 20 20"><path d="M10 4 L10 16 M6 12 L10 16 L14 12"/></svg>
+    publishing image policy
+  </div>
+
+  <div class="card anim" style="--i:11">
+    <div id="publishing-image-triggers"  class="sec-head viz-anchor" style="color: var(--blue);">
+      <span class="dot" style="background: var(--blue);"></span>
+      publishing image triggers
+    </div>
+    <div class="trigger-grid">
+      <div class="trigger-card" style="border-color: var(--blue-dim);">
+        <div class="trigger-name">OG Image 🏞️</div>
+        <div class="trigger-scope scope-all">primary</div>
+        <div class="trigger-desc">Use <code style="font-family: var(--font-mono); font-size: 11px; background: var(--blue-dim); color: var(--blue); padding: 1px 5px; border-radius: 3px;">workspace/scripts/generate-og-image.js</code> with <code style="font-family: var(--font-mono); font-size: 11px; background: var(--blue-dim); color: var(--blue); padding: 1px 5px; border-radius: 3px;">og-image-config.example.json</code> for generic site/page OpenGraph images. Alias: OG image 🖼️.</div>
+      </div>
+      <div class="trigger-card" style="border-color: var(--teal-dim);">
+        <div class="trigger-name">Blog OG 📝</div>
+        <div class="trigger-scope scope-all">alias</div>
+        <div class="trigger-desc">Blog/article-specific alias of OG Image 🏞️. Use <code style="font-family: var(--font-mono); font-size: 11px; background: var(--teal-dim); color: var(--teal); padding: 1px 5px; border-radius: 3px;">workspace/scripts/generate-blog-og-image.js</code> when a post title, series, date, and description should drive the preview image.</div>
+      </div>
+      <div class="trigger-card" style="border-color: var(--slate-dim);">
+        <div class="trigger-name">Ark logo/avatar 🎨</div>
+        <div class="trigger-scope scope-all">infrequent</div>
+        <div class="trigger-desc">Still available for Ark entity logos and avatars, but no longer the main publishing-image route. Use <code style="font-family: var(--font-mono); font-size: 11px; background: var(--slate-dim); color: var(--slate); padding: 1px 5px; border-radius: 3px;">ref/ark-logo-avatar-process.md</code> only when creating group/entity assets.</div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top: 16px;">
+      <strong>Routing rule:</strong> Blog/article posts happen more often than new Ark entities, so bots should reach for <code>OG Image 🏞️</code> first for social-preview and OpenGraph work. Keep <code>Ark logo/avatar 🎨</code> scoped to occasional Ark identity assets.
     </div>
   </div>
 
   <!-- Additional MEMORY.md refs -->
-  <div class="flow-arrow anim" style="--i:10">
+  <div class="flow-arrow anim" style="--i:12">
     <svg viewBox="0 0 20 20"><path d="M10 4 L10 16 M6 12 L10 16 L14 12"/></svg>
     contextual references (bonus)
   </div>
 
-  <div class="card card--recessed anim" style="--i:11">
+  <div class="card card--recessed anim" style="--i:13">
     <div id="memory-md-deep-links"  class="sec-head viz-anchor" style="color: var(--amber);">
       <span class="dot" style="background: var(--amber);"></span>
       memory.md deep links
@@ -704,7 +749,7 @@ html { scroll-behavior: smooth; }
   </div>
 
   <!-- Architecture callout -->
-  <div class="callout anim" style="--i:12; margin-top: 20px;">
+  <div class="callout anim" style="--i:14; margin-top: 20px;">
     <strong>Architecture principle:</strong> Single source of truth in <code>knowledge/shared/conventions/</code>.
     Each bot gets a one-line signpost in <code>AGENTS.md</code> (loaded every session).
     Contextual deep links in <code>MEMORY.md</code> are bonus — not required.
@@ -712,7 +757,7 @@ html { scroll-behavior: smooth; }
   </div>
 
   <!-- Cross-links -->
-  <div class="anim" style="--i:13; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border);">
+  <div class="anim" style="--i:15; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border);">
     <div id="related-pages"  class="sec-head viz-anchor" style="color: var(--slate);">
       <span class="dot" style="background: var(--slate);"></span>
       related pages
