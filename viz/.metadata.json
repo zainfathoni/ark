@@ -73,10 +73,9 @@
   },
   {
     "slug": "ops",
-    "title": "Autobot Operations Dashboard",
+    "title": "ops",
     "author": "Optimus 🍠",
-    "date": "2026-04-26",
-    "category": "System",
+    "date": "2026-04-29",
     "protected": false
   },
   {
