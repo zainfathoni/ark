@@ -11,9 +11,10 @@
     "slug": "architecture",
     "title": "Project Transformers — System Architecture",
     "author": "Optimus 🍠",
-    "date": "2026-04-26",
+    "date": "2026-05-10",
     "category": "System",
-    "protected": false
+    "protected": true,
+    "protectionNote": "Rich system page: do not overwrite wholesale during refresh; update only explicit dynamic regions and preserve narrative sections."
   },
   {
     "slug": "concert-fractions",
@@ -73,10 +74,12 @@
   },
   {
     "slug": "ops",
-    "title": "ops",
-    "author": "Optimus",
-    "date": "2026-05-13",
-    "protected": false
+    "title": "Autobot Operations Dashboard",
+    "author": "Optimus 🍠",
+    "date": "2026-05-10",
+    "category": "System",
+    "protected": true,
+    "protectionNote": "Rich system page: do not overwrite wholesale during refresh; update only explicit dynamic regions and preserve narrative sections."
   },
   {
     "slug": "shared-conventions-map",
