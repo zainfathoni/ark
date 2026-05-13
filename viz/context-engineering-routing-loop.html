@@ -86,6 +86,29 @@
     .talk-card b { display: block; margin-bottom: 4px; }
     .talk-card span { color: var(--muted); font-size: 14px; }
     .section-title { margin: 34px 0 14px; font-size: 24px; letter-spacing: -.02em; }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: -8px 0 28px;
+      padding: 14px;
+    }
+    .quick-links__label { color: var(--muted); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; margin-right: 4px; }
+    .quick-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface-strong);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 750;
+    }
+    .quick-links a:hover { text-decoration: none; border-color: var(--blue); color: var(--blue); }
     .loop {
       display: grid;
       grid-template-columns: repeat(6, minmax(130px, 1fr));
@@ -165,6 +188,15 @@
         <div class="talk-card"><b>Supporting pages</b><span><a href="/">The Ark homepage</a> · <a href="architecture.html#s1">System Architecture</a> · <a href="memory-management-method.html">Memory</a> · <a href="shared-conventions-map.html">Conventions</a></span></div>
       </aside>
     </section>
+
+    <nav class="quick-links panel" aria-label="Presentation quick links">
+      <span class="quick-links__label">Presentation quick links</span>
+      <a href="/">🏠 The Ark homepage</a>
+      <a href="architecture.html#s1">💬 Communication Architecture</a>
+      <a href="ops.html#dispatcher">🧭 Live Fizzy Dispatcher</a>
+      <a href="memory-management-method.html">🧠 Memory Management</a>
+      <a href="shared-conventions-map.html">🗺️ Shared Conventions</a>
+    </nav>
 
     <h2 class="section-title">The routing loop</h2>
     <section class="loop panel" style="padding:14px;">
