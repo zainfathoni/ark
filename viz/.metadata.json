@@ -76,7 +76,7 @@
     "slug": "ops",
     "title": "Autobot Operations Dashboard",
     "author": "Optimus 🍠",
-    "date": "2026-05-10",
+    "date": "2026-05-13",
     "category": "System",
     "protected": true,
     "protectionNote": "Rich system page: do not overwrite wholesale during refresh; update only explicit dynamic regions and preserve narrative sections."
