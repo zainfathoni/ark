@@ -978,19 +978,13 @@ flowchart TD
         T5["General / Commands"]
     end
 
-    CH1 -.- CH2
-    CH2 -.- CH3
+    W1 -.- FP
+    FC -.- T1
 
-    classDef ch1 fill:#1e3a5f33,stroke:#2563eb,stroke-width:2px
-    classDef ch2 fill:#04785733,stroke:#059669,stroke-width:2px
-    classDef ch3 fill:#b4530933,stroke:#d97706,stroke-width:2px
     classDef agent fill:#1e3a5f22,stroke:#60a5fa,stroke-width:1.5px
     classDef tool fill:#04785722,stroke:#34d399,stroke-width:1px
     classDef topic fill:#b4530922,stroke:#fbbf24,stroke-width:1px
 
-    class CH1 ch1
-    class CH2 ch2
-    class CH3 ch3
     class P1,W1,O1,J1 agent
     class FC,FP,FM tool
     class T1,T2,T3,T4,T5 topic
