@@ -111,5 +111,13 @@
     "author": "Optimus",
     "date": "2026-04-27",
     "protected": false
+  },
+  {
+    "slug": "context-engineering-routing-loop",
+    "title": "Context Engineering with Multi-Agent Routing in OpenClaw",
+    "author": "Optimus 🍠",
+    "date": "2026-05-13",
+    "category": "System",
+    "protected": false
   }
 ]

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viz-author" content="Optimus 🍠">
+  <meta name="viz-date" content="2026-05-13">
+  <meta name="viz-category" content="System">
+  <title>Context Engineering with Multi-Agent Routing in OpenClaw</title>
+  <meta name="description" content="A talk-specific map for explaining context selection, multi-agent routing, execution, memory, and Fizzy feedback loops in OpenClaw.">
+  <link rel="canonical" href="https://ark.zainf.dev/viz/context-engineering-routing-loop.html">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f8f5ef;
+      --surface: rgba(255,255,255,.86);
+      --surface-strong: #fffaf2;
+      --text: #1f2933;
+      --muted: #65707c;
+      --border: rgba(31,41,51,.14);
+      --blue: #2563eb;
+      --blue-soft: rgba(37,99,235,.1);
+      --teal: #0f766e;
+      --teal-soft: rgba(15,118,110,.1);
+      --amber: #b45309;
+      --amber-soft: rgba(180,83,9,.12);
+      --rose: #be123c;
+      --rose-soft: rgba(190,18,60,.1);
+      --violet: #7c3aed;
+      --violet-soft: rgba(124,58,237,.1);
+      --shadow: 0 18px 60px rgba(31,41,51,.12);
+      --radius: 22px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1017;
+        --surface: rgba(17,24,39,.82);
+        --surface-strong: #111827;
+        --text: #eef2f7;
+        --muted: #a8b3c2;
+        --border: rgba(255,255,255,.12);
+        --blue-soft: rgba(59,130,246,.16);
+        --teal-soft: rgba(20,184,166,.14);
+        --amber-soft: rgba(245,158,11,.15);
+        --rose-soft: rgba(244,63,94,.14);
+        --violet-soft: rgba(139,92,246,.16);
+        --shadow: 0 22px 70px rgba(0,0,0,.34);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, var(--blue-soft), transparent 28rem),
+        radial-gradient(circle at 90% 18%, var(--amber-soft), transparent 26rem),
+        radial-gradient(circle at 50% 105%, var(--teal-soft), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: var(--blue); text-decoration: none; font-weight: 650; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 40px 20px 64px; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 28px;
+    }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .hero-main { padding: 34px; }
+    .kicker { color: var(--teal); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; font-size: 12px; }
+    h1 { font-size: clamp(34px, 5vw, 64px); line-height: .98; letter-spacing: -.055em; margin: 12px 0 18px; }
+    .subtitle { color: var(--muted); font-size: 18px; max-width: 760px; }
+    .hero-side { padding: 24px; display: grid; gap: 14px; align-content: center; }
+    .talk-card { border: 1px solid var(--border); background: var(--surface-strong); border-radius: 18px; padding: 16px; }
+    .talk-card b { display: block; margin-bottom: 4px; }
+    .talk-card span { color: var(--muted); font-size: 14px; }
+    .section-title { margin: 34px 0 14px; font-size: 24px; letter-spacing: -.02em; }
+    .loop {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(130px, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+    .step {
+      position: relative;
+      padding: 18px 16px;
+      min-height: 164px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .step::after {
+      content: "→";
+      position: absolute;
+      right: -9px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      z-index: 2;
+    }
+    .step:last-child::after { content: "↺"; right: 10px; top: 18px; transform: none; }
+    .num { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 10px; color: white; font-weight: 850; margin-bottom: 12px; }
+    .step h3 { margin: 0 0 8px; font-size: 17px; letter-spacing: -.015em; }
+    .step p { margin: 0; color: var(--muted); font-size: 13px; }
+    .s1 .num { background: var(--blue); } .s1 { background: linear-gradient(180deg, var(--blue-soft), var(--surface)); }
+    .s2 .num { background: var(--violet); } .s2 { background: linear-gradient(180deg, var(--violet-soft), var(--surface)); }
+    .s3 .num { background: var(--amber); } .s3 { background: linear-gradient(180deg, var(--amber-soft), var(--surface)); }
+    .s4 .num { background: var(--teal); } .s4 { background: linear-gradient(180deg, var(--teal-soft), var(--surface)); }
+    .s5 .num { background: var(--rose); } .s5 { background: linear-gradient(180deg, var(--rose-soft), var(--surface)); }
+    .s6 .num { background: #334155; } .s6 { background: linear-gradient(180deg, rgba(51,65,85,.12), var(--surface)); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .card { padding: 20px; border-radius: 18px; background: var(--surface); border: 1px solid var(--border); }
+    .card h3 { margin: 0 0 8px; font-size: 18px; }
+    .card p, .card li { color: var(--muted); font-size: 14px; }
+    .card ul { margin: 10px 0 0; padding-left: 18px; }
+    .route-table { width: 100%; border-collapse: collapse; font-size: 14px; overflow: hidden; border-radius: 16px; }
+    .route-table th, .route-table td { text-align: left; padding: 13px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .route-table th { color: var(--muted); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; background: var(--surface-strong); }
+    .pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 750; background: var(--blue-soft); color: var(--blue); }
+    .demo { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: center; }
+    .demo-box { padding: 16px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface-strong); min-height: 104px; }
+    .demo-arrow { font-size: 28px; color: var(--muted); font-weight: 900; }
+    .footer { margin-top: 30px; padding: 20px; color: var(--muted); font-size: 14px; }
+    @media (max-width: 980px) {
+      .hero, .grid-2 { grid-template-columns: 1fr; }
+      .loop { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: 1fr; }
+      .demo { grid-template-columns: 1fr; }
+      .demo-arrow { transform: rotate(90deg); text-align: center; }
+    }
+    @media (max-width: 560px) { .loop { grid-template-columns: 1fr; } .hero-main { padding: 24px; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-main panel">
+        <div class="kicker">Talk map · OpenClaw</div>
+        <h1>Context Engineering with Multi-Agent Routing</h1>
+        <p class="subtitle">The practical loop behind Project Transformers: choose the right context, route to the right agent or tool, preserve the outcome, and let the system get smarter without turning the prompt into a junk drawer.</p>
+      </div>
+      <aside class="hero-side panel">
+        <div class="talk-card"><b>Thesis</b><span>Good multi-agent systems are mostly context boundaries and routing rules.</span></div>
+        <div class="talk-card"><b>Demo anchor</b><span><a href="ops.html#dispatcher">Fizzy Dispatcher on the Ops Dashboard</a></span></div>
+        <div class="talk-card"><b>Supporting pages</b><span><a href="architecture.html#s1">System Architecture</a> · <a href="memory-management-method.html">Memory</a> · <a href="shared-conventions-map.html">Conventions</a></span></div>
+      </aside>
+    </section>
+
+    <h2 class="section-title">The routing loop</h2>
+    <section class="loop panel" style="padding:14px;">
+      <div class="step s1"><div class="num">1</div><h3>Signal arrives</h3><p>Telegram message, Fizzy card, cron wake, GitHub issue, PR check, browser page, or human nudge.</p></div>
+      <div class="step s2"><div class="num">2</div><h3>Select context</h3><p>Load only the relevant memories, conventions, project files, and recent state needed for this decision.</p></div>
+      <div class="step s3"><div class="num">3</div><h3>Route intent</h3><p>Pick the execution lane: Optimus, specialist agent, coding harness, first-class tool, cron, or human review.</p></div>
+      <div class="step s4"><div class="num">4</div><h3>Execute safely</h3><p>Use scoped tools, repo rules, reversible changes, protected pages, and explicit boundaries for external writes.</p></div>
+      <div class="step s5"><div class="num">5</div><h3>Persist result</h3><p>Commit code, update Fizzy, append memory, create PRs, add knowledge, or mark a blocker.</p></div>
+      <div class="step s6"><div class="num">6</div><h3>Feedback loop</h3><p>Heartbeats, dispatcher state, status dashboards, and future retrieval turn the output into better future context.</p></div>
+    </section>
+
+    <h2 class="section-title">What gets routed where?</h2>
+    <section class="panel" style="padding:14px; overflow:auto;">
+      <table class="route-table">
+        <thead><tr><th>Signal</th><th>Context boundary</th><th>Route</th><th>Durable output</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill">User ask</span></td><td>Current chat + relevant memory/docs only</td><td>Optimus or specialist agent</td><td>Answer, file change, PR, or Fizzy card</td></tr>
+          <tr><td><span class="pill">Fizzy card</span></td><td>Card description, steps, comments, repo conventions</td><td>Dispatcher → coding agent / Optimus / human</td><td>Branch, PR, card update, review note</td></tr>
+          <tr><td><span class="pill">GitHub issue</span></td><td>Issue labels, repo rules, CI, linked PRs</td><td>Wheeljack / Amp / Codex / OpenCode</td><td>Implementation PR with verification</td></tr>
+          <tr><td><span class="pill">Recurring check</span></td><td>Cron payload + current runtime status</td><td>Isolated OpenClaw job</td><td>Summary, alert, state file, or silence</td></tr>
+          <tr><td><span class="pill">Knowledge gap</span></td><td>Memory + QMD + source files</td><td>Search, retrieve, summarize, compound</td><td>Knowledge note or updated convention</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="grid-2">
+      <div>
+        <h2 class="section-title">Fizzy demo path</h2>
+        <div class="card panel">
+          <div class="demo">
+            <div class="demo-box"><b>1. Card becomes actionable</b><br><span style="color:var(--muted)">Human creates/updates a task with steps and assignee.</span></div>
+            <div class="demo-arrow">→</div>
+            <div class="demo-box"><b>2. Dispatcher evaluates</b><br><span style="color:var(--muted)">Fuel, blockers, worktree, routing lane, runtime caps.</span></div>
+            <div class="demo-arrow">→</div>
+            <div class="demo-box"><b>3. Agent returns artifact</b><br><span style="color:var(--muted)">PR, comment, done step, or “needs judgment”.</span></div>
+          </div>
+          <p style="margin-top:14px">For the live demo, jump to <a href="ops.html#dispatcher">Ops Dashboard → Fizzy Dispatcher</a>. It already has the query/fuel/route flow and current backlog state.</p>
+        </div>
+      </div>
+      <div>
+        <h2 class="section-title">Speaker notes</h2>
+        <div class="card panel">
+          <h3>Three punchlines</h3>
+          <ul>
+            <li><b>Context engineering is routing.</b> The system decides what context enters the turn before it decides what model answers.</li>
+            <li><b>Agents are boundaries, not personalities.</b> Each agent owns a domain, memory surface, and permission envelope.</li>
+            <li><b>Memory is an output channel.</b> If a result matters later, it must become a card, commit, note, or convention.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <h2 class="section-title">Where this sits in the existing Viz tour</h2>
+    <section class="grid-3">
+      <div class="card panel"><h3>Start</h3><p><a href="architecture.html">System Architecture</a> for the full Autobot topology and communication map.</p></div>
+      <div class="card panel"><h3>Deepen</h3><p><a href="shared-conventions-map.html">Shared Conventions</a> and <a href="memory-management-method.html">Memory Management</a> for context selection.</p></div>
+      <div class="card panel"><h3>Prove</h3><p><a href="ops.html">Operations Dashboard</a> for live cron, fuel, dispatcher, and health posture.</p></div>
+    </section>
+
+    <footer class="footer panel">
+      Built for “Context Engineering with Multi-Agent Routing in OpenClaw” · <a href="./">All visualizations</a> · <a href="https://openclaw.ai">OpenClaw</a>
+    </footer>
+  </main>
+</body>
+</html>
