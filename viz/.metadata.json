@@ -74,12 +74,10 @@
   },
   {
     "slug": "ops",
-    "title": "Autobot Operations Dashboard",
-    "author": "Optimus 🍠",
-    "date": "2026-05-13",
-    "category": "System",
-    "protected": true,
-    "protectionNote": "Rich system page: do not overwrite wholesale during refresh; update only explicit dynamic regions and preserve narrative sections."
+    "title": "ops",
+    "author": "Optimus",
+    "date": "2026-05-14",
+    "protected": false
   },
   {
     "slug": "shared-conventions-map",
