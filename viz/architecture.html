@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="viz-author" content="Optimus 🍠">
-  <meta name="viz-date"   content="2026-05-17">
+  <meta name="viz-date"   content="2026-06-13">
   <meta name="viz-category" content="System">
   <title>Project Transformers — System Architecture</title>
   <meta name="description" content="How the Autobot roster coordinates through OpenClaw, Fizzy, memory, crons, shared knowledge, and public-safe reporting">
@@ -501,6 +501,7 @@
     .agent-prowl { background: var(--rose-dim); color: var(--rose); }
     .agent-wheeljack { background: var(--teal-dim); color: var(--teal); }
     .agent-optimus { background: var(--accent-dim); color: var(--accent-bright); }
+    .agent-human { background: var(--gold-dim); color: var(--gold); }
 
     /* ── Cost chart ── */
     .cost-bar-group {
@@ -956,10 +957,11 @@
       <pre class="mermaid">
 flowchart TD
     subgraph CH1["sessions_send — Direct Messaging"]
-        P1["Prowl 🚔"] -->|digest JSON| W1["Wheeljack 🛠️"]
+        P1["Prowl 🚔"] -->|digest PR notice| B1["Blog PR Flow"]
         O1["Optimus 🍠"] -->|task delegation| W1
         O1 -->|status query| P1
         O1 -->|dispatch + viz sync| J1["Jazz 🎷"]
+        W1["Wheeljack 🛠️"]
     end
 
     subgraph CH2["Fizzy Cards — Task Tracking"]
@@ -986,7 +988,7 @@ flowchart TD
     classDef topic fill:#b4530922,stroke:#fbbf24,stroke-width:1px
 
     class P1,W1,O1,J1 agent
-    class FC,FP,FM tool
+    class B1,FC,FP,FM tool
     class T1,T2,T3,T4,T5 topic
       </pre>
     </div>
@@ -1042,7 +1044,7 @@ flowchart TD
     <div style="margin-top: 24px;" class="card-grid-3">
       <div class="ve-card" style="--i:9;">
         <div class="ve-card__label" style="color: var(--accent-bright);">sessions_send</div>
-        <p style="font-size:13px; color:var(--text-dim);">Direct agent-to-agent messaging. Structured JSON payloads. Used for handoffs where data format matters — like Prowl passing digest JSON to Wheeljack.</p>
+        <p style="font-size:13px; color:var(--text-dim);">Direct agent-to-agent messaging. Structured payloads are still available for delegation and status, while digest publication now runs through Prowl-owned cron skills and blog PR flow.</p>
       </div>
       <div class="ve-card" style="--i:10;">
         <div class="ve-card__label" style="color: var(--emerald);">Fizzy Cards</div>
@@ -1290,7 +1292,7 @@ flowchart TD
     OP --> RV["Rivet 🔩<br/>Vika's Organizer"]
     OP --> AT["Alpha Trion 📿<br/>Islamic Knowledge"]
 
-    PR -->|digest pipeline| WJ
+    PR -->|digest crons + article PRs| BLOG["zainf blog PRs"]
     WJ --> AMP["Amp"]
     WJ --> CDX["Codex CLI"]
     WJ --> OC["OpenCode"]
@@ -1321,7 +1323,7 @@ flowchart TD
 
     class OP coordinator
     class PR,WJ,BB,BS,RA,HN,PC,RW,JZ,RV,AT agent
-    class AMP,CDX,OC tool
+    class BLOG,AMP,CDX,OC tool
     class RT,AC,AIR1,AIR2 airgap
     class FIZZY,ARK hub
       </pre>
@@ -1345,55 +1347,55 @@ flowchart TD
 
     <!-- ═══ SECTION 5: DIGEST PIPELINE ═══ -->
     <div id="s5" class="sec-head"><span class="sec-num">05</span> The Digest Pipeline</div>
-    <p class="sec-desc">A concrete example of multi-agent coordination: turning 194+ weekly WhatsApp messages into a published blog digest.</p>
+    <p class="sec-desc">A concrete example of cron-driven publication: turning selected WhatsApp community discussions into reviewable blog PRs for both AI Tools and Hidup Sehat.</p>
 
     <div class="flow-steps">
       <div class="flow-step" style="--i:1;">
         <div class="flow-step__num">1</div>
         <div class="flow-step__content">
           <span class="flow-step__agent agent-prowl">Prowl</span>
-          <h4>Scan WhatsApp Group</h4>
-          <p>Prowl ingests 194+ messages/week from the AI tools WhatsApp group, filtering signal from noise.</p>
+          <h4>Select Cadence and Batch</h4>
+          <p>AI Tools runs on its weekly cadence. Hidup Sehat runs every Saturday morning for the latest trailing two-week window, with historical backfill handled as explicit burst jobs.</p>
         </div>
       </div>
       <div class="flow-step" style="--i:2;">
         <div class="flow-step__num">2</div>
         <div class="flow-step__content">
           <span class="flow-step__agent agent-prowl">Prowl</span>
-          <h4>Extract Highlights</h4>
-          <p>Preserves Indonesian slang and cultural context. Captures tool recommendations, hot takes, and community sentiment.</p>
+          <h4>Fetch WhatsApp Messages</h4>
+          <p>Allowlisted fetch wrappers pull each selected group window from WhatsApp. Hidup Sehat batches are capped at 14 days so no article spans more than two weeks of chat.</p>
         </div>
       </div>
       <div class="flow-step" style="--i:3;">
         <div class="flow-step__num">3</div>
         <div class="flow-step__content">
           <span class="flow-step__agent agent-prowl">Prowl</span>
-          <h4>Structure into Categories</h4>
-          <p>Organizes highlights into thematic sections: new tools, community debates, tutorials shared, notable quotes.</p>
+          <h4>Normalize and Extract Signal</h4>
+          <p>Prowl resolves participant names, removes command chatter, preserves Indonesian context, and keeps the custom human discussion that can carry a public article.</p>
         </div>
       </div>
       <div class="flow-step" style="--i:4;">
         <div class="flow-step__num">4</div>
         <div class="flow-step__content">
           <span class="flow-step__agent agent-prowl">Prowl</span>
-          <h4>Send to Wheeljack</h4>
-          <p>Structured JSON payload via <code style="font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); padding: 1px 5px; border-radius: 3px;">sessions_send</code>. Data format is pre-agreed — no ambiguity in the handoff.</p>
+          <h4>Compile Article Package</h4>
+          <p>The digest skill prepares structured JSON, writes MDX in the right editorial voice, updates <code style="font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); padding: 1px 5px; border-radius: 3px;">posts.ts</code>, and generates a 1200×630 OG image.</p>
         </div>
       </div>
       <div class="flow-step" style="--i:5;">
         <div class="flow-step__num">5</div>
         <div class="flow-step__content">
-          <span class="flow-step__agent agent-wheeljack">Wheeljack</span>
-          <h4>Format, Branch, PR</h4>
-          <p>Wheeljack formats the digest as MDX, creates a feature branch, and opens a Pull Request on the blog repository.</p>
+          <span class="flow-step__agent agent-prowl">Prowl</span>
+          <h4>Create Draft PR</h4>
+          <p>Prowl runs validation, opens a draft PR against the blog repository, announces the link to The Ark, and advances digest state or backfill queue only after the PR exists.</p>
         </div>
       </div>
       <div class="flow-step" style="--i:6;">
         <div class="flow-step__num">6</div>
         <div class="flow-step__content">
-          <span class="flow-step__agent agent-optimus">Optimus</span>
-          <h4>Notify for Review</h4>
-          <p>Optimus pings Zain with the PR link. Human reviews, edits if needed, and merges. The digest goes live.</p>
+          <span class="flow-step__agent agent-human">Human</span>
+          <h4>Review and Merge</h4>
+          <p>Zain reviews the article direction, voice, OG image, and metadata before merge. The final publication remains a human decision.</p>
         </div>
       </div>
     </div>
