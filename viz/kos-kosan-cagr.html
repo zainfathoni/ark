@@ -341,7 +341,7 @@
       <div>
         <div class="section-label">Business projection</div>
         <h1>Kos-kosan CAGR Scenarios</h1>
-        <p class="subtitle">A grounded projection for Indonesian boarding-house property returns. The scenario lines combine net rental yield and property appreciation, excluding leverage.</p>
+        <p class="subtitle">A plain-language comparison of Indonesian kos-kosan returns against Bitcoin CAGR, starting with the simple idea before the charts.</p>
       </div>
       <aside class="summary" aria-label="Base case summary">
         <div class="summary-label">Base case</div>
@@ -350,13 +350,39 @@
       </aside>
     </section>
 
+
+    <section class="panel" aria-labelledby="eli5-title">
+      <div class="panel-header">
+        <div>
+          <div class="section-label">ELI5</div>
+          <h2 id="eli5-title">English and Indonesian explanation</h2>
+        </div>
+      </div>
+
+      <div class="eli5-grid">
+        <article class="explain" lang="en">
+          <h3>English</h3>
+          <p>CAGR is the average yearly growth rate. If an investment grows at 8% CAGR, it means we pretend the growth was smooth every year, even though real life goes up and down.</p>
+          <p>For kos-kosan, the money can grow in two ways: rent collected from tenants and the property becoming more valuable. In Indonesia right now, property prices are not rising fast, so rent matters more.</p>
+          <p>Compared with Bitcoin, kos-kosan is slower. Bitcoin's 10-year CAGR is about 57%, while the kos base case is 8%. But kos-kosan can produce monthly cash flow; Bitcoin depends on price appreciation.</p>
+        </article>
+
+        <article class="explain" lang="id">
+          <h3>Bahasa Indonesia</h3>
+          <p>CAGR itu rata-rata pertumbuhan per tahun. Kalau investasi tumbuh 8% CAGR, artinya kita membayangkan pertumbuhannya rata setiap tahun, walaupun kenyataannya bisa naik turun.</p>
+          <p>Untuk kos-kosan, uang bertumbuh dari dua sumber: uang sewa penghuni dan kenaikan nilai properti. Di Indonesia saat ini, harga properti residensial tidak naik kencang, jadi sewa adalah mesin utamanya.</p>
+          <p>Dibanding Bitcoin, kos-kosan jauh lebih lambat. CAGR Bitcoin 10 tahun sekitar 57%, sedangkan base case kos 8%. Tapi kos-kosan bisa memberi arus kas bulanan; Bitcoin bergantung pada kenaikan harga.</p>
+        </article>
+      </div>
+    </section>
+
     <section class="panel" aria-labelledby="projection-title">
       <div class="panel-header">
         <div>
           <div class="section-label">Projection chart</div>
-          <h2 id="projection-title">What Rp100M becomes after 10 years</h2>
+          <h2 id="projection-title">What Rp100M becomes: kos-kosan vs Bitcoin</h2>
         </div>
-        <p>Change the starting amount to model a different investment size. The CAGR math stays the same.</p>
+        <p>The dashed Bitcoin lines use historical BTC CAGR windows. They are not forecasts, but they show the opportunity-cost benchmark.</p>
       </div>
 
       <div class="controls">
@@ -367,22 +393,14 @@
 
       <div class="chart-shell">
         <svg id="projectionChart" viewBox="0 0 1000 520" role="img" aria-labelledby="projection-title projection-desc">
-          <desc id="projection-desc">Line chart comparing 5, 8, 11, and 14 percent CAGR scenarios from 2026 to 2036.</desc>
+          <desc id="projection-desc">Line chart comparing kos-kosan CAGR scenarios and Bitcoin historical CAGR windows from 2026 to 2036.</desc>
         </svg>
       </div>
 
       <div class="legend-list" id="legend"></div>
       <div class="table-wrap">
         <table id="projectionTable">
-          <thead>
-            <tr>
-              <th>Year</th>
-              <th>5% Defensive</th>
-              <th>8% Base</th>
-              <th>11% Strong</th>
-              <th>14% Aggressive</th>
-            </tr>
-          </thead>
+          <thead></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -452,37 +470,13 @@
       </div>
     </section>
 
-    <section class="panel" aria-labelledby="eli5-title">
-      <div class="panel-header">
-        <div>
-          <div class="section-label">ELI5</div>
-          <h2 id="eli5-title">English and Indonesian explanation</h2>
-        </div>
-      </div>
-
-      <div class="eli5-grid">
-        <article class="explain" lang="en">
-          <h3>English</h3>
-          <p>CAGR is the average yearly growth rate. If an investment grows at 8% CAGR, it means we pretend the growth was smooth every year, even though real life goes up and down.</p>
-          <p>For kos-kosan, the money can grow in two ways: rent collected from tenants and the property becoming more valuable. In Indonesia right now, property prices are not rising fast, so rent matters more.</p>
-          <p>Compared with Bitcoin, kos-kosan is slower. Bitcoin's 10-year CAGR is about 57%, while the kos base case is 8%. But kos-kosan can produce monthly cash flow; Bitcoin depends on price appreciation.</p>
-        </article>
-
-        <article class="explain" lang="id">
-          <h3>Bahasa Indonesia</h3>
-          <p>CAGR itu rata-rata pertumbuhan per tahun. Kalau investasi tumbuh 8% CAGR, artinya kita membayangkan pertumbuhannya rata setiap tahun, walaupun kenyataannya bisa naik turun.</p>
-          <p>Untuk kos-kosan, uang bertumbuh dari dua sumber: uang sewa penghuni dan kenaikan nilai properti. Di Indonesia saat ini, harga properti residensial tidak naik kencang, jadi sewa adalah mesin utamanya.</p>
-          <p>Dibanding Bitcoin, kos-kosan jauh lebih lambat. CAGR Bitcoin 10 tahun sekitar 57%, sedangkan base case kos 8%. Tapi kos-kosan bisa memberi arus kas bulanan; Bitcoin bergantung pada kenaikan harga.</p>
-        </article>
-      </div>
-    </section>
 
     <section class="panel sources" aria-labelledby="sources-title">
       <div>
         <div class="section-label">Research notes</div>
         <h2 id="sources-title">Sources and assumptions</h2>
       </div>
-      <p>Scenario rates are estimates for visualization, not financial advice. They exclude debt/leverage, transaction costs, income tax details, vacancy shocks, furniture refreshes, and major renovation cycles.</p>
+      <p>Scenario rates are estimates for visualization, not financial advice. Kos-kosan lines are forward scenarios; Bitcoin lines use historical CAGR windows as opportunity-cost benchmarks. They exclude debt/leverage, transaction costs, income tax details, vacancy shocks, furniture refreshes, and major renovation cycles.</p>
       <ul>
         <li>BIS/FRED Indonesia residential property index: 5-year CAGR about 1.43%, 10-year CAGR about 1.81%, 15-year CAGR about 3.45%. <a href="https://fred.stlouisfed.org/series/QIDN628BIS">FRED QIDN628BIS</a></li>
         <li>FRED Coinbase Bitcoin daily price series: as of 2026-06-20, BTC was $64,180; calculated BTC CAGR was about 33.0% over 4 years, 12.5% over 5 years, and 57.1% over 10 years. <a href="https://fred.stlouisfed.org/series/CBBTCUSD">FRED CBBTCUSD</a></li>
@@ -499,11 +493,19 @@
 
   <script>
     const scenarios = [
-      { rate: 0.05, label: "Defensive", color: "#60a5fa", note: "weak occupancy or limited rent growth" },
-      { rate: 0.08, label: "Base kos-kosan", color: "#34d399", note: "healthy occupancy and normal operations" },
-      { rate: 0.11, label: "Strong managed kos", color: "#f59e0b", note: "good location plus disciplined operations" },
-      { rate: 0.14, label: "Aggressive", color: "#fb7185", note: "excellent location and pricing power" }
+      { rate: 0.05, label: "Kos defensive", shortLabel: "5% kos", color: "#60a5fa", note: "weak occupancy or limited rent growth", kind: "kos" },
+      { rate: 0.08, label: "Kos base", shortLabel: "8% kos", color: "#34d399", note: "healthy occupancy and normal operations", kind: "kos" },
+      { rate: 0.11, label: "Strong managed kos", shortLabel: "11% kos", color: "#f59e0b", note: "good location plus disciplined operations", kind: "kos" },
+      { rate: 0.14, label: "Aggressive kos", shortLabel: "14% kos", color: "#fb7185", note: "excellent location and pricing power", kind: "kos" }
     ];
+
+    const bitcoinProjectionScenarios = [
+      { rate: 0.125, label: "BTC 5Y historical", shortLabel: "BTC 5Y", color: "#93c5fd", note: "Bitcoin 5-year historical CAGR from FRED Coinbase data", kind: "btc" },
+      { rate: 0.33, label: "BTC 4Y historical", shortLabel: "BTC 4Y", color: "#fbbf24", note: "Bitcoin 4-year historical CAGR from FRED Coinbase data", kind: "btc" },
+      { rate: 0.571, label: "BTC 10Y historical", shortLabel: "BTC 10Y", color: "#f472b6", note: "Bitcoin 10-year historical CAGR from FRED Coinbase data", kind: "btc" }
+    ];
+
+    const projectionSeries = [...scenarios, ...bitcoinProjectionScenarios];
 
     const bitcoinComparisons = [
       { label: "Kos base", value: 8, color: "#34d399" },
@@ -518,6 +520,7 @@
     const evidenceSvg = document.querySelector("#evidenceChart");
     const bitcoinSvg = document.querySelector("#bitcoinChart");
     const legend = document.querySelector("#legend");
+    const tableHead = document.querySelector("#projectionTable thead");
     const tableBody = document.querySelector("#projectionTable tbody");
 
     const rupiah = value => {
@@ -544,8 +547,8 @@
         : { top: 28, right: 130, bottom: 58, left: 78 };
       const chartWidth = width - margin.left - margin.right;
       const chartHeight = height - margin.top - margin.bottom;
-      const maxValue = Math.max(...scenarios.map(s => principal * Math.pow(1 + s.rate, 10)));
-      const yMax = Math.ceil(maxValue / 50) * 50;
+      const maxValue = Math.max(...projectionSeries.map(s => principal * Math.pow(1 + s.rate, 10)));
+      const yMax = Math.ceil(maxValue / 500) * 500;
       const x = year => margin.left + ((year - years[0]) / (years[years.length - 1] - years[0])) * chartWidth;
       const y = value => margin.top + chartHeight - (value / yMax) * chartHeight;
       const yTicks = compact ? [0, 0.5, 1].map(t => Math.round(yMax * t)) : [0, 0.25, 0.5, 0.75, 1].map(t => Math.round(yMax * t));
@@ -564,33 +567,37 @@
       markup += `<line class="axis-line" x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${height - margin.bottom}"></line>`;
       if (!compact) markup += `<text class="axis-label" x="${margin.left}" y="${height - 6}">Year</text>`;
 
-      scenarios.forEach(scenario => {
+      projectionSeries.forEach(scenario => {
         const points = years.map((year, index) => ({
           x: x(year),
           y: y(principal * Math.pow(1 + scenario.rate, index)),
           value: principal * Math.pow(1 + scenario.rate, index)
         }));
         const last = points[points.length - 1];
-        markup += `<path class="scenario-line" d="${pointPath(points)}" stroke="${scenario.color}" style="stroke-width:${compact ? 3 : 4}"></path>`;
-        markup += points.map(point => `<circle class="data-point" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="${compact ? 2.8 : 4}" fill="${scenario.color}"><title>${scenario.label}: ${rupiah(point.value)}</title></circle>`).join("");
-        if (!compact) markup += `<text class="legend" x="${last.x + 14}" y="${last.y + 4}" fill="${scenario.color}">${Math.round(scenario.rate * 100)}%</text>`;
+        const dash = scenario.kind === "btc" ? 'stroke-dasharray="8 8"' : "";
+        const lineWidth = scenario.kind === "btc" ? (compact ? 3.2 : 4.4) : (compact ? 2.6 : 3.5);
+        markup += `<path class="scenario-line" d="${pointPath(points)}" stroke="${scenario.color}" style="stroke-width:${lineWidth}" ${dash}></path>`;
+        markup += points.map(point => `<circle class="data-point" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="${scenario.kind === "btc" ? (compact ? 3.1 : 4.4) : (compact ? 2.4 : 3.6)}" fill="${scenario.color}"><title>${scenario.label}: ${rupiah(point.value)}</title></circle>`).join("");
+        if (!compact && scenario.kind === "btc") markup += `<text class="legend" x="${Math.min(last.x + 14, width - 90)}" y="${last.y + 4}" fill="${scenario.color}">${scenario.shortLabel}</text>`;
       });
 
       if (!compact) {
-        markup += `<text class="chart-note" x="${width - margin.right}" y="${margin.top + 8}" text-anchor="end">Excludes leverage, taxes, vacancy shocks, and major renovation cycles</text>`;
+        markup += `<text class="chart-note" x="${width - margin.right}" y="${margin.top + 8}" text-anchor="end">Dashed lines = BTC historical CAGR; solid lines = kos scenarios</text>`;
       }
       projectionSvg.innerHTML = markup;
 
-      legend.innerHTML = scenarios.map(scenario => {
+      legend.innerHTML = projectionSeries.map(scenario => {
         const finalValue = principal * Math.pow(1 + scenario.rate, 10);
+        const lineStyle = scenario.kind === "btc" ? "dashed BTC benchmark" : "solid kos scenario";
         return `<div class="legend-item">
-          <div class="legend-top"><span class="swatch" style="background:${scenario.color}"></span>${Math.round(scenario.rate * 100)}% ${scenario.label}</div>
-          <small>${rupiah(finalValue)} in 2036 - ${scenario.note}</small>
+          <div class="legend-top"><span class="swatch" style="background:${scenario.color}"></span>${scenario.shortLabel} ${scenario.label}</div>
+          <small>${rupiah(finalValue)} in 2036 - ${lineStyle}; ${scenario.note}</small>
         </div>`;
       }).join("");
 
+      tableHead.innerHTML = `<tr><th>Year</th>${projectionSeries.map(scenario => `<th>${scenario.shortLabel}</th>`).join("")}</tr>`;
       tableBody.innerHTML = years.map((year, index) => {
-        const cells = scenarios.map(scenario => `<td>${rupiah(principal * Math.pow(1 + scenario.rate, index))}</td>`).join("");
+        const cells = projectionSeries.map(scenario => `<td>${rupiah(principal * Math.pow(1 + scenario.rate, index))}</td>`).join("");
         return `<tr><td>${year}</td>${cells}</tr>`;
       }).join("");
     }
