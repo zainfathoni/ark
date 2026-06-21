@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viz-author" content="Bluestreak 🎯">
+  <meta name="viz-date" content="2026-06-21">
+  <meta name="viz-category" content="Business">
+  <title>Kos-kosan CAGR Scenarios — The Ark</title>
+  <meta name="description" content="A grounded CAGR projection for Indonesian kos-kosan property returns, with English and Indonesian ELI5 explanations.">
+  <link rel="canonical" href="https://ark.zainf.dev/viz/kos-kosan-cagr.html">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0b0f;
+      --surface: #151523;
+      --surface-2: #1c1c2d;
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #f3f4f6;
+      --muted: #b0b0ba;
+      --soft: #d1d5db;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+      --green: #34d399;
+      --line-grid: rgba(255, 255, 255, 0.08);
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(245, 158, 11, 0.16), transparent 32%),
+        radial-gradient(circle at 86% 12%, rgba(34, 211, 238, 0.13), transparent 35%),
+        linear-gradient(160deg, #0d0d0d 10%, #0b0b0f 58%, #111827 120%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { color: var(--amber); }
+
+    .container {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 40px 0 56px;
+    }
+
+    .breadcrumb {
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08rem;
+      margin-bottom: 28px;
+    }
+
+    .breadcrumb span { opacity: 0.45; margin: 0 8px; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 2.1rem + 1.8vw, 4rem);
+      line-height: 1.05;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 720px;
+      color: var(--soft);
+      font-size: 1.04rem;
+    }
+
+    .summary {
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      background: rgba(21, 21, 35, 0.82);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .summary-label,
+    .section-label {
+      color: var(--amber);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08rem;
+      margin-bottom: 8px;
+    }
+
+    .summary strong {
+      display: block;
+      font-size: 2.2rem;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .summary p { color: var(--muted); font-size: 0.9rem; }
+
+    .panel {
+      border: 1px solid var(--border);
+      background: rgba(21, 21, 35, 0.86);
+      border-radius: 8px;
+      padding: 22px;
+      margin-top: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .panel-header p,
+    .sources p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 18px;
+    }
+
+    .controls input {
+      width: 138px;
+      color: var(--text);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font: inherit;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chart-shell { position: relative; }
+
+    svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+    .axis-label,
+    .tick,
+    .legend,
+    .chart-note {
+      fill: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .axis-line,
+    .grid-line { stroke: var(--line-grid); stroke-width: 1; }
+
+    .scenario-line {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .data-point { stroke: #0b0b0f; stroke-width: 2; }
+
+    .legend-list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .legend-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .legend-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .swatch { width: 12px; height: 12px; border-radius: 50%; flex: 0 0 auto; }
+
+    .legend-item small { color: var(--muted); display: block; font-size: 0.78rem; }
+
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .evidence-list { display: grid; gap: 10px; }
+
+    .evidence-item {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .evidence-item:last-child { border-bottom: 0; }
+
+    .evidence-value {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--green);
+      font-size: 1.05rem;
+      white-space: nowrap;
+    }
+
+    .evidence-item strong { display: block; margin-bottom: 2px; }
+    .evidence-item span { color: var(--muted); font-size: 0.88rem; }
+
+    .eli5-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .explain {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .explain h3 { font-size: 1rem; margin-bottom: 10px; color: var(--amber); letter-spacing: 0; }
+    .explain p { color: var(--soft); margin-bottom: 12px; font-size: 0.94rem; }
+    .explain p:last-child { margin-bottom: 0; }
+
+    .sources { display: grid; gap: 10px; }
+
+    .sources ul {
+      display: grid;
+      gap: 8px;
+      padding-left: 18px;
+      color: var(--soft);
+      font-size: 0.9rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 18px;
+    }
+
+    table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 0.9rem; }
+
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th:first-child,
+    td:first-child { text-align: left; }
+
+    th {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06rem;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .back-link { display: inline-flex; margin-top: 28px; font-size: 0.9rem; }
+
+    @media (max-width: 820px) {
+      .hero,
+      .evidence-grid,
+      .eli5-grid { grid-template-columns: 1fr; }
+      .panel-header { flex-direction: column; }
+      .legend-list { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .container { width: min(100% - 24px, 1120px); padding-top: 28px; }
+      .panel { padding: 16px; }
+      .legend-list { grid-template-columns: 1fr; }
+      .evidence-item { grid-template-columns: 1fr; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <nav class="breadcrumb">
+      <a href="/">The Ark</a><span>/</span><a href="/viz/">Viz</a><span>/</span>Kos-kosan CAGR
+    </nav>
+
+    <section class="hero">
+      <div>
+        <div class="section-label">Business projection</div>
+        <h1>Kos-kosan CAGR Scenarios</h1>
+        <p class="subtitle">A grounded projection for Indonesian boarding-house property returns. The scenario lines combine net rental yield and property appreciation, excluding leverage.</p>
+      </div>
+      <aside class="summary" aria-label="Base case summary">
+        <div class="summary-label">Base case</div>
+        <strong>8% CAGR</strong>
+        <p>Credible for a well-run kos with healthy occupancy. Higher lines require stronger location, operations, and pricing power.</p>
+      </aside>
+    </section>
+
+    <section class="panel" aria-labelledby="projection-title">
+      <div class="panel-header">
+        <div>
+          <div class="section-label">Projection chart</div>
+          <h2 id="projection-title">What Rp100M becomes after 10 years</h2>
+        </div>
+        <p>Change the starting amount to model a different investment size. The CAGR math stays the same.</p>
+      </div>
+
+      <div class="controls">
+        <label for="principal">Starting amount</label>
+        <input id="principal" type="number" min="1" step="10" value="100" aria-label="Starting amount in million rupiah">
+        <span>million rupiah</span>
+      </div>
+
+      <div class="chart-shell">
+        <svg id="projectionChart" viewBox="0 0 1000 520" role="img" aria-labelledby="projection-title projection-desc">
+          <desc id="projection-desc">Line chart comparing 5, 8, 11, and 14 percent CAGR scenarios from 2026 to 2036.</desc>
+        </svg>
+      </div>
+
+      <div class="legend-list" id="legend"></div>
+      <div class="table-wrap">
+        <table id="projectionTable">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>5% Defensive</th>
+              <th>8% Base</th>
+              <th>11% Strong</th>
+              <th>14% Aggressive</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="evidence-title">
+      <div class="panel-header">
+        <div>
+          <div class="section-label">Why these rates</div>
+          <h2 id="evidence-title">Evidence anchors behind the scenarios</h2>
+        </div>
+        <p>Public data does not publish a clean kos-kosan CAGR index, so the model triangulates from property appreciation, rental yield, and kos-specific payback examples.</p>
+      </div>
+
+      <div class="evidence-grid">
+        <svg id="evidenceChart" viewBox="0 0 640 420" role="img" aria-labelledby="evidence-title evidence-desc">
+          <desc id="evidence-desc">Bar chart showing residential price growth, rental yields, kos payback implied yield, and rent escalation guidance.</desc>
+        </svg>
+        <div class="evidence-list">
+          <div class="evidence-item">
+            <div class="evidence-value">1-3%</div>
+            <div><strong>Property price growth</strong><span>Recent Indonesia residential appreciation is low. Capital gain should not carry the model.</span></div>
+          </div>
+          <div class="evidence-item">
+            <div class="evidence-value">7-8%</div>
+            <div><strong>Rental yield benchmark</strong><span>Gross rental yield data makes income the real engine of the return.</span></div>
+          </div>
+          <div class="evidence-item">
+            <div class="evidence-value">~8%</div>
+            <div><strong>Kos example yield</strong><span>A published 10-room kos example implies about 8.1% yield at full occupancy before deeper capex/tax adjustments.</span></div>
+          </div>
+          <div class="evidence-item">
+            <div class="evidence-value">5-10%</div>
+            <div><strong>Rent increase potential</strong><span>Annual rent increases can support upside, but only if occupancy and local demand hold.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="eli5-title">
+      <div class="panel-header">
+        <div>
+          <div class="section-label">ELI5</div>
+          <h2 id="eli5-title">English and Indonesian explanation</h2>
+        </div>
+      </div>
+
+      <div class="eli5-grid">
+        <article class="explain" lang="en">
+          <h3>English</h3>
+          <p>CAGR is the average yearly growth rate. If an investment grows at 8% CAGR, it means we pretend the growth was smooth every year, even though real life goes up and down.</p>
+          <p>For kos-kosan, the money can grow in two ways: rent collected from tenants and the property becoming more valuable. In Indonesia right now, property prices are not rising fast, so rent matters more.</p>
+          <p>That is why the base case is 8%, not 15% or 20%. A higher return is possible, but it needs a good location, strong occupancy, disciplined operations, and controlled maintenance costs.</p>
+        </article>
+
+        <article class="explain" lang="id">
+          <h3>Bahasa Indonesia</h3>
+          <p>CAGR itu rata-rata pertumbuhan per tahun. Kalau investasi tumbuh 8% CAGR, artinya kita membayangkan pertumbuhannya rata setiap tahun, walaupun kenyataannya bisa naik turun.</p>
+          <p>Untuk kos-kosan, uang bertumbuh dari dua sumber: uang sewa penghuni dan kenaikan nilai properti. Di Indonesia saat ini, harga properti residensial tidak naik kencang, jadi sewa adalah mesin utamanya.</p>
+          <p>Makanya base case yang masuk akal adalah 8%, bukan 15% atau 20%. Return lebih tinggi bisa terjadi, tapi butuh lokasi bagus, okupansi kuat, operasional rapi, dan biaya perawatan terkendali.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel sources" aria-labelledby="sources-title">
+      <div>
+        <div class="section-label">Research notes</div>
+        <h2 id="sources-title">Sources and assumptions</h2>
+      </div>
+      <p>Scenario rates are estimates for visualization, not financial advice. They exclude debt/leverage, transaction costs, income tax details, vacancy shocks, furniture refreshes, and major renovation cycles.</p>
+      <ul>
+        <li>BIS/FRED Indonesia residential property index: 5-year CAGR about 1.43%, 10-year CAGR about 1.81%, 15-year CAGR about 3.45%. <a href="https://fred.stlouisfed.org/series/QIDN628BIS">FRED QIDN628BIS</a></li>
+        <li>Bank Indonesia RPPI Q3 2025: residential property prices grew 0.84% year on year. <a href="https://www.bi.go.id/en/publikasi/ruang-media/news-release/Pages/sp_2726625.aspx">Bank Indonesia release</a></li>
+        <li>Indonesia average gross rental yield around 8.30% in Q1 2026. <a href="https://www.globalpropertyguide.com/asia/indonesia/rental-yields">Global Property Guide rental yields</a></li>
+        <li>High-end property gross yield reached 7.15% in Q3 2025. <a href="https://www.globalpropertyguide.com/asia/indonesia/price-history">Global Property Guide price history</a></li>
+        <li>Pegadaian kos example: 10 rooms, Rp1.33B investment, Rp15M/month revenue, Rp6M/month operating cost, about 12-year payback. <a href="https://pegadaian.co.id/artikel/wirausaha/modal-usaha-kos-kosan">Pegadaian kos-kosan article</a></li>
+        <li>Mamikos suggests 5-7% annual rent increases in some cases; Rukita says annual increases can reach around 10% depending on building and neighborhood. <a href="https://mamikos.com/info/waktu-terbaik-menaikkan-harga-sewa-kos/">Mamikos</a>, <a href="https://www.rukita.co/stories/cara-menentukan-harga-sewa-kost">Rukita</a></li>
+      </ul>
+    </section>
+
+    <a class="back-link" href="/viz/">Back to Viz</a>
+  </main>
+
+  <script>
+    const scenarios = [
+      { rate: 0.05, label: "Defensive", color: "#60a5fa", note: "weak occupancy or limited rent growth" },
+      { rate: 0.08, label: "Base kos-kosan", color: "#34d399", note: "healthy occupancy and normal operations" },
+      { rate: 0.11, label: "Strong managed kos", color: "#f59e0b", note: "good location plus disciplined operations" },
+      { rate: 0.14, label: "Aggressive", color: "#fb7185", note: "excellent location and pricing power" }
+    ];
+
+    const years = Array.from({ length: 11 }, (_, index) => 2026 + index);
+    const principalInput = document.querySelector("#principal");
+    const projectionSvg = document.querySelector("#projectionChart");
+    const evidenceSvg = document.querySelector("#evidenceChart");
+    const legend = document.querySelector("#legend");
+    const tableBody = document.querySelector("#projectionTable tbody");
+
+    const rupiah = value => {
+      if (value >= 1000) return `Rp${(value / 1000).toFixed(value >= 10000 ? 1 : 2)}B`;
+      return `Rp${Math.round(value)}M`;
+    };
+
+    const pointPath = points => points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" ");
+
+    function fitSvg(svg, desktopWidth, desktopHeight, mobileHeight) {
+      const containerWidth = Math.floor(svg.parentElement.getBoundingClientRect().width || desktopWidth);
+      const compact = containerWidth < 560;
+      const width = compact ? Math.max(containerWidth, 320) : desktopWidth;
+      const height = compact ? mobileHeight : desktopHeight;
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      return { compact, width, height };
+    }
+
+    function renderProjection() {
+      const principal = Math.max(Number(principalInput.value) || 100, 1);
+      const { compact, width, height } = fitSvg(projectionSvg, 1000, 520, 380);
+      const margin = compact
+        ? { top: 18, right: 28, bottom: 44, left: 52 }
+        : { top: 28, right: 130, bottom: 58, left: 78 };
+      const chartWidth = width - margin.left - margin.right;
+      const chartHeight = height - margin.top - margin.bottom;
+      const maxValue = Math.max(...scenarios.map(s => principal * Math.pow(1 + s.rate, 10)));
+      const yMax = Math.ceil(maxValue / 50) * 50;
+      const x = year => margin.left + ((year - years[0]) / (years[years.length - 1] - years[0])) * chartWidth;
+      const y = value => margin.top + chartHeight - (value / yMax) * chartHeight;
+      const yTicks = compact ? [0, 0.5, 1].map(t => Math.round(yMax * t)) : [0, 0.25, 0.5, 0.75, 1].map(t => Math.round(yMax * t));
+      let markup = "";
+
+      yTicks.forEach(tick => {
+        markup += `<line class="grid-line" x1="${margin.left}" y1="${y(tick)}" x2="${width - margin.right}" y2="${y(tick)}"></line>`;
+        markup += `<text class="tick" x="${margin.left - 8}" y="${y(tick) + 4}" text-anchor="end">${rupiah(tick)}</text>`;
+      });
+
+      years.filter((_, index) => compact ? index % 5 === 0 : index % 2 === 0).forEach(year => {
+        markup += `<text class="tick" x="${x(year)}" y="${height - 18}" text-anchor="middle">${year}</text>`;
+      });
+
+      markup += `<line class="axis-line" x1="${margin.left}" y1="${height - margin.bottom}" x2="${width - margin.right}" y2="${height - margin.bottom}"></line>`;
+      markup += `<line class="axis-line" x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${height - margin.bottom}"></line>`;
+      if (!compact) markup += `<text class="axis-label" x="${margin.left}" y="${height - 6}">Year</text>`;
+
+      scenarios.forEach(scenario => {
+        const points = years.map((year, index) => ({
+          x: x(year),
+          y: y(principal * Math.pow(1 + scenario.rate, index)),
+          value: principal * Math.pow(1 + scenario.rate, index)
+        }));
+        const last = points[points.length - 1];
+        markup += `<path class="scenario-line" d="${pointPath(points)}" stroke="${scenario.color}" style="stroke-width:${compact ? 3 : 4}"></path>`;
+        markup += points.map(point => `<circle class="data-point" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="${compact ? 2.8 : 4}" fill="${scenario.color}"><title>${scenario.label}: ${rupiah(point.value)}</title></circle>`).join("");
+        if (!compact) markup += `<text class="legend" x="${last.x + 14}" y="${last.y + 4}" fill="${scenario.color}">${Math.round(scenario.rate * 100)}%</text>`;
+      });
+
+      if (!compact) {
+        markup += `<text class="chart-note" x="${width - margin.right}" y="${margin.top + 8}" text-anchor="end">Excludes leverage, taxes, vacancy shocks, and major renovation cycles</text>`;
+      }
+      projectionSvg.innerHTML = markup;
+
+      legend.innerHTML = scenarios.map(scenario => {
+        const finalValue = principal * Math.pow(1 + scenario.rate, 10);
+        return `<div class="legend-item">
+          <div class="legend-top"><span class="swatch" style="background:${scenario.color}"></span>${Math.round(scenario.rate * 100)}% ${scenario.label}</div>
+          <small>${rupiah(finalValue)} in 2036 - ${scenario.note}</small>
+        </div>`;
+      }).join("");
+
+      tableBody.innerHTML = years.map((year, index) => {
+        const cells = scenarios.map(scenario => `<td>${rupiah(principal * Math.pow(1 + scenario.rate, index))}</td>`).join("");
+        return `<tr><td>${year}</td>${cells}</tr>`;
+      }).join("");
+    }
+
+    function renderEvidence() {
+      const bars = [
+        { label: "BI RPPI YoY", value: 0.84, color: "#a78bfa" },
+        { label: "Property 5Y CAGR", value: 1.43, color: "#60a5fa" },
+        { label: "High-end yield", value: 7.15, color: "#22d3ee" },
+        { label: "Avg rental yield", value: 8.3, color: "#34d399" },
+        { label: "Kos example", value: 8.1, color: "#f59e0b" },
+        { label: "Rent increase", value: 10, color: "#fb7185" }
+      ];
+      const { compact, width, height } = fitSvg(evidenceSvg, 640, 420, 360);
+      const max = 12;
+      let markup = "";
+
+      if (compact) {
+        const margin = { top: 16, right: 36, bottom: 28, left: 120 };
+        const chartWidth = width - margin.left - margin.right;
+        const rowHeight = (height - margin.top - margin.bottom) / bars.length;
+        const x = value => margin.left + (value / max) * chartWidth;
+
+        [0, 6, 12].forEach(tick => {
+          markup += `<line class="grid-line" x1="${x(tick)}" y1="${margin.top}" x2="${x(tick)}" y2="${height - margin.bottom}"></line>`;
+          markup += `<text class="tick" x="${x(tick)}" y="${height - 8}" text-anchor="middle">${tick}%</text>`;
+        });
+
+        bars.forEach((bar, index) => {
+          const y = margin.top + index * rowHeight + rowHeight * 0.28;
+          const barHeight = rowHeight * 0.44;
+          markup += `<text class="tick" x="${margin.left - 10}" y="${y + barHeight * 0.7}" text-anchor="end">${bar.label}</text>`;
+          markup += `<rect x="${margin.left}" y="${y}" width="${x(bar.value) - margin.left}" height="${barHeight}" rx="5" fill="${bar.color}"><title>${bar.label}: ${bar.value}%</title></rect>`;
+          markup += `<text class="tick" x="${Math.min(x(bar.value) + 6, width - 26)}" y="${y + barHeight * 0.7}">${bar.value}%</text>`;
+        });
+      } else {
+        const margin = { top: 22, right: 24, bottom: 76, left: 58 };
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.top - margin.bottom;
+        const barGap = 14;
+        const barWidth = (chartWidth - barGap * (bars.length - 1)) / bars.length;
+        const y = value => margin.top + chartHeight - (value / max) * chartHeight;
+
+        [0, 3, 6, 9, 12].forEach(tick => {
+          markup += `<line class="grid-line" x1="${margin.left}" y1="${y(tick)}" x2="${width - margin.right}" y2="${y(tick)}"></line>`;
+          markup += `<text class="tick" x="${margin.left - 10}" y="${y(tick) + 4}" text-anchor="end">${tick}%</text>`;
+        });
+
+        bars.forEach((bar, index) => {
+          const x = margin.left + index * (barWidth + barGap);
+          const barHeight = chartHeight - (y(bar.value) - margin.top);
+          markup += `<rect x="${x}" y="${y(bar.value)}" width="${barWidth}" height="${barHeight}" rx="6" fill="${bar.color}"><title>${bar.label}: ${bar.value}%</title></rect>`;
+          markup += `<text class="tick" x="${x + barWidth / 2}" y="${y(bar.value) - 8}" text-anchor="middle">${bar.value}%</text>`;
+          markup += `<text class="tick" x="${x + barWidth / 2}" y="${height - 44}" text-anchor="middle" transform="rotate(-28 ${x + barWidth / 2} ${height - 44})">${bar.label}</text>`;
+        });
+
+        markup += `<line class="axis-line" x1="${margin.left}" y1="${height - margin.bottom}" x2="${width - margin.right}" y2="${height - margin.bottom}"></line>`;
+        markup += `<line class="axis-line" x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${height - margin.bottom}"></line>`;
+        markup += `<text class="chart-note" x="${margin.left}" y="${height - 10}">The 8% base case follows rental-yield evidence more than resale-price evidence.</text>`;
+      }
+
+      evidenceSvg.innerHTML = markup;
+    }
+
+    let resizeFrame;
+    function renderAll() {
+      renderProjection();
+      renderEvidence();
+    }
+
+    principalInput.addEventListener("input", renderProjection);
+    window.addEventListener("resize", () => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(renderAll);
+    });
+    renderAll();
+  </script>
+
+</body>
+</html>
