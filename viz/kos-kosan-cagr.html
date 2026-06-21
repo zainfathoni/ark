@@ -220,7 +220,18 @@
       align-items: center;
     }
 
-    .evidence-list { display: grid; gap: 10px; }
+    .evidence-list,
+    .comparison-callouts { display: grid; gap: 10px; }
+
+    .comparison-callout {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .comparison-callout strong { display: block; margin-bottom: 4px; }
+    .comparison-callout span { color: var(--muted); font-size: 0.9rem; }
 
     .evidence-item {
       display: grid;
@@ -411,6 +422,36 @@
       </div>
     </section>
 
+    <section class="panel" aria-labelledby="bitcoin-title">
+      <div class="panel-header">
+        <div>
+          <div class="section-label">Bitcoin comparison</div>
+          <h2 id="bitcoin-title">Kos-kosan CAGR vs Bitcoin CAGR</h2>
+        </div>
+        <p>Bitcoin is the benchmark that makes the opportunity cost visible. The comparison uses FRED's Coinbase BTC/USD daily series ending 2026-06-20.</p>
+      </div>
+
+      <div class="evidence-grid">
+        <svg id="bitcoinChart" viewBox="0 0 640 360" role="img" aria-labelledby="bitcoin-title bitcoin-desc">
+          <desc id="bitcoin-desc">Bar chart comparing 8 percent kos-kosan base CAGR against Bitcoin 5-year, 4-year, and 10-year historical CAGR.</desc>
+        </svg>
+        <div class="comparison-callouts">
+          <div class="comparison-callout">
+            <strong>Short version</strong>
+            <span>Kos-kosan base case is about income stability. Bitcoin is the growth benchmark, but with much higher volatility and no monthly rent.</span>
+          </div>
+          <div class="comparison-callout">
+            <strong>Important nuance</strong>
+            <span>BTC 5-year CAGR is only about 12.5%, close enough that a strong kos operator can look competitive. BTC 10-year CAGR is in another league at about 57.1%.</span>
+          </div>
+          <div class="comparison-callout">
+            <strong>Family explanation</strong>
+            <span>Kos-kosan is like a cash-flow asset. Bitcoin is like a volatile growth asset. They answer different questions.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="panel" aria-labelledby="eli5-title">
       <div class="panel-header">
         <div>
@@ -424,14 +465,14 @@
           <h3>English</h3>
           <p>CAGR is the average yearly growth rate. If an investment grows at 8% CAGR, it means we pretend the growth was smooth every year, even though real life goes up and down.</p>
           <p>For kos-kosan, the money can grow in two ways: rent collected from tenants and the property becoming more valuable. In Indonesia right now, property prices are not rising fast, so rent matters more.</p>
-          <p>That is why the base case is 8%, not 15% or 20%. A higher return is possible, but it needs a good location, strong occupancy, disciplined operations, and controlled maintenance costs.</p>
+          <p>Compared with Bitcoin, kos-kosan is slower. Bitcoin's 10-year CAGR is about 57%, while the kos base case is 8%. But kos-kosan can produce monthly cash flow; Bitcoin depends on price appreciation.</p>
         </article>
 
         <article class="explain" lang="id">
           <h3>Bahasa Indonesia</h3>
           <p>CAGR itu rata-rata pertumbuhan per tahun. Kalau investasi tumbuh 8% CAGR, artinya kita membayangkan pertumbuhannya rata setiap tahun, walaupun kenyataannya bisa naik turun.</p>
           <p>Untuk kos-kosan, uang bertumbuh dari dua sumber: uang sewa penghuni dan kenaikan nilai properti. Di Indonesia saat ini, harga properti residensial tidak naik kencang, jadi sewa adalah mesin utamanya.</p>
-          <p>Makanya base case yang masuk akal adalah 8%, bukan 15% atau 20%. Return lebih tinggi bisa terjadi, tapi butuh lokasi bagus, okupansi kuat, operasional rapi, dan biaya perawatan terkendali.</p>
+          <p>Dibanding Bitcoin, kos-kosan jauh lebih lambat. CAGR Bitcoin 10 tahun sekitar 57%, sedangkan base case kos 8%. Tapi kos-kosan bisa memberi arus kas bulanan; Bitcoin bergantung pada kenaikan harga.</p>
         </article>
       </div>
     </section>
@@ -444,6 +485,7 @@
       <p>Scenario rates are estimates for visualization, not financial advice. They exclude debt/leverage, transaction costs, income tax details, vacancy shocks, furniture refreshes, and major renovation cycles.</p>
       <ul>
         <li>BIS/FRED Indonesia residential property index: 5-year CAGR about 1.43%, 10-year CAGR about 1.81%, 15-year CAGR about 3.45%. <a href="https://fred.stlouisfed.org/series/QIDN628BIS">FRED QIDN628BIS</a></li>
+        <li>FRED Coinbase Bitcoin daily price series: as of 2026-06-20, BTC was $64,180; calculated BTC CAGR was about 33.0% over 4 years, 12.5% over 5 years, and 57.1% over 10 years. <a href="https://fred.stlouisfed.org/series/CBBTCUSD">FRED CBBTCUSD</a></li>
         <li>Bank Indonesia RPPI Q3 2025: residential property prices grew 0.84% year on year. <a href="https://www.bi.go.id/en/publikasi/ruang-media/news-release/Pages/sp_2726625.aspx">Bank Indonesia release</a></li>
         <li>Indonesia average gross rental yield around 8.30% in Q1 2026. <a href="https://www.globalpropertyguide.com/asia/indonesia/rental-yields">Global Property Guide rental yields</a></li>
         <li>High-end property gross yield reached 7.15% in Q3 2025. <a href="https://www.globalpropertyguide.com/asia/indonesia/price-history">Global Property Guide price history</a></li>
@@ -463,10 +505,18 @@
       { rate: 0.14, label: "Aggressive", color: "#fb7185", note: "excellent location and pricing power" }
     ];
 
+    const bitcoinComparisons = [
+      { label: "Kos base", value: 8, color: "#34d399" },
+      { label: "BTC 5Y", value: 12.5, color: "#60a5fa" },
+      { label: "BTC 4Y", value: 33.0, color: "#f59e0b" },
+      { label: "BTC 10Y", value: 57.1, color: "#fb7185" }
+    ];
+
     const years = Array.from({ length: 11 }, (_, index) => 2026 + index);
     const principalInput = document.querySelector("#principal");
     const projectionSvg = document.querySelector("#projectionChart");
     const evidenceSvg = document.querySelector("#evidenceChart");
+    const bitcoinSvg = document.querySelector("#bitcoinChart");
     const legend = document.querySelector("#legend");
     const tableBody = document.querySelector("#projectionTable tbody");
 
@@ -605,10 +655,39 @@
       evidenceSvg.innerHTML = markup;
     }
 
+    function renderBitcoinComparison() {
+      const { compact, width, height } = fitSvg(bitcoinSvg, 640, 360, 340);
+      const margin = compact
+        ? { top: 18, right: 38, bottom: 32, left: 94 }
+        : { top: 20, right: 56, bottom: 40, left: 110 };
+      const max = 60;
+      const chartWidth = width - margin.left - margin.right;
+      const rowHeight = (height - margin.top - margin.bottom) / bitcoinComparisons.length;
+      const x = value => margin.left + (value / max) * chartWidth;
+      let markup = "";
+
+      [0, 20, 40, 60].forEach(tick => {
+        markup += `<line class="grid-line" x1="${x(tick)}" y1="${margin.top}" x2="${x(tick)}" y2="${height - margin.bottom}"></line>`;
+        markup += `<text class="tick" x="${x(tick)}" y="${height - 10}" text-anchor="middle">${tick}%</text>`;
+      });
+
+      bitcoinComparisons.forEach((item, index) => {
+        const y = margin.top + index * rowHeight + rowHeight * 0.25;
+        const barHeight = rowHeight * 0.5;
+        markup += `<text class="tick" x="${margin.left - 10}" y="${y + barHeight * 0.68}" text-anchor="end">${item.label}</text>`;
+        markup += `<rect x="${margin.left}" y="${y}" width="${x(item.value) - margin.left}" height="${barHeight}" rx="6" fill="${item.color}"><title>${item.label}: ${item.value}% CAGR</title></rect>`;
+        markup += `<text class="tick" x="${Math.min(x(item.value) + 8, width - 28)}" y="${y + barHeight * 0.68}">${item.value}%</text>`;
+      });
+
+      markup += `<text class="chart-note" x="${margin.left}" y="${margin.top - 4}">Historical CAGR, not a forward projection</text>`;
+      bitcoinSvg.innerHTML = markup;
+    }
+
     let resizeFrame;
     function renderAll() {
       renderProjection();
       renderEvidence();
+      renderBitcoinComparison();
     }
 
     principalInput.addEventListener("input", renderProjection);
