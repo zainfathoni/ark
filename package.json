@@ -1,0 +1,11 @@
+{
+  "name": "the-ark",
+  "private": true,
+  "scripts": {
+    "build:viz-index": "node viz/build-index.js",
+    "generate:og": "node scripts/generate-og-image.js"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

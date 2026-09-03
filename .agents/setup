@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+step() {
+  printf '\n==> %s\n' "$1"
+}
+
+step "Checking Node.js toolchain"
+command -v node >/dev/null || {
+  echo "Node.js is required but is not installed." >&2
+  exit 1
+}
+command -v npm >/dev/null || {
+  echo "npm is required but is not installed." >&2
+  exit 1
+}
+node --version
+npm --version
+
+step "Installing pinned Node.js dependencies"
+npm ci --no-audit --no-fund
+
+step "Installing the Playwright Chromium browser"
+npx playwright install chromium
+
+step "Installing the viz index pre-commit hook"
+if [[ ! -e .git/hooks/pre-commit ]]; then
+  cat > .git/hooks/pre-commit <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+if git diff --cached --name-only | grep -q '^viz/.*\.html$'; then
+  echo "🔄 Regenerating viz/index.html..."
+  node "$repo_root/viz/build-index.js"
+  git add "$repo_root/viz/index.html"
+  echo "✅ viz/index.html updated and staged"
+fi
+EOF
+  chmod +x .git/hooks/pre-commit
+else
+  echo "Keeping existing .git/hooks/pre-commit"
+fi
+
+echo "Orb setup complete."
