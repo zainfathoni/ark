@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viz-author" content="Wheeljack 🛠️">
+  <meta name="viz-date" content="2026-10-02">
+  <meta name="viz-category" content="Tools">
+  <meta name="description" content="Solve a Caesar cipher one character at a time. Use the key and alphabet guide to build your own decoded message.">
+  <title>Caesar Cipher Helper — The Ark</title>
+  <link rel="canonical" href="https://ark.zainf.dev/viz/caesar-cipher.html">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    :root { color-scheme: dark; --bg: #0b0b0f; --surface: #151523; --border: #343443; --text: #f3f4f6; --muted: #b0b0ba; --accent: #fbbf24; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: radial-gradient(ellipse at top, #182239, var(--bg) 65%); color: var(--text); font-family: system-ui, sans-serif; line-height: 1.6; min-height: 100vh; }
+    main { max-width: 900px; margin: auto; padding: 40px 24px; }
+    a { color: #93c5fd; text-underline-offset: 4px; }
+    nav { font-size: 14px; color: var(--muted); }
+    nav span { margin: 0 8px; }
+    header { margin: 32px 0; }
+    .eyebrow { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+    h1 { font-size: clamp(30px, 6vw, 44px); line-height: 1.2; letter-spacing: -1px; margin: 10px 0; }
+    p { margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+    .examples { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 24px; }
+    button, select { font: inherit; min-height: 44px; border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; background: #202031; color: var(--text); }
+    button { cursor: pointer; }
+    button:hover { border-color: var(--accent); }
+    .examples button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    label, .section-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+    textarea { display: block; width: 100%; min-height: 128px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 16px; background: #0e0e19; color: var(--text); font: 17px/1.6 ui-monospace, monospace; }
+    .key-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: 24px 0; }
+    .key-row label { margin: 0; }
+    .key-row select { margin-left: 8px; }
+    .key-row p { font-size: 14px; }
+    .workspace { border-top: 1px solid var(--border); padding-top: 24px; }
+    .characters { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 24px; }
+    .character { width: 44px; padding: 4px; font-family: ui-monospace, monospace; }
+    .character small { display: block; color: var(--accent); }
+    .character[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .character.solved { background: #18372f; border-color: #4b8b71; }
+    .separator { white-space: pre; align-self: center; min-width: 14px; }
+    .line-break { flex-basis: 100%; height: 0; }
+    #prompt { font-size: 18px; margin-bottom: 12px; }
+    .alphabet { display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 6px; }
+    .pair { min-width: 0; padding: 8px 0; font-family: ui-monospace, monospace; }
+    .pair span { display: block; color: var(--muted); font-size: 12px; }
+    .pair strong { display: block; color: var(--accent); font-size: 16px; }
+    .pair.highlight { border-color: var(--accent); background: #393020; }
+    button:disabled { cursor: default; opacity: 0.5; }
+    #feedback { min-height: 26px; margin: 12px 0; color: #a7d9c2; }
+    #decoded { display: block; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 60px; color: var(--accent); font: 20px/1.6 ui-monospace, monospace; }
+    .progress-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 24px 0 12px; }
+    .progress-row p { font-size: 14px; color: var(--muted); }
+    .note { font-size: 13px; color: var(--muted); margin-top: 16px; }
+    footer { font-size: 13px; color: var(--muted); margin-top: 24px; }
+    @media (max-width: 500px) { main { padding: 24px 16px; } .card { padding: 18px; } .key-row { gap: 8px; } .alphabet { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body>
+  <main>
+    <nav aria-label="Breadcrumb"><a href="/">The Ark</a><span>/</span><a href="/viz/">Viz</a><span>/</span>Caesar cipher</nav>
+    <header>
+      <div class="eyebrow">A small tool for secret messages</div>
+      <h1>Caesar Cipher Helper</h1>
+      <p class="muted">Use the key. Match one letter. Build the message yourself.</p>
+    </header>
+    <noscript><p>This tool needs JavaScript. Enable it to solve the message one character at a time.</p></noscript>
+    <section class="card" aria-label="Character-by-character cipher helper">
+      <div class="section-label">Try a Museum Sandi puzzle</div>
+      <div class="examples">
+        <button type="button" data-example="0">01 · A = N</button>
+        <button type="button" data-example="1">02 · A = R</button>
+        <button type="button" data-example="2">03 · A = S</button>
+      </div>
+      <label for="message">Encrypted message</label>
+      <textarea id="message" spellcheck="false" placeholder="Type or paste your encrypted message…" aria-describedby="preservation-note restart-note">NXHOV FNCRP
+NUXNA FNAQV</textarea>
+      <div class="key-row">
+        <label for="key">Key: A =<select id="key" aria-label="Encrypted letter for A"></select></label>
+        <p id="shift-description" class="muted"></p>
+      </div>
+      <p class="note" id="restart-note">Changing the message or key starts a new attempt.</p>
+      <div class="workspace">
+        <div class="section-label">1. Select an encrypted character</div>
+        <div id="characters" class="characters" role="group" aria-label="Message characters"></div>
+        <div class="section-label">2. Use the alphabet guide</div>
+        <p class="note">Top: encrypted letter. Bottom: decoded letter. Choose the pair that matches your selected character.</p>
+        <p id="prompt" aria-live="polite"></p>
+        <div id="alphabet" class="alphabet" role="group" aria-label="Alphabet guide"></div>
+        <p id="feedback" role="status"></p>
+        <div class="progress-row"><p id="progress"></p><button type="button" id="restart">Start again</button></div>
+        <label for="decoded">3. Your decoded message</label>
+        <output id="decoded" for="message key"></output>
+        <p class="note" id="preservation-note">Only A–Z and a–z change. Spaces, punctuation, and other characters stay the same.</p>
+        <p class="note">The museum puzzles use groups of letters, not word spaces. Add word spaces yourself. Extra letters at the end can be padding.</p>
+      </div>
+    </section>
+    <footer>Move back through the alphabet by the key’s shift. Wrap from A to Z when needed. This tool checks one character at a time, not the whole answer. Your message stays in this browser.</footer>
+  </main>
+  <script>
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const examples = [
+      { key: 13, message: 'NXHOV FNCRP\nNUXNA FNAQV' },
+      { key: 17, message: 'UFBKV IIFVS\nZFEFB VIKFG RKZZZ' },
+      { key: 18, message: 'SBSCL WESFE\nMCWEM KWMEK SFVAP' }
+    ];
+    const message = document.getElementById('message');
+    const key = document.getElementById('key');
+    const decoded = document.getElementById('decoded');
+    const characters = document.getElementById('characters');
+    const guide = document.getElementById('alphabet');
+    const feedback = document.getElementById('feedback');
+    let letters = [];
+    let answers = [];
+    let selected = -1;
+
+    for (let shift = 0; shift < 26; shift++) {
+      key.add(new Option(alphabet[shift], shift));
+    }
+    key.value = '13';
+
+    function isLetter(character) {
+      return /^[A-Za-z]$/.test(character);
+    }
+
+    function expectedLetter(character) {
+      const index = alphabet.indexOf(character.toUpperCase());
+      const plain = alphabet[(index - Number(key.value) + 26) % 26];
+      return character === character.toLowerCase() ? plain.toLowerCase() : plain;
+    }
+
+    function render() {
+      const shift = Number(key.value);
+      document.getElementById('shift-description').textContent = `Shift back ${shift} ${shift === 1 ? 'letter' : 'letters'} · ${alphabet[shift]} → A`;
+      document.querySelectorAll('[data-example]').forEach(button => {
+        const example = examples[Number(button.dataset.example)];
+        button.setAttribute('aria-pressed', String(example.key === shift && example.message === message.value));
+      });
+      characters.replaceChildren();
+      letters.forEach((character, index) => {
+        const tile = document.createElement(isLetter(character) ? 'button' : 'span');
+        if (isLetter(character)) {
+          tile.type = 'button';
+          tile.className = `character${answers[index] ? ' solved' : ''}`;
+          tile.dataset.index = index;
+          tile.setAttribute('aria-pressed', String(index === selected));
+          tile.setAttribute('aria-label', `Character ${index + 1}: ${character}, ${answers[index] ? 'solved as ' + answers[index] : 'unsolved'}`);
+          tile.textContent = character;
+          const answer = document.createElement('small');
+          answer.textContent = answers[index] || '·';
+          tile.append(answer);
+          tile.addEventListener('click', () => {
+            selected = index;
+            feedback.textContent = '';
+            render();
+            characters.querySelector(`[data-index="${index}"]`).focus();
+          });
+        } else {
+          tile.className = character === '\n' ? 'line-break' : 'separator';
+          tile.textContent = character;
+        }
+        characters.append(tile);
+      });
+      guide.replaceChildren();
+      for (let index = 0; index < 26; index++) {
+        const encrypted = alphabet[(index + shift) % 26];
+        const pair = document.createElement('button');
+        pair.type = 'button';
+        pair.className = `pair${selected >= 0 && letters[selected].toUpperCase() === encrypted ? ' highlight' : ''}`;
+        pair.dataset.plain = alphabet[index];
+        pair.setAttribute('aria-label', `${encrypted} becomes ${alphabet[index]}`);
+        pair.disabled = selected < 0;
+        const top = document.createElement('span');
+        top.textContent = encrypted;
+        const bottom = document.createElement('strong');
+        bottom.textContent = alphabet[index];
+        pair.append(top, bottom);
+        pair.addEventListener('click', () => chooseLetter(alphabet[index]));
+        guide.append(pair);
+      }
+      const total = letters.filter(isLetter).length;
+      const solved = letters.filter((character, index) => isLetter(character) && answers[index]).length;
+      document.getElementById('progress').textContent = `${solved} of ${total} letters solved`;
+      document.getElementById('prompt').textContent = selected >= 0
+        ? `Which decoded letter matches ${letters[selected]} at character ${selected + 1}?`
+        : total ? 'All letters solved. Read your message below.' : 'Enter a message with letters to begin.';
+      decoded.textContent = letters.length ? letters.map((character, index) => answers[index] || '·').join('') : 'Your work will appear here.';
+    }
+
+    function chooseLetter(plain) {
+      const expected = expectedLetter(letters[selected]);
+      if (plain !== expected.toUpperCase()) {
+        feedback.textContent = 'Not yet. Find the selected encrypted letter in the top row, then read the letter below it.';
+        return;
+      }
+      feedback.textContent = `Correct: ${letters[selected]} → ${expected}.`;
+      answers[selected] = expected;
+      selected = letters.findIndex((character, index) => isLetter(character) && !answers[index]);
+      render();
+      if (selected >= 0) characters.querySelector(`[data-index="${selected}"]`).focus();
+      else document.getElementById('restart').focus();
+    }
+
+    function restart() {
+      letters = Array.from(message.value);
+      answers = letters.map(character => isLetter(character) ? null : character);
+      selected = letters.findIndex(isLetter);
+      feedback.textContent = '';
+      render();
+    }
+
+    message.addEventListener('input', restart);
+    key.addEventListener('change', restart);
+    document.getElementById('restart').addEventListener('click', restart);
+    document.querySelectorAll('[data-example]').forEach(button => {
+      button.addEventListener('click', () => {
+        const example = examples[Number(button.dataset.example)];
+        message.value = example.message;
+        key.value = String(example.key);
+        restart();
+      });
+    });
+    restart();
+  </script>
+</body>
+</html>
