@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viz-author" content="Amp ⚡">
+<meta name="viz-date" content="2026-11-21">
+<meta name="viz-category" content="System">
+<meta name="description" content="How an OpenClaw filter mistook the Indonesian word dan for a jailbreak marker, and what the fix changed.">
+<link rel="canonical" href="https://ark.zainf.dev/viz/dan-false-positive.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>The DAN false positive — The Ark</title>
+<style>
+  :root { color-scheme: dark; --background: #0b0b0f; --foreground: #f3f4f6; --muted-foreground: #b0b0ba; --card: #151523; --border: #383849; --muted: #29293b; --chart-1: #f59e0b; --link: #8ab9ff; --destructive: #f08484; --success: #7cdb9e; }
+  body { margin: 0; color: var(--foreground); background: var(--background); font: 1rem/1.5 system-ui, sans-serif; }
+  main { container-type: inline-size; max-inline-size: 54rem; margin-inline: auto; padding: 2rem 1rem; }
+  h1, h2, p { margin: 0; }
+  .ui-title { font-size: clamp(1.5rem, 1rem + 2vw, 2.25rem); line-height: 1.2; font-weight: 600; text-wrap: balance; margin-block: 12px; }
+  .ui-header { margin-bottom: 24px; }
+  .ui-sub, .note, .edge, footer { color: var(--muted-foreground, #565656); font-size: .92em; }
+  .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  h2 { font-size: .92em; font-weight: 500; margin-bottom: 8px; }
+  .node { display: grid; align-content: center; min-block-size: 4.5em; padding: 8px 10px; background: var(--card, Canvas); border: 1px solid var(--border, #b5b5b5); border-radius: 6px; }
+  .edge { display: flex; align-items: center; gap: 6px; min-block-size: 26px; padding-inline: 12px; }
+  .edge svg { width: 10px; height: 22px; flex: none; color: var(--chart-1, #305aa3); }
+  code { font-family: var(--font-mono, monospace); }
+  mark { color: inherit; background: var(--muted, #ececec); border-bottom: 2px solid var(--chart-1, #305aa3); }
+  .dot { display: inline-block; inline-size: .55em; block-size: .55em; border-radius: 50%; margin-inline-end: 5px; background: var(--destructive, #ab3030); }
+  .pass .dot { background: var(--success, #267344); }
+  details { border-top: 1px solid var(--border, #b5b5b5); margin-top: 12px; padding-top: 8px; }
+  summary { cursor: pointer; width: fit-content; }
+  summary:focus-visible { outline: 2px solid var(--link, LinkText); outline-offset: 2px; }
+  details p, footer { margin-top: 6px; max-inline-size: 65ch; }
+  a { color: var(--link, LinkText); }
+  @container (width < 32rem) { .comparison { grid-template-columns: 1fr; gap: 20px; } }
+</style>
+<main>
+  <header class="ui-header">
+    <nav aria-label="Breadcrumb"><a href="./">Ark Viz</a></nav>
+    <h1 class="ui-title">OpenClaw mistook Indonesian <code>dan</code> for the <code>DAN</code> jailbreak marker</h1>
+    <p class="ui-sub">Ratchet received the Telegram photo. The filter affected the reply, not the upload.</p>
+  </header>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="down" viewBox="0 0 10 22"><path d="M5 1v18m-3-3 3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol></defs></svg>
+  <div class="comparison">
+    <section aria-labelledby="before">
+      <h2 id="before">Before · Telegram incident</h2>
+      <div class="node">Caption + conversation history<p class="note">History included <mark><code>dan</code></mark> (“and”).</p></div>
+      <div class="edge"><svg aria-hidden="true"><use href="#down"/></svg> Sends both to the filter</div>
+      <div class="node">Case-insensitive match<p class="note">Flags <code>dan</code> as <code>DAN</code>.</p></div>
+      <div class="edge"><svg aria-hidden="true"><use href="#down"/></svg> Combines several signals</div>
+      <div class="node"><p><span class="dot" aria-hidden="true"></span>100/100 · Block</p><p class="note">Ratchet sends a refusal.</p></div>
+    </section>
+    <section aria-labelledby="after">
+      <h2 id="after">After · Offline replay</h2>
+      <div class="node">Current caption only<p class="note">Leaves out chat history.</p></div>
+      <div class="edge"><svg aria-hidden="true"><use href="#down"/></svg> Sends only the caption</div>
+      <div class="node">Case-sensitive match<p class="note">This rule flags only uppercase <code>DAN</code>.</p></div>
+      <div class="edge"><svg aria-hidden="true"><use href="#down"/></svg> Finds no risk signals</div>
+      <div class="node pass"><p><span class="dot" aria-hidden="true"></span>0/100 · No block</p><p class="note">Confirmed in replay, not in a new chat.</p></div>
+    </section>
+  </div>
+  <details>
+    <summary>Why did a photo lead to a refusal?</summary>
+    <p>The filter scanned more than the caption. It also saw role labels, the attachment path, and instructions for returning media. The match on <code>dan</code> was one signal, not the sole cause. The fix limits scanning to the current user text or caption in direct chats the plugin recognizes.</p>
+  </details>
+  <footer>Incident and offline replay: August 24, 2026.</footer>
+</main>
+</html>
